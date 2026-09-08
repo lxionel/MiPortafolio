@@ -15,13 +15,15 @@ const SERVICES = [
   { num: '04', title: 'Desarrollo Frontend React', desc: 'Interfaces web modernas, responsivas, animadas con fluidez y optimizadas para rendimiento.', tags: ['React', 'JavaScript', 'GSAP'], img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80&auto=format&fit=crop' },
 ];
 
+const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+
 export default function Home() {
   const heroRef   = useRef(null);
   const titleRef  = useRef(null);
   const svcImgRef = useRef(null);
 
   useEffect(() => {
-    document.title = 'Lionel — Desarrollador de Software';
+    document.title = 'Lionel Aguirre Gomero — Desarrollador de Software';
     window.scrollTo(0, 0);
   }, []);
 
@@ -275,7 +277,7 @@ export default function Home() {
           <div className="work-bento">
             <Link to="/portafolio" className="work-card work-card--main">
               <div className="parallax-wrap" style={{position:'absolute',inset:0}}>
-                <img className="parallax-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop" alt="Sistema POS Peripollos" loading="lazy"/>
+                <img className="parallax-img" src={publicAsset('/img/peripollos-pos.png')} alt="Sistema POS Peripollos" loading="lazy"/>
               </div>
               <div className="work-card__overlay"/>
               <span className="work-card__arrow">↗</span>
@@ -287,7 +289,7 @@ export default function Home() {
             </Link>
             <Link to="/portafolio" className="work-card">
               <div className="parallax-wrap" style={{position:'absolute',inset:0}}>
-                <img className="parallax-img" src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=700&q=80&auto=format&fit=crop" alt="App Móvil MetaBit" loading="lazy"/>
+                <img className="parallax-img" src={publicAsset('/img/metabit-app.jpg')} alt="App Móvil MetaBit" loading="lazy"/>
               </div>
               <div className="work-card__overlay"/>
               <span className="work-card__arrow">↗</span>
@@ -299,14 +301,14 @@ export default function Home() {
             </Link>
             <Link to="/portafolio" className="work-card">
               <div className="parallax-wrap" style={{position:'absolute',inset:0}}>
-                <img className="parallax-img" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=700&q=80&auto=format&fit=crop" alt="Desarrollo Web React" loading="lazy"/>
+                <img className="parallax-img" src={publicAsset('/img/peripollos-web.png')} alt="Plataforma Web Peripollos" loading="lazy"/>
               </div>
               <div className="work-card__overlay"/>
               <span className="work-card__arrow">↗</span>
               <div className="work-card__body">
-                <span className="work-card__cat">Web · Frontend</span>
-                <h3 className="work-card__title">Interfaces Web Modernas</h3>
-                <p className="work-card__desc">Desarrollo interactivo con React, animaciones fluidas y buenas prácticas.</p>
+                <span className="work-card__cat">Web · En Vivo (Netlify)</span>
+                <h3 className="work-card__title">Plataforma Web "Peripollos"</h3>
+                <p className="work-card__desc">Carta digital interactiva y pedidos WhatsApp en producción.</p>
               </div>
             </Link>
           </div>

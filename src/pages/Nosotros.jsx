@@ -4,9 +4,11 @@ import { wspUrl } from '../utils/whatsapp';
 import CtaBand from '../components/CtaBand';
 import { useGsap, setupPageAnimations } from '../hooks/useGsap';
 
+const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+
 export default function Nosotros() {
   useEffect(() => {
-    document.title = 'Sobre mí — Lionel | Desarrollador de Software';
+    document.title = 'Sobre mí — Lionel Aguirre Gomero | Desarrollador de Software';
     window.scrollTo(0, 0);
   }, []);
 
@@ -29,21 +31,21 @@ export default function Nosotros() {
           <div className="about-portrait">
             <div className="img-frame">
               <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=75&auto=format&fit=crop"
-                alt="Lionel - Desarrollador de Software"
+                src={publicAsset('/img/lionel.png')}
+                alt="Lionel Aguirre Gomero — Desarrollador de Software"
                 loading="lazy"
-                onError={(e) => { e.target.style.display = 'none'; }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
               />
             </div>
             <div className="badge">
-              <b>Lionel</b>
+              <b>Lionel Aguirre Gomero</b>
               <span>Software Developer</span>
             </div>
           </div>
 
           <div className="about-body">
             <span className="eyebrow">Ingeniería y Desarrollo</span>
-            <h2>Hola, soy Lionel.</h2>
+            <h2>Hola, soy Lionel Aguirre Gomero.</h2>
             <p>
               Desarrollador de software con formación en <strong>Ingeniería de Sistemas</strong>.
               Me apasiona construir aplicaciones sólidas, con arquitecturas escalables, código limpio
@@ -59,6 +61,14 @@ export default function Nosotros() {
               <Link className="btn btn-primary" to="/contacto">
                 Contactar conmigo
               </Link>
+              <a
+                className="btn btn-ghost"
+                href="https://www.linkedin.com/in/lionel-aguirre-gomero-53a7052a9"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn ↗
+              </a>
               <Link className="btn btn-ghost" to="/portafolio">Ver proyectos destacados →</Link>
             </div>
           </div>

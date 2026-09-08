@@ -31,13 +31,14 @@ export default function Footer() {
         </div>
         <div className="footer-col">
           <h4>Contacto</h4>
+          <a href="https://www.linkedin.com/in/lionel-aguirre-gomero-53a7052a9" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a href="https://github.com/lxionel" target="_blank" rel="noopener noreferrer">GitHub / lxionel</a>
           <a href="mailto:lioneldavora1@gmail.com">lioneldavora1@gmail.com</a>
           <a href={wspUrl('Hola Lionel, vi tu portafolio y me gustaría conectar contigo')} target="_blank" rel="noopener noreferrer">WhatsApp</a>
         </div>
       </div>
       <div className="container footer-base">
-        <span>© {new Date().getFullYear()} Lionel. Portafolio personal.</span>
+        <span>© {new Date().getFullYear()} Lionel Aguirre Gomero. Portafolio personal.</span>
         <span>Código propio con React & GSAP.</span>
       </div>
     </footer>

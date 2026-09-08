@@ -32,15 +32,14 @@ export default function Portafolio() {
             <article className="work-live">
               <div className="work-live-frame reveal-img">
                 <img
-                  src={publicAsset('/img/peripollos-pos.jpg')}
+                  src={publicAsset('/img/peripollos-pos.png')}
                   alt="Sistema POS Peripollos en Java"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  onError={(e) => { e.target.style.display = 'none'; }}
                 />
               </div>
               <div className="work-live-body">
                 <span className="eyebrow">Desarrollo Backend · Sistema POS</span>
-                <h2>Sistema de Gestión "Peripollos"</h2>
+                <h2>Sistema de Gestión "Peripollos" (POS)</h2>
                 <p>
                   Desarrollo completo de un sistema de Punto de Venta (POS) programado en{' '}
                   <strong>Java</strong> con conexión a base de datos{' '}
@@ -50,8 +49,39 @@ export default function Portafolio() {
                 </p>
                 <ul className="checklist">
                   <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Arquitectura robusta en Java y consultas SQL optimizadas.</li>
-                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Integración de Webhooks y lógica de Chatbot.</li>
+                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Integración de Webhooks y lógica de Chatbot para atención.</li>
                 </ul>
+              </div>
+            </article>
+
+            <article className="work-live">
+              <div className="work-live-frame reveal-img">
+                <img
+                  src={publicAsset('/img/peripollos-web.png')}
+                  alt="Plataforma Web Peripollos en Vivo"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <div className="work-live-body">
+                <span className="eyebrow">Desarrollo Web · Carta Digital & Pedidos</span>
+                <h2>Plataforma Web "Peripollos"</h2>
+                <p>
+                  Plataforma web con carta digital interactiva, navegación fluida, diseño responsivo y sistema de pedidos directo por WhatsApp. Proyecto en producción y disponible para navegar en vivo.
+                </p>
+                <ul className="checklist">
+                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Diseño de interfaz UI/UX atractivo y optimizado para móviles.</li>
+                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Desplegado y funcionando en producción con Netlify.</li>
+                </ul>
+                <div style={{ marginTop: 20 }}>
+                  <a
+                    className="btn btn-primary"
+                    href="https://peripollos.netlify.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ver sitio en vivo (peripollos.netlify.app) ↗
+                  </a>
+                </div>
               </div>
             </article>
 
@@ -61,21 +91,19 @@ export default function Portafolio() {
                   src={publicAsset('/img/metabit-app.jpg')}
                   alt="Aplicación Móvil MetaBit"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  onError={(e) => { e.target.style.display = 'none'; }}
                 />
               </div>
               <div className="work-live-body">
                 <span className="eyebrow">Aplicación Móvil · Finanzas</span>
-                <h2>App "MetaBit"</h2>
+                <h2>App Móvil "MetaBit"</h2>
                 <p>
-                  Desarrollo de una aplicación móvil enfocada en la automatización de metas
-                  de ahorro. El proyecto implicó desde el diseño de la interfaz (UI) y la
-                  identidad visual (logotipo), hasta la programación de la lógica interna y
-                  la compilación del APK funcional.
+                  Desarrollo de una aplicación móvil enfocada en la automatización y proyección
+                  de metas de ahorro financiero. El proyecto abarcó desde el diseño de la interfaz (UI)
+                  y la identidad visual, hasta la programación de la lógica interna y la compilación del APK funcional.
                 </p>
                 <ul className="checklist">
-                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Algoritmos de cálculo para proyección de ahorros.</li>
-                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Desarrollo de interfaz de usuario intuitiva.</li>
+                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Algoritmos de cálculo para proyección de ahorros periódicos.</li>
+                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Desarrollo de interfaz Android nativa e intuitiva.</li>
                 </ul>
               </div>
             </article>
