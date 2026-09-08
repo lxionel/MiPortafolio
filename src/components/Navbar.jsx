@@ -4,27 +4,27 @@ import ThemeToggle from './ThemeToggle';
 import { wspUrl } from '../utils/whatsapp';
 
 const LINKS = [
-  { to: '/',           label: 'Inicio',     end: true },
-  { to: '/servicios',  label: 'Servicios' },
-  { to: '/precios',    label: 'Precios' },
+  { to: '/', label: 'Inicio', end: true },
+  { to: '/servicios', label: 'Servicios' },
+  { to: '/precios', label: 'Precios' },
   { to: '/portafolio', label: 'Portafolio' },
-  { to: '/nosotros',   label: 'Nosotros' },
-  { to: '/contacto',   label: 'Contacto' },
+  { to: '/nosotros', label: 'Nosotros' },
+  { to: '/contacto', label: 'Contacto' },
 ];
 
 const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
 
 export default function Navbar({ theme, toggleTheme }) {
-  const [scrolled,   setScrolled]   = useState(false);
-  const [menuOpen,   setMenuOpen]   = useState(false);
-  const [pillStyle,  setPillStyle]  = useState({ opacity: 0 });
-  const navMenuRef  = useRef(null);
-  const location    = useLocation();
-  const isHome      = location.pathname === '/';
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [pillStyle, setPillStyle] = useState({ opacity: 0 });
+  const navMenuRef = useRef(null);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const THRESHOLD = typeof window !== 'undefined'
-      ? window.innerHeight * 0.75   // show navbar after 75% of hero scrolled
+      ? window.innerHeight * 0.75
       : 500;
 
     const onScroll = () => {
@@ -35,7 +35,6 @@ export default function Navbar({ theme, toggleTheme }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* Sliding pill under active link */
   const updatePill = useCallback(() => {
     const menu = navMenuRef.current;
     if (!menu) return;
@@ -53,8 +52,6 @@ export default function Navbar({ theme, toggleTheme }) {
   }, [updatePill]);
 
   const closeMenu = () => setMenuOpen(false);
-
-  // On home page, hide the navbar until scrolled past hero
   const hidden = isHome && !scrolled;
 
   return (

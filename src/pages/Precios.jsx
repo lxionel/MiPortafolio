@@ -4,51 +4,49 @@ import { wspUrl } from '../utils/whatsapp';
 import CtaBand from '../components/CtaBand';
 import { useGsap, setupPageAnimations } from '../hooks/useGsap';
 
-/* ── SVG check icon reusable ── */
 const CheckIcon = () => (
   <svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
 );
 
-/* ── Data ── */
 const rubros = [
   { label: 'Restaurante', value: 'Restaurante o cafetería' },
-  { label: 'Comercio',    value: 'Comercio o bodega' },
-  { label: 'Servicios',   value: 'Servicios profesionales' },
-  { label: 'Salud',       value: 'Salud' },
-  { label: 'Educación',   value: 'Educación' },
-  { label: 'Otro',        value: 'Otro' },
+  { label: 'Comercio', value: 'Comercio o bodega' },
+  { label: 'Servicios', value: 'Servicios profesionales' },
+  { label: 'Salud', value: 'Salud' },
+  { label: 'Educación', value: 'Educación' },
+  { label: 'Otro', value: 'Otro' },
 ];
 
 const planes = [
-  { name: 'Web Corporativa',  price: '450',  display: 'S/ 450' },
-  { name: 'Sistemas Web',     price: '850',  display: 'S/ 850' },
+  { name: 'Web Corporativa', price: '450', display: 'S/ 450' },
+  { name: 'Sistemas Web', price: '850', display: 'S/ 850' },
   { name: 'Software a Medida', price: '1500', display: 'S/ 1500+' },
 ];
 
 const tableRows = [
-  { feature: 'Diseño UI/UX exclusivo',               web: 'yes',  sis: 'yes',  soft: 'yes',  webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
-  { feature: 'Código propio (sin plantillas)',        web: 'yes',  sis: 'yes',  soft: 'yes',  webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
-  { feature: 'SEO y optimización de carga',           web: 'yes',  sis: 'yes',  soft: 'yes',  webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
-  { feature: 'Responsive (móvil y tablet)',           web: 'yes',  sis: 'yes',  soft: 'yes',  webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
-  { feature: 'Integración WhatsApp / Yape / Plin',   web: 'yes',  sis: 'yes',  soft: 'yes',  webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
-  { feature: 'Base de datos relacional (SQL Server)', web: 'nope', sis: 'yes',  soft: 'yes',  webTxt: '—',  sisTxt: 'Sí', softTxt: 'Sí' },
-  { feature: 'Catálogo dinámico / inventario',        web: 'nope', sis: 'yes',  soft: 'yes',  webTxt: '—',  sisTxt: 'Sí', softTxt: 'Sí' },
-  { feature: 'Seguridad anti inyecciones SQL',        web: 'nope', sis: 'yes',  soft: 'yes',  webTxt: '—',  sisTxt: 'Sí', softTxt: 'Sí' },
-  { feature: 'Panel de administración',               web: 'nope', sis: 'yes',  soft: 'yes',  webTxt: '—',  sisTxt: 'Básico', softTxt: 'Completo' },
-  { feature: 'Backend Java / APIs REST',              web: 'nope', sis: 'nope', soft: 'yes',  webTxt: '—',  sisTxt: '—',  softTxt: 'Sí' },
-  { feature: 'Webhooks y automatizaciones',           web: 'nope', sis: 'nope', soft: 'yes',  webTxt: '—',  sisTxt: '—',  softTxt: 'Sí' },
-  { feature: 'Aplicación móvil (APK)',                web: 'nope', sis: 'nope', soft: 'yes',  webTxt: '—',  sisTxt: '—',  softTxt: 'Sí' },
-  { feature: 'Documentación técnica',                 web: 'nope', sis: 'nope', soft: 'yes',  webTxt: '—',  sisTxt: '—',  softTxt: 'Sí' },
-  { feature: 'Tiempo de entrega',                     web: '',     sis: '',     soft: '',     webTxt: '5 días', sisTxt: '7–10 días', softTxt: '15–30 días' },
+  { feature: 'Diseño UI/UX exclusivo', web: 'yes', sis: 'yes', soft: 'yes', webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
+  { feature: 'Código propio (sin plantillas)', web: 'yes', sis: 'yes', soft: 'yes', webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
+  { feature: 'SEO y optimización de carga', web: 'yes', sis: 'yes', soft: 'yes', webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
+  { feature: 'Responsive (móvil y tablet)', web: 'yes', sis: 'yes', soft: 'yes', webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
+  { feature: 'Integración WhatsApp / Yape / Plin', web: 'yes', sis: 'yes', soft: 'yes', webTxt: 'Sí', sisTxt: 'Sí', softTxt: 'Sí' },
+  { feature: 'Base de datos relacional (SQL Server)', web: 'nope', sis: 'yes', soft: 'yes', webTxt: '—', sisTxt: 'Sí', softTxt: 'Sí' },
+  { feature: 'Catálogo dinámico / inventario', web: 'nope', sis: 'yes', soft: 'yes', webTxt: '—', sisTxt: 'Sí', softTxt: 'Sí' },
+  { feature: 'Seguridad anti inyecciones SQL', web: 'nope', sis: 'yes', soft: 'yes', webTxt: '—', sisTxt: 'Sí', softTxt: 'Sí' },
+  { feature: 'Panel de administración', web: 'nope', sis: 'yes', soft: 'yes', webTxt: '—', sisTxt: 'Básico', softTxt: 'Completo' },
+  { feature: 'Backend Java / APIs REST', web: 'nope', sis: 'nope', soft: 'yes', webTxt: '—', sisTxt: '—', softTxt: 'Sí' },
+  { feature: 'Webhooks y automatizaciones', web: 'nope', sis: 'nope', soft: 'yes', webTxt: '—', sisTxt: '—', softTxt: 'Sí' },
+  { feature: 'Aplicación móvil (APK)', web: 'nope', sis: 'nope', soft: 'yes', webTxt: '—', sisTxt: '—', softTxt: 'Sí' },
+  { feature: 'Documentación técnica', web: 'nope', sis: 'nope', soft: 'yes', webTxt: '—', sisTxt: '—', softTxt: 'Sí' },
+  { feature: 'Tiempo de entrega', web: '', sis: '', soft: '', webTxt: '5 días', sisTxt: '7–10 días', softTxt: '15–30 días' },
 ];
 
 const addons = [
-  { title: 'Mantenimiento mensual',       desc: 'Hasta 4 actualizaciones al mes. Sin permanencia.',           price: 'S/ 100',    unit: '/ mes' },
-  { title: 'Dominio propio (.com / .pe)', desc: 'Lo registramos a tu nombre; lo pagas al proveedor.',         price: 'desde S/ 50', unit: '/ año' },
-  { title: 'Sección o página extra',      desc: 'Amplía tu sitio con secciones adicionales.',                 price: 'S/ 80',     unit: 'c/u' },
-  { title: 'Asesoría de fotos',           desc: 'Te guiamos para tomar fotos profesionales con tu celular.',  price: 'S/ 60',     unit: 'sesión' },
-  { title: 'Configuración de Google',     desc: 'Tu negocio en Google Maps y resultados de búsqueda.',        price: 'S/ 120',    unit: 'único' },
-  { title: 'Hosting administrado',        desc: 'Alojamiento gestionado por nosotros, opcional.',             price: 'desde S/ 15', unit: '/ mes' },
+  { title: 'Mantenimiento mensual', desc: 'Hasta 4 actualizaciones al mes. Sin permanencia.', price: 'S/ 100', unit: '/ mes' },
+  { title: 'Dominio propio (.com / .pe)', desc: 'Lo registramos a tu nombre; lo pagas al proveedor.', price: 'desde S/ 50', unit: '/ año' },
+  { title: 'Sección o página extra', desc: 'Amplía tu sitio con secciones adicionales.', price: 'S/ 80', unit: 'c/u' },
+  { title: 'Asesoría de fotos', desc: 'Te guiamos para tomar fotos profesionales con tu celular.', price: 'S/ 60', unit: 'sesión' },
+  { title: 'Configuración de Google', desc: 'Tu negocio en Google Maps y resultados de búsqueda.', price: 'S/ 120', unit: 'único' },
+  { title: 'Hosting administrado', desc: 'Alojamiento gestionado por nosotros, opcional.', price: 'desde S/ 15', unit: '/ mes' },
 ];
 
 const faqs = [
@@ -74,12 +72,9 @@ const faqs = [
   },
 ];
 
-/* ════════════════════════════════════════════════════════════
-   PRECIOS PAGE
-   ════════════════════════════════════════════════════════════ */
 export default function Precios() {
   const [rubro, setRubro] = useState(null);
-  const [plan, setPlan]   = useState(null);
+  const [plan, setPlan] = useState(null);
 
   useEffect(() => {
     document.title = 'Precios — Studio Zero | Planes corporativos de desarrollo';
@@ -90,14 +85,12 @@ export default function Precios() {
     setupPageAnimations(gsap, ScrollTrigger);
   }, []);
 
-  /* Build WhatsApp message from estimator selections */
   const estimatorMsg = rubro && plan
     ? `Hola Studio Zero, tengo un negocio de *${rubro}* y me interesa el plan *${plan.name}* (S/ ${plan.price}). ¿Me pueden dar más detalles?`
     : null;
 
   return (
     <div ref={scope}>
-      {/* ===== PAGE HEADER ===== */}
       <section className="pagehead">
         <div className="container">
           <p className="crumbs"><Link to="/">Inicio</Link> / Precios</p>
@@ -106,12 +99,10 @@ export default function Precios() {
         </div>
       </section>
 
-      {/* ===== PRICING CARDS ===== */}
       <section className="section bg-soft">
         <div className="container">
           <div className="price-grid">
 
-            {/* Card 1 — Web Corporativa */}
             <div className="price-card reveal">
               <h3>Web Corporativa</h3>
               <p className="for">Presencia profesional con diseño UI/UX propio y SEO.</p>
@@ -138,7 +129,6 @@ export default function Precios() {
               </a>
             </div>
 
-            {/* Card 2 — Sistemas Web & Ventas (featured) */}
             <div className="price-card featured reveal d1">
               <span className="price-tag">Más elegido</span>
               <h3>Sistemas Web &amp; Ventas</h3>
@@ -166,7 +156,6 @@ export default function Precios() {
               </a>
             </div>
 
-            {/* Card 3 — Software a Medida */}
             <div className="price-card reveal d2">
               <h3>Software a Medida</h3>
               <p className="for">Apps móviles, backend Java, APIs y webhooks.</p>
@@ -198,7 +187,6 @@ export default function Precios() {
         </div>
       </section>
 
-      {/* ===== COMPARISON TABLE ===== */}
       <section className="section section--elevated">
         <div className="container">
           <div className="section-head center">
@@ -230,7 +218,6 @@ export default function Precios() {
         </div>
       </section>
 
-      {/* ===== ADD-ONS ===== */}
       <section className="section">
         <div className="container">
           <div className="section-head">
@@ -252,7 +239,6 @@ export default function Precios() {
         </div>
       </section>
 
-      {/* ===== ESTIMATOR ===== */}
       <section className="section section--elevated">
         <div className="container">
           <div className="section-head center">
@@ -262,7 +248,6 @@ export default function Precios() {
           </div>
 
           <div className="estimator reveal" id="estimador">
-            {/* Step 1 — Business type */}
             <div className="est-step">
               <label>1 · ¿Qué tipo de negocio tienes?</label>
               <div className="est-options">
@@ -278,7 +263,6 @@ export default function Precios() {
               </div>
             </div>
 
-            {/* Step 2 — Plan selection */}
             <div className="est-step">
               <label>2 · Elige tu plan</label>
               <div className="est-pkgs">
@@ -294,7 +278,6 @@ export default function Precios() {
               </div>
             </div>
 
-            {/* Result — Show CTA when both selected */}
             {estimatorMsg && (
               <div className="est-result">
                 <a
@@ -311,7 +294,6 @@ export default function Precios() {
         </div>
       </section>
 
-      {/* ===== FAQ ===== */}
       <section className="section">
         <div className="container">
           <div className="section-head center">
@@ -329,7 +311,6 @@ export default function Precios() {
         </div>
       </section>
 
-      {/* ===== CTA BAND ===== */}
       <CtaBand
         title="Empecemos <em>tu proyecto</em>."
         subtitle="Te damos una propuesta clara con precio y fecha de entrega, sin compromiso."

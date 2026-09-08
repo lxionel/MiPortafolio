@@ -8,12 +8,6 @@ import { wspUrl } from '../utils/whatsapp';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ── DATA ── */
-const TICKER_ITEMS = [
-  'Desarrollo Web', 'Studio Zero', 'Sistemas POS', 'Apps Móviles',
-  'Backend & APIs', 'Chimbote · Perú', 'Diseño UI/UX', 'SQL Server',
-  'Java', 'React', 'SEO técnico', 'Entrega en 5 días',
-];
 const MARQUEE_ROW_1 = [
   { src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=70&auto=format&fit=crop', label: 'Restaurantes' },
   { src: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=70&auto=format&fit=crop', label: 'Cafeterías' },
@@ -30,15 +24,14 @@ const MARQUEE_ROW_2 = [
   { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=70&auto=format&fit=crop', label: 'Bares' },
   { src: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&q=70&auto=format&fit=crop', label: 'Servicios' },
 ];
-const dup = (arr) => [...arr, ...arr];
+
 const SERVICES = [
-  { num: '01', title: 'Plataformas Web',   desc: 'Sitios de alto rendimiento construidos desde cero. SEO técnico, velocidad y conversión garantizados.', tags: ['UI/UX', 'React', 'SEO', '5 días'], img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80&auto=format&fit=crop' },
-  { num: '02', title: 'Sistemas & POS',    desc: 'Software de gestión y punto de venta a medida. Base de datos relacional, inventario, reportes en tiempo real.', tags: ['Java', 'SQL Server', 'Seguro'], img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80&auto=format&fit=crop' },
-  { num: '03', title: 'Apps Móviles',      desc: 'Aplicaciones Android nativas con diseño propio. Funcionan sin internet y se entregan como APK lista para instalar.', tags: ['Android', 'APK', 'Kotlin'], img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop' },
-  { num: '04', title: 'Backend & APIs',    desc: 'Arquitectura escalable, endpoints seguros, webhooks y automatizaciones para conectar todo tu stack.', tags: ['REST API', 'Webhooks', 'Java'], img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80&auto=format&fit=crop' },
+  { num: '01', title: 'Plataformas Web', desc: 'Sitios de alto rendimiento construidos desde cero. SEO técnico, velocidad y conversión garantizados.', tags: ['UI/UX', 'React', 'SEO', '5 días'], img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80&auto=format&fit=crop' },
+  { num: '02', title: 'Sistemas & POS', desc: 'Software de gestión y punto de venta a medida. Base de datos relacional, inventario, reportes en tiempo real.', tags: ['Java', 'SQL Server', 'Seguro'], img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80&auto=format&fit=crop' },
+  { num: '03', title: 'Apps Móviles', desc: 'Aplicaciones Android nativas con diseño propio. Funcionan sin internet y se entregan como APK lista para instalar.', tags: ['Android', 'APK', 'Kotlin'], img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop' },
+  { num: '04', title: 'Backend & APIs', desc: 'Arquitectura escalable, endpoints seguros, webhooks y automatizaciones para conectar todo tu stack.', tags: ['REST API', 'Webhooks', 'Java'], img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80&auto=format&fit=crop' },
 ];
 
-/* ── FLOATING OBJECTS ── */
 const FLOATS = [
   {
     id: 'laptop', depth: 0.25,
@@ -91,7 +84,7 @@ const FLOATS = [
           <span style={{color:'#4A80CC'}}>public class</span> <span style={{color:'#fff'}}>StudioZero</span> {'{'}<br/>
           {'  '}<span style={{color:'#6B9FE0'}}>String</span> <span style={{color:'#9EC0F0'}}>client</span> <span style={{color:'rgba(255,255,255,.4)'}}>=</span> <span style={{color:'#7AC080'}}>"TuNegocio"</span>;<br/>
           {'  '}<span style={{color:'#4A80CC'}}>void</span> <span style={{color:'#9EC0F0'}}>build</span>() {'{'}<br/>
-          {'    '}<span style={{color:'rgba(255,255,255,.3)'}}>// 5 días de entrega</span><br/>
+          {'    '}<span style={{color:'rgba(255,255,255,.3)'}}></span><br/>
           {'  }'}<br/>
           {'}'}
         </pre>
@@ -165,7 +158,6 @@ const FLOATS = [
 export default function Home() {
   const heroRef      = useRef(null);
   const titleRef     = useRef(null);
-  const floatsRef    = useRef([]);
   const marquee1Ref  = useRef(null);
   const marquee2Ref  = useRef(null);
   const svcImgRef    = useRef(null);
@@ -175,85 +167,70 @@ export default function Home() {
     window.scrollTo(0, 0);
   }, []);
 
-  /* ─── HERO ENTRANCE + SCROLL FADE — single context ─── */
   useEffect(() => {
     const ctx = gsap.context(() => {
+      gsap.set('.hz__studio, .hz__zero', { y: '105%' });
+      gsap.set('.hz__sub, .hz__ctas, .hz__scroll', { opacity: 0, y: 20 });
+      gsap.set('.hz__card', { opacity: 0, y: 24, scale: 0.93 });
 
-      /* 1. Entrance timeline */
-      const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: 0.2 });
+      const tl = gsap.timeline({ delay: 0.15 });
       tl
-        .fromTo('.hv3__title-line',
-          { y: '110%', opacity: 0 },
-          { y: '0%',   opacity: 1, stagger: 0.13, duration: 1.1 })
-        .fromTo('.hv3__sub, .hv3__ctas',
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0,  stagger: .12,  duration: .85 }, '-=.65')
-        .fromTo('.hv3__float',
-          { opacity: 0, scale: 0.8, y: 20 },
-          { opacity: 1, scale: 1,   y: 0, stagger: 0.07, duration: .8, ease: 'back.out(1.2)' }, '-=.7');
+        .to('.hz__studio', { y: '0%', duration: 1.0, ease: 'expo.out' })
+        .to('.hz__zero',   { y: '0%', duration: 1.0, ease: 'expo.out' }, '-=0.82')
+        .to('.hz__sub',    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.55')
+        .to('.hz__ctas',   { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.55')
+        .to('.hz__card',   { opacity: 1, y: 0, scale: 1, stagger: 0.12, duration: 0.9, ease: 'back.out(1.3)' }, '-=0.6')
+        .to('.hz__scroll', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.3');
+    }, heroRef);
 
-      /* 2. Scroll fade — fromTo with explicit from-state so it never fights the entrance */
-      gsap.fromTo(
-        '.hv3__floats, .hv3__center',
-        { opacity: 1, y: 0 },          // always start from visible
-        {
-          opacity: 0, y: -30,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: '12% top',
-            end:   '55% top',
-            scrub: 1.8,
-          }
+    const timer = setTimeout(() => {
+      if (!heroRef.current) return;
+      ScrollTrigger.create({
+        trigger: heroRef.current,
+        start: '10% top',
+        end: '58% top',
+        scrub: 2,
+        onUpdate: (self) => {
+          const p = self.progress;
+          gsap.set(['.hz__cards', '.hz__center'], { opacity: 1 - p, y: -28 * p });
         }
-      );
+      });
+    }, 1800);
 
-    }, heroRef); // ← same scope: both entrance & scroll share one ctx.revert()
-
-    return () => ctx.revert();
+    return () => { ctx.revert(); clearTimeout(timer); };
   }, []);
 
-  /* ─── MOUSE PARALLAX on floating objects ─── */
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
-
     const onMove = (e) => {
       const { innerWidth: w, innerHeight: h } = window;
       const nx = (e.clientX / w - 0.5) * 2;
       const ny = (e.clientY / h - 0.5) * 2;
-
-      // Each .hv3__float moves based on data-depth (applied to mouse wrapper, not bob wrapper)
-      document.querySelectorAll('.hv3__float').forEach(el => {
-        const depth = parseFloat(el.dataset.depth || 0.3);
-        const mx = nx * depth * 34;
-        const my = ny * depth * 26;
-        gsap.to(el, { x: mx, y: my, duration: 1.5, ease: 'power2.out' });
+      hero.querySelectorAll('.hz__card').forEach(el => {
+        const d = parseFloat(el.dataset.depth || 0.3);
+        gsap.to(el, { x: nx * d * 28, y: ny * d * 20, duration: 1.6, ease: 'power2.out' });
       });
-
-      // Subtle title parallax
       if (titleRef.current) {
-        gsap.to(titleRef.current, { x: nx * 6, y: ny * 3, duration: 1.8, ease: 'power2.out' });
+        gsap.to(titleRef.current, { x: nx * 5, y: ny * 2.5, duration: 1.9, ease: 'power2.out' });
       }
     };
-
     window.addEventListener('mousemove', onMove, { passive: true });
     return () => window.removeEventListener('mousemove', onMove);
   }, []);
 
-  /* ─── SERVICE hover image ─── */
   useEffect(() => {
     const img = svcImgRef.current;
     if (!img) return;
     const rows = document.querySelectorAll('.svc-row');
     const onEnter = (e) => {
       const src = e.currentTarget.dataset.img;
-      const el  = img.querySelector('img');
+      const el = img.querySelector('img');
       if (el) el.src = src;
       img.classList.add('visible');
     };
     const onLeave = () => img.classList.remove('visible');
-    const onMove  = (e) => {
+    const onMove = (e) => {
       gsap.to(img, { x: e.clientX + 24, y: e.clientY - img.offsetHeight / 2, duration: .55, ease: 'power3.out' });
     };
     rows.forEach(r => { r.addEventListener('mouseenter', onEnter); r.addEventListener('mouseleave', onLeave); });
@@ -264,10 +241,12 @@ export default function Home() {
     };
   }, []);
 
-  /* ─── SCROLL ANIMATIONS ─── */
   useEffect(() => {
     const st = (trigger, extra = {}) => ({ trigger, start: 'top 88%', toggleActions: 'play none none none', ...extra });
     const ctx = gsap.context(() => {
+      gsap.fromTo('.about-intro__text', { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: .9, ease: 'power3.out', scrollTrigger: st('.about-intro__inner') });
+      gsap.fromTo('.about-stat', { opacity: 0, y: 30, scale: .95 }, { opacity: 1, y: 0, scale: 1, stagger: .1, duration: .7, ease: 'back.out(1.2)', scrollTrigger: st('.about-intro__stats', { start: 'top 90%' }) });
+      gsap.fromTo('.about-tech-tag', { opacity: 0, y: 14 }, { opacity: 1, y: 0, stagger: .06, duration: .5, ease: 'power2.out', scrollTrigger: st('.about-tech-grid', { start: 'top 92%' }) });
       gsap.fromTo('.svc-row', { opacity: 0, x: -40 }, { opacity: 1, x: 0, stagger: .11, duration: .8, ease: 'power3.out', scrollTrigger: st('.services-v2__grid') });
       gsap.fromTo('.services-v2__head .section-title, .services-v2__head .eyebrow', { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: .1, duration: .75, ease: 'power3.out', scrollTrigger: st('.services-v2__head') });
       gsap.fromTo('.work-card', { opacity: 0, y: 50, scale: .97 }, { opacity: 1, y: 0, scale: 1, stagger: .13, duration: .9, ease: 'expo.out', scrollTrigger: st('.work-bento', { start: 'top 85%' }) });
@@ -287,20 +266,10 @@ export default function Home() {
       gsap.utils.toArray('.section-head .section-title').forEach(el => {
         gsap.fromTo(el, { opacity: 0, y: 34, clipPath: 'inset(0 0 100% 0)' }, { opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', duration: .9, ease: 'expo.out', scrollTrigger: st(el) });
       });
-      /* Magnetic buttons */
-      if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
-        document.querySelectorAll('.btn-primary, .btn-light').forEach(btn => {
-          const onMove  = (e) => { const r = btn.getBoundingClientRect(); gsap.to(btn, { x: (e.clientX - (r.left + r.width/2)) * .28, y: (e.clientY - (r.top + r.height/2)) * .28, duration: .4, ease: 'power2.out' }); };
-          const onLeave = () => gsap.to(btn, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,.5)' });
-          btn.addEventListener('mousemove', onMove);
-          btn.addEventListener('mouseleave', onLeave);
-        });
-      }
     });
     return () => ctx.revert();
   }, []);
 
-  /* ─── MARQUEE duplicate ─── */
   useEffect(() => {
     [marquee1Ref, marquee2Ref].forEach(ref => {
       const el = ref.current;
@@ -312,10 +281,8 @@ export default function Home() {
 
   return (
     <div>
-
-      {/* ══════════════ HERO V3 ══════════════ */}
       <section className="hv3" ref={heroRef}>
-        {/* Background */}
+
         <div className="hv3__bg" aria-hidden="true">
           <div className="hv3__noise"/>
           <div className="hv3__grid"/>
@@ -323,52 +290,109 @@ export default function Home() {
           <div className="hv3__glow hv3__glow--2"/>
         </div>
 
-        {/* ── CANVAS PARTICLES ── */}
+        <div className="hz__edge hz__edge--l" aria-hidden="true"/>
+        <div className="hz__edge hz__edge--r" aria-hidden="true"/>
+
         <HeroParticles />
 
-      {/* ── FLOATING OBJECTS — wrapped in a container for scroll-fade —— */}
-        <div className="hv3__floats">
-          {FLOATS.map((f) => (
-            <div
-              key={f.id}
-              className="hv3__float"
-              data-depth={f.depth}
-              style={{ position: 'absolute', zIndex: 3, ...f.style }}
-            >
-              <div className="hv3__float-bob">
-                {f.content}
-              </div>
-            </div>
-          ))}
+        <div className="hz__cards" aria-hidden="true">
+          <div className="hz__card hz__card--code" data-depth="0.3">
+            <div className="hz__win-bar"><span/><span/><span/></div>
+            <pre className="hz__code-pre"><span style={{color:'rgba(255,255,255,.35)'}}>const </span><span style={{color:'rgba(255,255,255,.7)'}}>result</span><span style={{color:'rgba(255,255,255,.35)'}}> = await </span><span style={{color:'rgba(255,255,255,.85)'}}>studioZero</span><span style={{color:'rgba(255,255,255,.35)'}}>.</span><span style={{color:'rgba(255,255,255,.75)'}}>execute</span><span style={{color:'rgba(255,255,255,.35)'}}>{'();'}</span></pre>
+          </div>
+
+          <div className="hz__card hz__card--node" data-depth="0.45">
+            <div className="hz__win-bar"><span/><span/><span/></div>
+            <svg viewBox="0 0 130 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="hz__node-svg">
+              <circle cx="20" cy="45" r="7" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.25)" strokeWidth="1.2"/>
+              <circle cx="65" cy="20" r="6" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.2)" strokeWidth="1.2"/>
+              <circle cx="65" cy="45" r="6" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.2)" strokeWidth="1.2"/>
+              <circle cx="65" cy="70" r="6" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.2)" strokeWidth="1.2"/>
+              <circle cx="110" cy="20" r="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" strokeWidth="1"/>
+              <circle cx="110" cy="45" r="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" strokeWidth="1"/>
+              <circle cx="110" cy="70" r="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" strokeWidth="1"/>
+              <path d="M27 45 L59 20" stroke="rgba(255,255,255,.2)" strokeWidth="1"/>
+              <path d="M27 45 L59 45" stroke="rgba(255,255,255,.2)" strokeWidth="1"/>
+              <path d="M27 45 L59 70" stroke="rgba(255,255,255,.2)" strokeWidth="1"/>
+              <path d="M71 20 L105 20" stroke="rgba(255,255,255,.15)" strokeWidth="1"/>
+              <path d="M71 45 L105 45" stroke="rgba(255,255,255,.15)" strokeWidth="1"/>
+              <path d="M71 70 L105 70" stroke="rgba(255,255,255,.15)" strokeWidth="1"/>
+            </svg>
+          </div>
         </div>
 
-        {/* ── CENTER CONTENT ── */}
-        <div className="container hv3__center">
-          <h1 className="hv3__title" ref={titleRef}>
-            <span className="hv3__title-line">Studio</span>
-            <span className="hv3__title-line hv3__title-outline">Zero.</span>
+        <div className="container hz__center" ref={titleRef}>
+          <h1 className="hz__title">
+            <div className="hz__title-overflow">
+              <span className="hz__studio">STUDIO</span>
+            </div>
+            <div className="hz__title-overflow">
+              <span className="hz__zero">ZERO</span>
+            </div>
           </h1>
-          <p className="hv3__sub">
-            Código propio &nbsp;·&nbsp; Trato directo &nbsp;·&nbsp; Resultados reales.
+          <p className="hz__sub">
+            Desarrollo de software premium.<br/>
+            Código propio. Trato directo. Resultados reales.
           </p>
-          <div className="hv3__ctas">
-            <a
-              className="btn btn-light btn-lg"
-              href={wspUrl('Hola Studio Zero, quiero cotizar el desarrollo de un sistema o web')}
-              target="_blank" rel="noopener noreferrer"
-            >
-              Empezar proyecto
-            </a>
-            <Link className="btn btn-outline-light btn-lg" to="/portafolio">
-              Ver portafolio →
-            </Link>
+          <div className="hz__ctas">
+            <a className="btn btn-light btn-lg" href={wspUrl('Hola Studio Zero, quiero cotizar el desarrollo de un sistema o web')} target="_blank" rel="noopener noreferrer">Empezar proyecto</a>
+            <Link className="btn btn-outline-light btn-lg" to="/portafolio">Ver portafolio →</Link>
           </div>
+        </div>
+
+        <div className="hz__scroll" aria-hidden="true">
+          <svg width="24" height="38" viewBox="0 0 24 38" fill="none">
+            <rect x="1" y="1" width="22" height="36" rx="11" stroke="rgba(255,255,255,.25)" strokeWidth="1.5"/>
+            <rect className="hz__scroll-dot" x="10" y="7" width="4" height="7" rx="2" fill="rgba(255,255,255,.5)"/>
+          </svg>
         </div>
 
       </section>
 
+      <section className="about-intro section">
+        <div className="container about-intro__inner">
+          <div className="about-intro__text">
+            <span className="eyebrow">Quién soy</span>
+            <h2 className="section-title">Ingeniero de software con enfoque en <em>soluciones reales</em>.</h2>
+            <p className="about-intro__desc">
+              Soy desarrollador full-stack especializado en sistemas web, aplicaciones móviles y arquitectura backend. 
+              Trabajo desde Chimbote, Perú, creando software a medida para negocios locales que quieren 
+              digitalizar sus operaciones con código propio, seguro y escalable.
+            </p>
+            <p className="about-intro__desc">
+              Cada proyecto lo construyo desde cero — sin plantillas, sin WordPress. 
+              Trato directo, precio fijo, entrega en días.
+            </p>
+          </div>
+          <div className="about-intro__stats">
+            <div className="about-stat">
+              <span className="about-stat__num">+5</span>
+              <span className="about-stat__label">Años de experiencia en desarrollo</span>
+            </div>
+            <div className="about-stat">
+              <span className="about-stat__num">100%</span>
+              <span className="about-stat__label">Código propio, sin plantillas</span>
+            </div>
+            <div className="about-stat">
+              <span className="about-stat__num">5</span>
+              <span className="about-stat__label">Días de entrega promedio</span>
+            </div>
+            <div className="about-stat">
+              <span className="about-stat__num">50/50</span>
+              <span className="about-stat__label">Forma de pago sin riesgo</span>
+            </div>
+          </div>
+        </div>
+        <div className="container about-intro__tech">
+          <span className="eyebrow">Stack tecnológico</span>
+          <div className="about-tech-grid">
+            {['Java', 'SQL Server', 'React', 'Node.js', 'Android / Kotlin', 'REST APIs', 'HTML / CSS', 'Git'].map(t => (
+              <span key={t} className="about-tech-tag">{t}</span>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* ══════════════ SERVICES ══════════════ */}
       <section className="services-v2 section" id="servicios">
         <div className="container">
           <div className="services-v2__head">
@@ -396,7 +420,6 @@ export default function Home() {
         <img src={SERVICES[0].img} alt=""/>
       </div>
 
-      {/* ══════════════ WORK SHOWCASE ══════════════ */}
       <section className="work-showcase section" id="portafolio">
         <div className="container">
           <div className="section-head work-showcase__head">
@@ -445,7 +468,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════ SPLIT ══════════════ */}
       <section className="split-immersive">
         <div className="container split-immersive__inner">
           <div className="split-immersive__visual">
@@ -471,7 +493,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════ GALLERY ══════════════ */}
       <section className="gallery" aria-label="Rubros">
         <div className="gallery__head container">
           <span className="eyebrow">Para todo tipo de negocio</span>
@@ -487,16 +508,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════ STATS ══════════════ */}
       <section className="stats-dark" aria-label="Números clave">
         <div className="stats-dark__glow stats-dark__glow--1" aria-hidden="true"/>
         <div className="stats-dark__glow stats-dark__glow--2" aria-hidden="true"/>
         <div className="container stats-grid">
           {[
-            { val:'5',   suffix:'días',  label:'Entrega promedio',         count:'5' },
-            { val:'100', suffix:'%',     label:'Adaptado a celular',       count:'100' },
-            { val:'50',  suffix:'/50',   label:'Forma de pago sin riesgo', count:null },
-            { val:'24',  suffix:'h',     label:'Tiempo de respuesta',      count:null },
+            { val:'5', suffix:'días', label:'Entrega promedio', count:'5' },
+            { val:'100', suffix:'%', label:'Adaptado a celular', count:'100' },
+            { val:'50', suffix:'/50', label:'Forma de pago sin riesgo', count:null },
+            { val:'24', suffix:'h', label:'Tiempo de respuesta', count:null },
           ].map((s,i) => (
             <div key={i} className="stat-block">
               <div style={{display:'flex',alignItems:'baseline',gap:4,justifyContent:'center'}}>
@@ -509,7 +529,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════ CTA ══════════════ */}
       <CtaBand
         title="¿Listo para que tu negocio <em>se vea profesional</em>?"
         subtitle="Conversemos sobre tu proyecto. Te respondemos el mismo día, sin compromiso."

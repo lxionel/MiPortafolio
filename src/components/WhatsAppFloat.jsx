@@ -2,10 +2,15 @@ import { useState, useEffect } from 'react';
 import { wspUrl } from '../utils/whatsapp';
 
 export default function WhatsAppFloat() {
+  const [visible, setVisible] = useState(false);
   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setShowTop(window.scrollY > 600);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setVisible(y > window.innerHeight * 0.75);
+      setShowTop(y > 600);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -13,7 +18,7 @@ export default function WhatsAppFloat() {
   return (
     <>
       <a
-        className="float-wsp"
+        className={`float-wsp${visible ? '' : ' float-wsp--hidden'}`}
         href={wspUrl('Hola Studio Zero, vi su web y quiero información')}
         target="_blank"
         rel="noopener noreferrer"

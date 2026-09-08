@@ -17,7 +17,6 @@ export default function Portafolio() {
 
   return (
     <div ref={scope}>
-      {/* ===== PAGE HEADER ===== */}
       <section className="pagehead">
         <div className="container">
           <p className="crumbs"><Link to="/">Inicio</Link> / Portafolio</p>
@@ -26,18 +25,17 @@ export default function Portafolio() {
         </div>
       </section>
 
-      {/* ===== PROJECTS GRID ===== */}
       <section className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
         <div className="container">
           <div className="work-live-grid">
 
-            {/* ---- Peripollos POS ---- */}
             <article className="work-live">
               <div className="work-live-frame reveal-img">
                 <img
                   src={publicAsset('/img/peripollos-pos.jpg')}
                   alt="Sistema POS Peripollos en Java"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onError={(e) => { e.target.style.display = 'none'; }}
                 />
               </div>
               <div className="work-live-body">
@@ -57,7 +55,6 @@ export default function Portafolio() {
               </div>
             </article>
 
-            {/* ---- MetaBit App ---- */}
             <article className="work-live">
               <div className="work-live-frame reveal-img">
                 <img
@@ -87,7 +84,6 @@ export default function Portafolio() {
         </div>
       </section>
 
-      {/* ===== CTA BAND ===== */}
       <CtaBand
         title="¿Imaginas tu negocio <em>así</em>?"
         subtitle="Cuéntanos qué necesitas y preparamos una demo o propuesta a tu medida."

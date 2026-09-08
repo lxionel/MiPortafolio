@@ -42,7 +42,6 @@ export default function Contacto() {
 
   return (
     <div ref={scope}>
-      {/* ===== PAGE HEADER ===== */}
       <section className="pagehead">
         <div className="container">
           <p className="crumbs"><Link to="/">Inicio</Link> / Contacto</p>
@@ -51,18 +50,15 @@ export default function Contacto() {
         </div>
       </section>
 
-      {/* ===== CONTACT GRID ===== */}
       <section className="section bg-soft">
         <div className="container contact-grid">
 
-          {/* ---- Left: Channels ---- */}
           <div>
             <span className="eyebrow">Medios directos</span>
             <h2 className="section-title" style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>
               Como te resulte más cómodo.
             </h2>
             <div className="contact-channels">
-              {/* WhatsApp */}
               <a
                 className="channel"
                 href={wspUrl('Hola Studio Zero, quiero información sobre un proyecto')}
@@ -81,7 +77,6 @@ export default function Contacto() {
                 </div>
               </a>
 
-              {/* Llamada */}
               <a className="channel" href="tel:+51952102805">
                 <span className="channel-ico ico-call">
                   <svg viewBox="0 0 24 24">
@@ -95,7 +90,6 @@ export default function Contacto() {
                 </div>
               </a>
 
-              {/* Correo */}
               <a className="channel" href="mailto:lioneldavora1@gmail.com">
                 <span className="channel-ico ico-mail">
                   <svg viewBox="0 0 24 24">
@@ -111,7 +105,6 @@ export default function Contacto() {
             </div>
           </div>
 
-          {/* ---- Right: Form ---- */}
           <form className="form" onSubmit={handleSubmit}>
             <div className="field">
               <label htmlFor="cfNombre">Tu nombre</label>
@@ -188,7 +181,6 @@ export default function Contacto() {
         </div>
       </section>
 
-      {/* ===== FAQ ===== */}
       <section className="section section--elevated">
         <div className="container">
           <div className="section-head center">

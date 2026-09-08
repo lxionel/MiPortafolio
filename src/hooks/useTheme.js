@@ -14,7 +14,6 @@ export function useTheme() {
     try {
       window.localStorage.setItem('sz-theme', theme);
     } catch {
-      // Storage can be unavailable in strict browser privacy modes.
     }
   }, [theme]);
 

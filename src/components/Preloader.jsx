@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 export default function Preloader({ onComplete }) {
-  const elRef   = useRef(null);
+  const elRef = useRef(null);
   const fillRef = useRef(null);
   const logoRef = useRef(null);
 
   useEffect(() => {
-    const el   = elRef.current;
+    const el = elRef.current;
     const fill = fillRef.current;
     const logo = logoRef.current;
     if (!el || !fill || !logo) return;

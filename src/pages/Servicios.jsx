@@ -16,7 +16,6 @@ export default function Servicios() {
 
   return (
     <div ref={scope}>
-      {/* ===== PAGE HEADER ===== */}
       <section className="pagehead">
         <div className="container">
           <p className="crumbs">
@@ -31,11 +30,9 @@ export default function Servicios() {
         </div>
       </section>
 
-      {/* ===== SERVICE DETAILS ===== */}
       <section className="section" style={{ background: 'var(--bg-soft)' }}>
         <div className="container">
 
-          {/* ── Especialidad 01 ── */}
           <article className="svc-detail">
             <div>
               <span className="svc-num">Especialidad 01</span>
@@ -90,7 +87,6 @@ export default function Servicios() {
             </div>
           </article>
 
-          {/* ── Especialidad 02 (reverse) ── */}
           <article className="svc-detail reverse">
             <div>
               <span className="svc-num">Especialidad 02</span>
@@ -144,7 +140,6 @@ export default function Servicios() {
             </div>
           </article>
 
-          {/* ── Especialidad 03 ── */}
           <article className="svc-detail">
             <div>
               <span className="svc-num">Especialidad 03</span>
@@ -203,7 +198,6 @@ export default function Servicios() {
             </div>
           </article>
 
-          {/* ── Especialidad 04 (reverse) ── */}
           <article className="svc-detail reverse">
             <div>
               <span className="svc-num">Especialidad 04</span>
@@ -261,7 +255,6 @@ export default function Servicios() {
         </div>
       </section>
 
-      {/* ===== METODOLOGÍA ===== */}
       <section className="section" style={{ background: 'var(--bg-soft)' }}>
         <div className="container">
           <div className="section-head center">
@@ -300,7 +293,6 @@ export default function Servicios() {
         </div>
       </section>
 
-      {/* ===== CTA BAND ===== */}
       <CtaBand
         title="¿Listo para digitalizar <em>tu empresa</em>?"
         subtitle="Cuéntanos el reto técnico que tienes y armaremos la arquitectura ideal para tu negocio."

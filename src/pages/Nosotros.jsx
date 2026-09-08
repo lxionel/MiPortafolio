@@ -16,7 +16,6 @@ export default function Nosotros() {
 
   return (
     <div ref={scope}>
-      {/* ── PAGE HEADER ── */}
       <section className="pagehead">
         <div className="container">
           <p className="crumbs"><Link to="/">Inicio</Link> / Nosotros</p>
@@ -25,7 +24,6 @@ export default function Nosotros() {
         </div>
       </section>
 
-      {/* ── ABOUT HERO ── */}
       <section className="section">
         <div className="container about-hero">
           <div className="about-portrait">
@@ -75,7 +73,6 @@ export default function Nosotros() {
         </div>
       </section>
 
-      {/* ── VALUES ── */}
       <section className="section" style={{ background: 'var(--bg-soft)' }}>
         <div className="container">
           <div className="section-head center">
@@ -117,16 +114,15 @@ export default function Nosotros() {
         </div>
       </section>
 
-      {/* ── STATS ── */}
       <section className="stats-dark">
         <div className="stats-dark__glow stats-dark__glow--1" aria-hidden="true" />
         <div className="stats-dark__glow stats-dark__glow--2" aria-hidden="true" />
         <div className="container stats-grid">
           {[
-            { num: '+5',   label: 'años creando productos digitales' },
+            { num: '+5', label: 'años creando productos digitales' },
             { num: '100%', label: 'diseño a medida, sin plantillas' },
-            { num: '3–7',  label: 'días de entrega promedio' },
-            { num: '2',    label: 'ciudades atendidas en persona' },
+            { num: '3–7', label: 'días de entrega promedio' },
+            { num: '2', label: 'ciudades atendidas en persona' },
           ].map((s, i) => (
             <div key={i} className="stat-block">
               <span className="stat-block__num">{s.num}</span>
@@ -136,7 +132,6 @@ export default function Nosotros() {
         </div>
       </section>
 
-      {/* ── SPLIT: Dónde trabajamos ── */}
       <section className="section">
         <div className="container split-immersive__inner">
           <div className="split-immersive__body">
@@ -162,7 +157,6 @@ export default function Nosotros() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
       <CtaBand
         title="Trabajemos <em>juntos</em>."
         subtitle="Cuéntanos tu idea y la convertimos en una presencia digital de la que estés orgulloso."

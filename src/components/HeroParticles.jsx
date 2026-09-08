@@ -12,65 +12,57 @@ export default function HeroParticles() {
     let animId;
     let particles = [];
 
-    /* ── Resize to fill parent ── */
     const resize = () => {
-      canvas.width  = canvas.offsetWidth;
+      canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
-      // Rebuild particles on resize to fill new dimensions
-      particles = Array.from({ length: 110 }, () => new Particle());
+      particles = Array.from({ length: 180 }, () => new Particle());
     };
 
-    /* ── Particle class ── */
     class Particle {
       constructor() { this.init(true); }
 
       init(random = false) {
-        this.x  = random ? Math.random() * canvas.width  : Math.random() * canvas.width;
-        this.y  = random ? Math.random() * canvas.height : Math.random() * canvas.height;
-        /* Slow drift */
-        this.vx = (Math.random() - 0.5) * 0.35;
-        this.vy = (Math.random() - 0.5) * 0.35;
-        /* Visual */
-        this.size       = Math.random() * 1.4 + 0.4;
-        this.baseOpacity = Math.random() * 0.45 + 0.1;
-        this.opacity    = this.baseOpacity;
+        this.x = random ? Math.random() * canvas.width : Math.random() * canvas.width;
+        this.y = random ? Math.random() * canvas.height : Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.size = Math.random() * 1.6 + 0.3;
+        this.baseOpacity = Math.random() * 0.35 + 0.08;
+        this.opacity = this.baseOpacity;
       }
 
       update() {
-        const dx   = this.x - mouse.x;
-        const dy   = this.y - mouse.y;
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const R    = 160; // repulsion radius
+        const R = 140;
 
         if (dist < R && dist > 0) {
-          const force = (R - dist) / R;            // 0→1 as particle gets closer
+          const force = (R - dist) / R;
           const angle = Math.atan2(dy, dx);
-          this.vx += Math.cos(angle) * force * 1.1;
-          this.vy += Math.sin(angle) * force * 1.1;
-          this.opacity = Math.min(0.9, this.baseOpacity + force * 0.55);
+          this.vx += Math.cos(angle) * force * 0.8;
+          this.vy += Math.sin(angle) * force * 0.8;
+          this.opacity = Math.min(0.7, this.baseOpacity + force * 0.35);
         } else {
-          /* Drift opacity back to base */
-          this.opacity += (this.baseOpacity - this.opacity) * 0.04;
+          this.opacity += (this.baseOpacity - this.opacity) * 0.03;
         }
 
-        /* Soft friction so velocity doesn't grow unbounded */
-        this.vx *= 0.96;
-        this.vy *= 0.96;
+        this.vx *= 0.97;
+        this.vy *= 0.97;
 
         this.x += this.vx;
         this.y += this.vy;
 
-        /* Wrap around edges */
-        if (this.x < -10)             this.x = canvas.width  + 10;
+        if (this.x < -10) this.x = canvas.width + 10;
         if (this.x > canvas.width+10) this.x = -10;
-        if (this.y < -10)             this.y = canvas.height + 10;
+        if (this.y < -10) this.y = canvas.height + 10;
         if (this.y > canvas.height+10) this.y = -10;
       }
 
       draw() {
         ctx.save();
         ctx.globalAlpha = this.opacity;
-        ctx.fillStyle   = '#c8d8f0';
+        ctx.fillStyle = '#a0b8d8';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -78,21 +70,20 @@ export default function HeroParticles() {
       }
     }
 
-    /* ── Draw connections between nearby particles ── */
-    const MAX_CONN = 130;
+    const MAX_CONN = 110;
 
     function drawConnections() {
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const dx   = particles[i].x - particles[j].x;
-          const dy   = particles[i].y - particles[j].y;
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < MAX_CONN) {
-            const alpha = (1 - dist / MAX_CONN) * 0.18;
+            const alpha = (1 - dist / MAX_CONN) * 0.12;
             ctx.save();
             ctx.globalAlpha = alpha;
             ctx.strokeStyle = '#4A80CC';
-            ctx.lineWidth   = 0.6;
+            ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -103,18 +94,16 @@ export default function HeroParticles() {
       }
     }
 
-    /* ── Subtle mouse glow ── */
     function drawMouseGlow() {
       if (mouse.x === -9999) return;
-      const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 140);
-      grad.addColorStop(0,   'rgba(74,128,204,0.10)');
-      grad.addColorStop(0.5, 'rgba(74,128,204,0.04)');
-      grad.addColorStop(1,   'rgba(74,128,204,0)');
+      const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 200);
+      grad.addColorStop(0, 'rgba(60,100,180,0.06)');
+      grad.addColorStop(0.4, 'rgba(60,100,180,0.025)');
+      grad.addColorStop(1, 'rgba(60,100,180,0)');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    /* ── Main loop ── */
     function loop() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawMouseGlow();
@@ -123,7 +112,6 @@ export default function HeroParticles() {
       animId = requestAnimationFrame(loop);
     }
 
-    /* ── Event listeners (on window so pointer-events:none works) ── */
     const onMove = (e) => {
       const rect = canvas.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;

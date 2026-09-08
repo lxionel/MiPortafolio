@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import { useTheme } from './hooks/useTheme';
@@ -13,7 +13,6 @@ import Portafolio from './pages/Portafolio';
 import Nosotros from './pages/Nosotros';
 import Contacto from './pages/Contacto';
 
-/* Scroll to top on route change */
 function ScrollReset() {
   const { pathname } = useLocation();
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
@@ -26,12 +25,12 @@ function AppInner({ theme, toggleTheme }) {
       <ScrollReset />
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <Routes>
-        <Route path="/"           element={<Home />} />
-        <Route path="/servicios"  element={<Servicios />} />
-        <Route path="/precios"    element={<Precios />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/servicios" element={<Servicios />} />
+        <Route path="/precios" element={<Precios />} />
         <Route path="/portafolio" element={<Portafolio />} />
-        <Route path="/nosotros"   element={<Nosotros />} />
-        <Route path="/contacto"   element={<Contacto />} />
+        <Route path="/nosotros" element={<Nosotros />} />
+        <Route path="/contacto" element={<Contacto />} />
       </Routes>
       <Footer />
       <WhatsAppFloat />
@@ -41,23 +40,18 @@ function AppInner({ theme, toggleTheme }) {
 
 export default function App() {
   const { theme, toggleTheme } = useTheme();
-  const lenisRef   = useRef(null);
   const [ready, setReady] = useState(false);
   const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-  /* Lenis smooth scroll */
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
-    lenisRef.current = lenis;
-
     let rafId;
     const raf = (time) => { lenis.raf(time); rafId = requestAnimationFrame(raf); };
     rafId = requestAnimationFrame(raf);
-
     return () => { cancelAnimationFrame(rafId); lenis.destroy(); };
   }, []);
 
