@@ -276,39 +276,67 @@ export default function Home() {
           </div>
           <div className="work-bento">
             <Link to="/portafolio" className="work-card work-card--main">
-              <div className="parallax-wrap" style={{position:'absolute',inset:0}}>
-                <img className="parallax-img" src={publicAsset('/img/peripollos-pos.png')} alt="Sistema POS Peripollos" loading="lazy"/>
-              </div>
-              <div className="work-card__overlay"/>
               <span className="work-card__arrow">↗</span>
-              <div className="work-card__body">
-                <span className="work-card__cat">Backend · Sistema POS</span>
-                <h3 className="work-card__title">Sistema de Gestión "Peripollos"</h3>
-                <p className="work-card__desc">POS en Java con base de datos SQL Server, webhooks y chatbot integrado.</p>
+              <div className="work-card__inner">
+                <div className="work-card__header">
+                  <span className="work-card__cat">Backend · Sistema POS</span>
+                  <h3 className="work-card__title">Sistema de Gestión "Peripollos"</h3>
+                  <p className="work-card__desc">POS de escritorio en Java conectado con SQL Server, webhooks y chatbot integrado para pedidos.</p>
+                </div>
+                <div className="work-card__preview">
+                  <div className="mock-window">
+                    <div className="mock-window-bar">
+                      <span className="mock-dot mock-dot--red" />
+                      <span className="mock-dot mock-dot--yellow" />
+                      <span className="mock-dot mock-dot--green" />
+                      <span className="mock-window-title">peripollos_pos_v2.0 — Java / SQL Server</span>
+                    </div>
+                    <div className="mock-window-screen">
+                      <img src={publicAsset('/img/peripollos-pos.png')} alt="Sistema POS Peripollos" loading="lazy"/>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Link>
+
             <Link to="/portafolio" className="work-card">
-              <div className="parallax-wrap" style={{position:'absolute',inset:0}}>
-                <img className="parallax-img" src={publicAsset('/img/metabit-app.jpg')} alt="App Móvil MetaBit" loading="lazy"/>
-              </div>
-              <div className="work-card__overlay"/>
               <span className="work-card__arrow">↗</span>
-              <div className="work-card__body">
-                <span className="work-card__cat">Móvil · Finanzas</span>
-                <h3 className="work-card__title">App Móvil "MetaBit"</h3>
-                <p className="work-card__desc">Aplicación Android nativa para cálculo y proyección de metas de ahorro.</p>
+              <div className="work-card__inner">
+                <div className="work-card__header">
+                  <span className="work-card__cat">Móvil · Finanzas</span>
+                  <h3 className="work-card__title">App Móvil "MetaBit"</h3>
+                  <p className="work-card__desc">Aplicación Android nativa para cálculo y proyección de metas de ahorro financiero.</p>
+                </div>
+                <div className="work-card__preview work-card__preview--phone">
+                  <div className="mock-phone">
+                    <div className="mock-phone-notch" />
+                    <img src={publicAsset('/img/metabit-app.jpg')} alt="App Móvil MetaBit" loading="lazy"/>
+                  </div>
+                </div>
               </div>
             </Link>
+
             <Link to="/portafolio" className="work-card">
-              <div className="parallax-wrap" style={{position:'absolute',inset:0}}>
-                <img className="parallax-img" src={publicAsset('/img/peripollos-web.png')} alt="Plataforma Web Peripollos" loading="lazy"/>
-              </div>
-              <div className="work-card__overlay"/>
               <span className="work-card__arrow">↗</span>
-              <div className="work-card__body">
-                <span className="work-card__cat">Web · En Vivo (Netlify)</span>
-                <h3 className="work-card__title">Plataforma Web "Peripollos"</h3>
-                <p className="work-card__desc">Carta digital interactiva y pedidos WhatsApp en producción.</p>
+              <div className="work-card__inner">
+                <div className="work-card__header">
+                  <span className="work-card__cat">Web · En Vivo (Netlify)</span>
+                  <h3 className="work-card__title">Plataforma Web "Peripollos"</h3>
+                  <p className="work-card__desc">Carta digital interactiva y pedidos WhatsApp con despliegue en vivo.</p>
+                </div>
+                <div className="work-card__preview">
+                  <div className="mock-window">
+                    <div className="mock-window-bar">
+                      <span className="mock-dot mock-dot--red" />
+                      <span className="mock-dot mock-dot--yellow" />
+                      <span className="mock-dot mock-dot--green" />
+                      <span className="mock-browser-url">peripollos.netlify.app</span>
+                    </div>
+                    <div className="mock-window-screen">
+                      <img src={publicAsset('/img/peripollos-web.png')} alt="Plataforma Web Peripollos" loading="lazy"/>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Link>
           </div>

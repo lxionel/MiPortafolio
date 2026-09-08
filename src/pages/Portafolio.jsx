@@ -31,11 +31,21 @@ export default function Portafolio() {
 
             <article className="work-live">
               <div className="work-live-frame reveal-img">
-                <img
-                  src={publicAsset('/img/peripollos-pos.png')}
-                  alt="Sistema POS Peripollos en Java"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+                <div className="mock-window">
+                  <div className="mock-window-bar">
+                    <span className="mock-dot mock-dot--red" />
+                    <span className="mock-dot mock-dot--yellow" />
+                    <span className="mock-dot mock-dot--green" />
+                    <span className="mock-window-title">peripollos_pos_v2.0 — Java / SQL Server</span>
+                  </div>
+                  <div className="mock-window-screen">
+                    <img
+                      src={publicAsset('/img/peripollos-pos.png')}
+                      alt="Sistema POS Peripollos en Java"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="work-live-body">
                 <span className="eyebrow">Desarrollo Backend · Sistema POS</span>
@@ -56,11 +66,21 @@ export default function Portafolio() {
 
             <article className="work-live">
               <div className="work-live-frame reveal-img">
-                <img
-                  src={publicAsset('/img/peripollos-web.png')}
-                  alt="Plataforma Web Peripollos en Vivo"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+                <div className="mock-window">
+                  <div className="mock-window-bar">
+                    <span className="mock-dot mock-dot--red" />
+                    <span className="mock-dot mock-dot--yellow" />
+                    <span className="mock-dot mock-dot--green" />
+                    <span className="mock-browser-url">peripollos.netlify.app</span>
+                  </div>
+                  <div className="mock-window-screen">
+                    <img
+                      src={publicAsset('/img/peripollos-web.png')}
+                      alt="Plataforma Web Peripollos en Vivo"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="work-live-body">
                 <span className="eyebrow">Desarrollo Web · Carta Digital & Pedidos</span>
@@ -86,12 +106,15 @@ export default function Portafolio() {
             </article>
 
             <article className="work-live">
-              <div className="work-live-frame reveal-img">
-                <img
-                  src={publicAsset('/img/metabit-app.jpg')}
-                  alt="Aplicación Móvil MetaBit"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+              <div className="work-live-frame work-live-frame--phone reveal-img">
+                <div className="mock-phone mock-phone--lg">
+                  <div className="mock-phone-notch" />
+                  <img
+                    src={publicAsset('/img/metabit-app.jpg')}
+                    alt="Aplicación Móvil MetaBit"
+                    loading="lazy"
+                  />
+                </div>
               </div>
               <div className="work-live-body">
                 <span className="eyebrow">Aplicación Móvil · Finanzas</span>
