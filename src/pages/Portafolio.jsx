@@ -30,6 +30,32 @@ export default function Portafolio() {
           <div className="work-live-grid">
 
             <article className="work-live">
+              <div className="work-live-frame work-live-frame--phone reveal-img">
+                <div className="mock-phone mock-phone--lg">
+                  <div className="mock-phone-notch" />
+                  <img
+                    src={publicAsset('/img/metabit-app.jpg')}
+                    alt="Aplicación Móvil MetaBit"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+              <div className="work-live-body">
+                <span className="eyebrow">Aplicación Móvil · Finanzas</span>
+                <h2>App Móvil "MetaBit"</h2>
+                <p>
+                  Desarrollo de una aplicación móvil enfocada en la automatización y proyección
+                  de metas de ahorro financiero. El proyecto abarcó desde el diseño de la interfaz (UI)
+                  y la identidad visual, hasta la programación de la lógica interna y la compilación del APK funcional.
+                </p>
+                <ul className="checklist">
+                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Algoritmos de cálculo para proyección de ahorros periódicos.</li>
+                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Desarrollo de interfaz Android nativa e intuitiva.</li>
+                </ul>
+              </div>
+            </article>
+
+            <article className="work-live">
               <div className="work-live-frame reveal-img">
                 <div className="mock-window">
                   <div className="mock-window-bar">
@@ -102,32 +128,6 @@ export default function Portafolio() {
                     Ver sitio en vivo (peripollos.netlify.app) ↗
                   </a>
                 </div>
-              </div>
-            </article>
-
-            <article className="work-live">
-              <div className="work-live-frame work-live-frame--phone reveal-img">
-                <div className="mock-phone mock-phone--lg">
-                  <div className="mock-phone-notch" />
-                  <img
-                    src={publicAsset('/img/metabit-app.jpg')}
-                    alt="Aplicación Móvil MetaBit"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-              <div className="work-live-body">
-                <span className="eyebrow">Aplicación Móvil · Finanzas</span>
-                <h2>App Móvil "MetaBit"</h2>
-                <p>
-                  Desarrollo de una aplicación móvil enfocada en la automatización y proyección
-                  de metas de ahorro financiero. El proyecto abarcó desde el diseño de la interfaz (UI)
-                  y la identidad visual, hasta la programación de la lógica interna y la compilación del APK funcional.
-                </p>
-                <ul className="checklist">
-                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Algoritmos de cálculo para proyección de ahorros periódicos.</li>
-                  <li><span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>Desarrollo de interfaz Android nativa e intuitiva.</li>
-                </ul>
               </div>
             </article>
 

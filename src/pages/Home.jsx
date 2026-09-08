@@ -279,6 +279,23 @@ export default function Home() {
               <span className="work-card__arrow">↗</span>
               <div className="work-card__inner">
                 <div className="work-card__header">
+                  <span className="work-card__cat">Móvil · Finanzas</span>
+                  <h3 className="work-card__title">App Móvil "MetaBit"</h3>
+                  <p className="work-card__desc">Aplicación Android nativa para cálculo y proyección de metas de ahorro financiero con diseño de interfaz móvil intuitiva.</p>
+                </div>
+                <div className="work-card__preview work-card__preview--phone-main">
+                  <div className="mock-phone mock-phone--hero">
+                    <div className="mock-phone-notch" />
+                    <img src={publicAsset('/img/metabit-app.jpg')} alt="App Móvil MetaBit" loading="lazy"/>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            <Link to="/portafolio" className="work-card">
+              <span className="work-card__arrow">↗</span>
+              <div className="work-card__inner">
+                <div className="work-card__header">
                   <span className="work-card__cat">Backend · Sistema POS</span>
                   <h3 className="work-card__title">Sistema de Gestión "Peripollos"</h3>
                   <p className="work-card__desc">POS de escritorio en Java conectado con SQL Server, webhooks y chatbot integrado para pedidos.</p>
@@ -294,23 +311,6 @@ export default function Home() {
                     <div className="mock-window-screen">
                       <img src={publicAsset('/img/peripollos-pos.png')} alt="Sistema POS Peripollos" loading="lazy"/>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            <Link to="/portafolio" className="work-card">
-              <span className="work-card__arrow">↗</span>
-              <div className="work-card__inner">
-                <div className="work-card__header">
-                  <span className="work-card__cat">Móvil · Finanzas</span>
-                  <h3 className="work-card__title">App Móvil "MetaBit"</h3>
-                  <p className="work-card__desc">Aplicación Android nativa para cálculo y proyección de metas de ahorro financiero.</p>
-                </div>
-                <div className="work-card__preview work-card__preview--phone">
-                  <div className="mock-phone">
-                    <div className="mock-phone-notch" />
-                    <img src={publicAsset('/img/metabit-app.jpg')} alt="App Móvil MetaBit" loading="lazy"/>
                   </div>
                 </div>
               </div>

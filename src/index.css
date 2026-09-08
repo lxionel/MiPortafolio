@@ -829,6 +829,29 @@ h1, h2, h3, h4 {
   border-radius: 36px;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.15);
 }
+.mock-phone--hero {
+  width: 245px;
+  max-width: 88%;
+  border-width: 5.5px;
+  border-radius: 34px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+@media (max-width: 1200px) {
+  .mock-phone--hero {
+    width: 215px;
+  }
+}
+.work-card__preview--phone-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0 12px;
+  background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.16) 0%, transparent 75%);
+  border-radius: var(--radius-lg);
+  margin-top: auto;
+  width: 100%;
+}
 .mock-phone-notch {
   width: 52px;
   height: 9px;
