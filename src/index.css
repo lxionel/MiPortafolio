@@ -720,7 +720,9 @@ h1, h2, h3, h4 {
   padding-top: 10px;
 }
 .work-card__preview--phone {
-  padding: 12px 0;
+  padding: 16px 0 10px;
+  background: radial-gradient(circle at 50% 60%, rgba(37, 99, 235, 0.12) 0%, transparent 70%);
+  border-radius: var(--radius-lg);
 }
 .work-card__arrow {
   position: absolute;
@@ -808,29 +810,30 @@ h1, h2, h3, h4 {
 
 /* Phone Mockup */
 .mock-phone {
-  width: 175px;
+  width: 190px;
   max-width: 85%;
   margin: 0 auto;
-  border: 4px solid #222c3d;
-  border-radius: 28px;
+  border: 5px solid #1e293b;
+  border-radius: 30px;
   overflow: hidden;
   background: #000;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.12);
   position: relative;
   display: flex;
   flex-direction: column;
 }
 .mock-phone--lg {
-  width: 250px;
+  width: 270px;
   max-width: 90%;
-  border-width: 5px;
-  border-radius: 34px;
+  border-width: 6px;
+  border-radius: 36px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.15);
 }
 .mock-phone-notch {
-  width: 48px;
-  height: 8px;
-  background: #222c3d;
-  border-radius: 0 0 6px 6px;
+  width: 52px;
+  height: 9px;
+  background: #1e293b;
+  border-radius: 0 0 7px 7px;
   position: absolute;
   top: 0;
   left: 50%;
