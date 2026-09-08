@@ -125,7 +125,7 @@ export default function Portafolio() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Ver sitio en vivo (peripollos.netlify.app) ↗
+                    Ver sitio en vivo (peripollos.netlify.app)
                   </a>
                 </div>
               </div>

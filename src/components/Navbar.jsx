@@ -50,11 +50,10 @@ export default function Navbar({ theme, toggleTheme }) {
   }, [updatePill]);
 
   const closeMenu = () => setMenuOpen(false);
-  const hidden = isHome && !scrolled;
 
   return (
     <header
-      className={`nav${scrolled ? ' scrolled' : ''}${hidden ? ' nav--hero-hidden' : ''}`}
+      className={`nav${scrolled ? ' scrolled' : ''}`}
       id="nav"
     >
       <div className="container nav-inner">

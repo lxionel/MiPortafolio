@@ -6,7 +6,6 @@ const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, 
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="footer-glow" aria-hidden="true"></div>
       <div className="container footer-grid">
         <div className="footer-brand">
           <Link className="logo" to="/">

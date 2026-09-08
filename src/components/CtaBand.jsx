@@ -31,9 +31,6 @@ export default function CtaBand({ title, subtitle, primaryText, primaryMsg, prim
 
   return (
     <section className="cta-band">
-      <div className="cta-band__grid" aria-hidden="true" />
-      <div className="cta-band__glow cta-band__glow--1" aria-hidden="true" />
-      <div className="cta-band__glow cta-band__glow--2" aria-hidden="true" />
       <div className="container cta-band__inner">
         <span className="eyebrow cta-band__eyebrow">{eyebrow}</span>
         <h2 dangerouslySetInnerHTML={{ __html: title }} />

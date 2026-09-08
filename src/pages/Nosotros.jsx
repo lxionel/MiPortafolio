@@ -62,14 +62,14 @@ export default function Nosotros() {
                 Contactar conmigo
               </Link>
               <a
-                className="btn btn-ghost"
+                className="btn btn-secondary"
                 href="https://www.linkedin.com/in/lionel-aguirre-gomero-53a7052a9"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                LinkedIn ↗
+                LinkedIn
               </a>
-              <Link className="btn btn-ghost" to="/portafolio">Ver proyectos destacados →</Link>
+              <Link className="btn btn-secondary" to="/portafolio">Ver proyectos destacados</Link>
             </div>
           </div>
         </div>

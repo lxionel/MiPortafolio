@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import { useTheme } from './hooks/useTheme';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
-import Preloader from './components/Preloader';
 import Home from './pages/Home';
 import Portafolio from './pages/Portafolio';
 import Nosotros from './pages/Nosotros';
@@ -37,7 +36,6 @@ function AppInner({ theme, toggleTheme }) {
 
 export default function App() {
   const { theme, toggleTheme } = useTheme();
-  const [ready, setReady] = useState(false);
   const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   useEffect(() => {
@@ -54,7 +52,6 @@ export default function App() {
 
   return (
     <BrowserRouter basename={basename || undefined}>
-      {!ready && <Preloader onComplete={() => setReady(true)} />}
       <AppInner theme={theme} toggleTheme={toggleTheme} />
     </BrowserRouter>
   );
