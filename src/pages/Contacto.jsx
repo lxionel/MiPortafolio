@@ -5,13 +5,12 @@ import { useGsap, setupPageAnimations } from '../hooks/useGsap';
 
 export default function Contacto() {
   const [nombre, setNombre] = useState('');
-  const [negocio, setNegocio] = useState('');
-  const [servicio, setServicio] = useState('');
+  const [email, setEmail] = useState('');
+  const [motivo, setMotivo] = useState('');
   const [mensaje, setMensaje] = useState('');
-  const [cuando, setCuando] = useState('');
 
   useEffect(() => {
-    document.title = 'Contacto — Studio Zero | Hablemos de tu proyecto';
+    document.title = 'Contacto — Lionel | Desarrollador de Software';
     window.scrollTo(0, 0);
   }, []);
 
@@ -23,30 +22,23 @@ export default function Contacto() {
     e.preventDefault();
 
     const lines = [
-      `Hola Studio Zero, soy ${nombre}.`,
-      negocio ? `Mi negocio: ${negocio}.` : '',
-      servicio ? `Me interesa: ${servicio}.` : '',
-      mensaje ? `\nDetalle: ${mensaje}` : '',
-      cuando ? `\nPreferencia de contacto: ${cuando}.` : '',
+      `Hola Lionel, te contacto desde tu portafolio.`,
+      `Mi nombre: ${nombre}`,
+      email ? `Mi correo/contacto: ${email}` : '',
+      motivo ? `Motivo: ${motivo}` : '',
+      mensaje ? `\nMensaje:\n${mensaje}` : '',
     ].filter(Boolean).join('\n');
 
     window.open(wspUrl(lines), '_blank', 'noopener,noreferrer');
   };
-
-  const chips = [
-    { label: 'Mañana', value: 'En la mañana' },
-    { label: 'Tarde', value: 'En la tarde' },
-    { label: 'Noche', value: 'En la noche' },
-    { label: 'Cuando puedan', value: 'Cuando puedan' },
-  ];
 
   return (
     <div ref={scope}>
       <section className="pagehead">
         <div className="container">
           <p className="crumbs"><Link to="/">Inicio</Link> / Contacto</p>
-          <h1>Hablemos de tu proyecto.</h1>
-          <p>Elige el medio que prefieras. Respondemos el mismo día, sin compromiso.</p>
+          <h1>Conectemos.</h1>
+          <p>¿Tienes una oportunidad laboral, una consulta sobre mis proyectos o buscas colaborar? Escríbeme por cualquiera de estos canales.</p>
         </div>
       </section>
 
@@ -54,39 +46,26 @@ export default function Contacto() {
         <div className="container contact-grid">
 
           <div>
-            <span className="eyebrow">Medios directos</span>
+            <span className="eyebrow">Canales directos</span>
             <h2 className="section-title" style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>
-              Como te resulte más cómodo.
+              Canales de comunicación.
             </h2>
             <div className="contact-channels">
               <a
                 className="channel"
-                href={wspUrl('Hola Studio Zero, quiero información sobre un proyecto')}
+                href="https://github.com/lxionel"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span className="channel-ico ico-wsp">
-                  <svg viewBox="0 0 32 32">
-                    <path d="M16 3C9.4 3 4 8.4 4 15c0 2.6.8 5 2.3 7L4 29l7.2-2.2c1.9 1 4 1.6 6.2 1.6 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-2 0-3.9-.6-5.5-1.6l-.4-.2-4.2 1.3 1.3-4.1-.3-.4C5.7 18.2 5.1 16.6 5.1 15 5.1 9 10 4.1 16 4.1S26.9 9 26.9 15 22 24.8 16 24.8zm6-7.4c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.3-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6-.1-.2-.7-1.8-1-2.4-.3-.6-.5-.5-.7-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.2 1.3 3.4c.2.2 2.3 3.5 5.5 4.9.8.3 1.4.5 1.9.7.8.2 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/>
-                  </svg>
-                </span>
-                <div>
-                  <b>WhatsApp</b><span className="val">952 102 805</span>
-                  <br />
-                  <span className="hint">Respuesta en minutos</span>
-                </div>
-              </a>
-
-              <a className="channel" href="tel:+51952102805">
                 <span className="channel-ico ico-call">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/>
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                   </svg>
                 </span>
                 <div>
-                  <b>Llamada</b><span className="val">952 102 805</span>
+                  <b>GitHub</b><span className="val">@lxionel</span>
                   <br />
-                  <span className="hint">Lun a Sáb · 9am — 8pm</span>
+                  <span className="hint">Ver código y repositorios</span>
                 </div>
               </a>
 
@@ -99,7 +78,25 @@ export default function Contacto() {
                 <div>
                   <b>Correo</b><span className="val">lioneldavora1@gmail.com</span>
                   <br />
-                  <span className="hint">Para propuestas formales</span>
+                  <span className="hint">Contacto profesional</span>
+                </div>
+              </a>
+
+              <a
+                className="channel"
+                href={wspUrl('Hola Lionel, vi tu portafolio y me gustaría ponerme en contacto contigo')}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="channel-ico ico-wsp">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M16 3C9.4 3 4 8.4 4 15c0 2.6.8 5 2.3 7L4 29l7.2-2.2c1.9 1 4 1.6 6.2 1.6 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-2 0-3.9-.6-5.5-1.6l-.4-.2-4.2 1.3 1.3-4.1-.3-.4C5.7 18.2 5.1 16.6 5.1 15 5.1 9 10 4.1 16 4.1S26.9 9 26.9 15 22 24.8 16 24.8zm6-7.4c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.3-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6-.1-.2-.7-1.8-1-2.4-.3-.6-.5-.5-.7-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.2 1.3 3.4c.2.2 2.3 3.5 5.5 4.9.8.3 1.4.5 1.9.7.8.2 1.5.2 2 .1.6-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/>
+                  </svg>
+                </span>
+                <div>
+                  <b>WhatsApp</b><span className="val">+51 952 102 805</span>
+                  <br />
+                  <span className="hint">Mensajes directos</span>
                 </div>
               </a>
             </div>
@@ -120,61 +117,45 @@ export default function Contacto() {
             </div>
             <div className="form-row">
               <div className="field">
-                <label htmlFor="cfNegocio">Tu negocio</label>
+                <label htmlFor="cfEmail">Tu correo o contacto</label>
                 <input
                   type="text"
-                  id="cfNegocio"
-                  placeholder="Ej. Bazar Central"
-                  value={negocio}
-                  onChange={(e) => setNegocio(e.target.value)}
+                  id="cfEmail"
+                  placeholder="tu@correo.com o teléfono"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="field">
-                <label htmlFor="cfServicio">¿Qué te interesa?</label>
+                <label htmlFor="cfMotivo">Motivo</label>
                 <select
-                  id="cfServicio"
-                  value={servicio}
-                  onChange={(e) => setServicio(e.target.value)}
+                  id="cfMotivo"
+                  value={motivo}
+                  onChange={(e) => setMotivo(e.target.value)}
                 >
-                  <option value="">Elige una opción</option>
-                  <option>Sitio web de negocio</option>
-                  <option>Carta digital con QR</option>
-                  <option>Catálogo con pedidos</option>
-                  <option>Reservas y citas</option>
-                  <option>Landing de campaña</option>
-                  <option>Aún no estoy seguro</option>
+                  <option value="">Selecciona una opción</option>
+                  <option>Oportunidad laboral / Selección</option>
+                  <option>Proyecto de software / Desarrollo</option>
+                  <option>Consulta técnica o sobre un proyecto</option>
+                  <option>Networking / Conectar</option>
                 </select>
               </div>
             </div>
             <div className="field">
-              <label htmlFor="cfMsg">Cuéntanos un poco más</label>
+              <label htmlFor="cfMsg">Mensaje</label>
               <textarea
                 id="cfMsg"
-                placeholder="Describe tu negocio y qué te gustaría lograr."
+                placeholder="Cuéntame sobre la propuesta, el proyecto o la idea."
+                required
                 value={mensaje}
                 onChange={(e) => setMensaje(e.target.value)}
               />
-            </div>
-            <div className="field">
-              <label>¿Cuándo prefieres que te contactemos?</label>
-              <div className="chip-row">
-                {chips.map((chip) => (
-                  <button
-                    key={chip.value}
-                    type="button"
-                    className={`chip${cuando === chip.value ? ' active' : ''}`}
-                    onClick={() => setCuando(cuando === chip.value ? '' : chip.value)}
-                  >
-                    {chip.label}
-                  </button>
-                ))}
-              </div>
             </div>
             <button type="submit" className="btn btn-primary btn-block btn-lg">
               Enviar por WhatsApp
             </button>
             <p className="form-note">
-              Se abrirá WhatsApp con tu mensaje ya redactado. Tú decides si lo envías.
+              Se abrirá WhatsApp con el mensaje estructurado listo para enviar. También puedes escribirme directamente a <a href="mailto:lioneldavora1@gmail.com" style={{color:'var(--primary)'}}>lioneldavora1@gmail.com</a>.
             </p>
           </form>
 
@@ -184,25 +165,21 @@ export default function Contacto() {
       <section className="section section--elevated">
         <div className="container">
           <div className="section-head center">
-            <span className="eyebrow">Antes de escribir</span>
+            <span className="eyebrow">Información adicional</span>
             <h2 className="section-title">Preguntas frecuentes.</h2>
           </div>
           <div className="faq">
             <details>
-              <summary>¿En cuánto tiempo responden?</summary>
-              <p>El mismo día, dentro del horario de atención (Lun a Sáb, 9am a 8pm). Por WhatsApp normalmente en minutos.</p>
+              <summary>¿En qué tecnologías te especializas?</summary>
+              <p>Mi enfoque principal es el desarrollo backend con <strong>Java</strong> y bases de datos relacionales en <strong>SQL Server</strong>, creación de aplicaciones móviles en <strong>Android / Kotlin</strong>, e interfaces web modernas con <strong>React</strong>.</p>
             </details>
             <details>
-              <summary>¿Atienden fuera de Chimbote?</summary>
-              <p>Sí. Trabajamos presencialmente en Chimbote y Nuevo Chimbote, y a distancia para todo el Perú.</p>
+              <summary>¿Estás disponible para trabajo remoto o presencial?</summary>
+              <p>Sí, estoy disponible para oportunidades en modalidad 100% remota para cualquier lugar, así como para proyectos y reuniones presenciales en Chimbote y Nuevo Chimbote.</p>
             </details>
             <details>
-              <summary>¿Tiene costo cotizar?</summary>
-              <p>No. La cotización y la asesoría inicial son gratuitas y sin compromiso.</p>
-            </details>
-            <details>
-              <summary>¿Qué información debo tener lista?</summary>
-              <p>El nombre de tu negocio, qué ofreces y, si tienes, tu logo y fotos. Si te falta algo, te orientamos.</p>
+              <summary>¿Dónde puedo ver más de tu código?</summary>
+              <p>Puedes revisar mis repositorios y commits directamente en mi cuenta de GitHub: <a href="https://github.com/lxionel" target="_blank" rel="noopener noreferrer" style={{color:'var(--primary)'}}>github.com/lxionel</a>.</p>
             </details>
           </div>
         </div>

@@ -7,7 +7,7 @@ const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, 
 
 export default function Portafolio() {
   useEffect(() => {
-    document.title = 'Portafolio — Studio Zero | Demos reales';
+    document.title = 'Proyectos — Lionel | Desarrollador de Software';
     window.scrollTo(0, 0);
   }, []);
 
@@ -19,9 +19,9 @@ export default function Portafolio() {
     <div ref={scope}>
       <section className="pagehead">
         <div className="container">
-          <p className="crumbs"><Link to="/">Inicio</Link> / Portafolio</p>
-          <h1>No son capturas: son sistemas reales.</h1>
-          <p>Conoce la arquitectura detrás de nuestros proyectos más destacados, desarrollados a medida con ingeniería de software.</p>
+          <p className="crumbs"><Link to="/">Inicio</Link> / Proyectos</p>
+          <h1>Proyectos y sistemas reales.</h1>
+          <p>Casos prácticos de desarrollo de software, arquitectura de backend, bases de datos y aplicaciones móviles.</p>
         </div>
       </section>
 
@@ -85,12 +85,12 @@ export default function Portafolio() {
       </section>
 
       <CtaBand
-        title="¿Imaginas tu negocio <em>así</em>?"
-        subtitle="Cuéntanos qué necesitas y preparamos una demo o propuesta a tu medida."
-        primaryText="Quiero algo así"
-        primaryMsg="Hola Studio Zero, vi el portafolio y quiero algo similar para mi negocio"
-        secondaryText="Ver precios"
-        secondaryLink="/precios"
+        title="¿Te gustaría conocer más sobre <em>estos desarrollos</em>?"
+        subtitle="Conversemos sobre la arquitectura, el código o posibles colaboraciones técnicas."
+        primaryText="Contactar"
+        primaryLink="/contacto"
+        secondaryText="Ver mi GitHub"
+        secondaryLink="https://github.com/lxionel"
       />
     </div>
   );

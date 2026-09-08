@@ -7,8 +7,6 @@ import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
 import Preloader from './components/Preloader';
 import Home from './pages/Home';
-import Servicios from './pages/Servicios';
-import Precios from './pages/Precios';
 import Portafolio from './pages/Portafolio';
 import Nosotros from './pages/Nosotros';
 import Contacto from './pages/Contacto';
@@ -26,9 +24,8 @@ function AppInner({ theme, toggleTheme }) {
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/servicios" element={<Servicios />} />
-        <Route path="/precios" element={<Precios />} />
         <Route path="/portafolio" element={<Portafolio />} />
+        <Route path="/sobre-mi" element={<Nosotros />} />
         <Route path="/nosotros" element={<Nosotros />} />
         <Route path="/contacto" element={<Contacto />} />
       </Routes>

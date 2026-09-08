@@ -5,10 +5,8 @@ import { wspUrl } from '../utils/whatsapp';
 
 const LINKS = [
   { to: '/', label: 'Inicio', end: true },
-  { to: '/servicios', label: 'Servicios' },
-  { to: '/precios', label: 'Precios' },
-  { to: '/portafolio', label: 'Portafolio' },
-  { to: '/nosotros', label: 'Nosotros' },
+  { to: '/portafolio', label: 'Proyectos' },
+  { to: '/sobre-mi', label: 'Sobre mí' },
   { to: '/contacto', label: 'Contacto' },
 ];
 
@@ -60,10 +58,10 @@ export default function Navbar({ theme, toggleTheme }) {
       id="nav"
     >
       <div className="container nav-inner">
-        <Link className="logo" to="/" onClick={closeMenu} aria-label="Studio Zero">
+        <Link className="logo" to="/" onClick={closeMenu} aria-label="Lionel Dev">
           <img className="logo-mark" src={publicAsset('/img/logo.svg')} alt="" width="34" height="34"
             onError={e => { e.target.style.display='none'; }} />
-          <span className="logo-text">Studio<span>Zero</span></span>
+          <span className="logo-text">Lionel<span>.dev</span></span>
         </Link>
 
         <nav ref={navMenuRef} className={`nav-menu${menuOpen ? ' open' : ''}`} aria-label="Principal">
@@ -75,13 +73,13 @@ export default function Navbar({ theme, toggleTheme }) {
 
         <div className="nav-actions">
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
-          <a
+          <Link
             className="btn btn-sm btn-primary"
-            href={wspUrl('Hola Studio Zero, quiero cotizar un proyecto')}
-            target="_blank" rel="noopener noreferrer"
+            to="/contacto"
+            onClick={closeMenu}
           >
-            Cotizar
-          </a>
+            Contactar
+          </Link>
           <button
             className={`nav-toggle${menuOpen ? ' open' : ''}`}
             aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}

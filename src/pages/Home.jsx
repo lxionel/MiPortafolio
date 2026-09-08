@@ -8,162 +8,20 @@ import { wspUrl } from '../utils/whatsapp';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const MARQUEE_ROW_1 = [
-  { src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&q=70&auto=format&fit=crop', label: 'Restaurantes' },
-  { src: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=70&auto=format&fit=crop', label: 'Cafeterías' },
-  { src: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&q=70&auto=format&fit=crop', label: 'Comercios' },
-  { src: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=500&q=70&auto=format&fit=crop', label: 'Salones' },
-  { src: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&q=70&auto=format&fit=crop', label: 'Gimnasios' },
-  { src: 'https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=500&q=70&auto=format&fit=crop', label: 'Salud' },
-];
-const MARQUEE_ROW_2 = [
-  { src: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=500&q=70&auto=format&fit=crop', label: 'Pastelerías' },
-  { src: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=500&q=70&auto=format&fit=crop', label: 'Boutiques' },
-  { src: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=500&q=70&auto=format&fit=crop', label: 'Fitness' },
-  { src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=500&q=70&auto=format&fit=crop', label: 'Educación' },
-  { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=70&auto=format&fit=crop', label: 'Bares' },
-  { src: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&q=70&auto=format&fit=crop', label: 'Servicios' },
-];
-
 const SERVICES = [
-  { num: '01', title: 'Plataformas Web', desc: 'Sitios de alto rendimiento construidos desde cero. SEO técnico, velocidad y conversión garantizados.', tags: ['UI/UX', 'React', 'SEO', '5 días'], img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80&auto=format&fit=crop' },
-  { num: '02', title: 'Sistemas & POS', desc: 'Software de gestión y punto de venta a medida. Base de datos relacional, inventario, reportes en tiempo real.', tags: ['Java', 'SQL Server', 'Seguro'], img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80&auto=format&fit=crop' },
-  { num: '03', title: 'Apps Móviles', desc: 'Aplicaciones Android nativas con diseño propio. Funcionan sin internet y se entregan como APK lista para instalar.', tags: ['Android', 'APK', 'Kotlin'], img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop' },
-  { num: '04', title: 'Backend & APIs', desc: 'Arquitectura escalable, endpoints seguros, webhooks y automatizaciones para conectar todo tu stack.', tags: ['REST API', 'Webhooks', 'Java'], img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80&auto=format&fit=crop' },
-];
-
-const FLOATS = [
-  {
-    id: 'laptop', depth: 0.25,
-    style: { top: '9%', right: '7%' },
-    content: (
-      <div className="f-laptop">
-        <div className="f-laptop__screen">
-          <div className="f-win-bar"><span/><span/><span/></div>
-          <div className="f-code">
-            <div className="f-code__ln" style={{width:'65%',background:'#4A80CC'}}/>
-            <div className="f-code__ln" style={{width:'80%',background:'#374151',marginLeft:14}}/>
-            <div className="f-code__ln" style={{width:'45%',background:'#2554A0',marginLeft:28}}/>
-            <div className="f-code__ln" style={{width:'70%',background:'#374151',marginLeft:14}}/>
-            <div className="f-code__ln" style={{width:'55%',background:'#4A80CC'}}/>
-            <div className="f-code__ln" style={{width:'35%',background:'#1B3A6B',marginLeft:28}}/>
-            <div className="f-code__ln" style={{width:'60%',background:'#374151'}}/>
-          </div>
-        </div>
-        <div className="f-laptop__chin"/>
-      </div>
-    )
-  },
-  {
-    id: 'phone', depth: 0.45,
-    style: { bottom: '12%', right: '9%' },
-    content: (
-      <div className="f-phone">
-        <div className="f-phone__notch"/>
-        <div className="f-phone__screen">
-          <div className="f-phone__bar" style={{width:'80%',height:8,background:'#1B3A6B',borderRadius:4,marginBottom:6}}/>
-          <div className="f-phone__bar" style={{width:'100%',height:60,background:'linear-gradient(135deg,#1B3A6B,#2554A0)',borderRadius:6,marginBottom:6}}/>
-          <div className="f-phone__bar" style={{width:'60%',height:6,background:'#374151',borderRadius:3,marginBottom:4}}/>
-          <div className="f-phone__bar" style={{width:'80%',height:6,background:'#374151',borderRadius:3,marginBottom:4}}/>
-          <div className="f-phone__bar" style={{width:'50%',height:6,background:'#374151',borderRadius:3,marginBottom:8}}/>
-          <div className="f-phone__bar" style={{width:'100%',height:28,background:'#1B3A6B',borderRadius:5}}/>
-        </div>
-      </div>
-    )
-  },
-  {
-    id: 'code', depth: 0.55,
-    style: { top: '14%', left: '5%' },
-    content: (
-      <div className="f-glass-card">
-        <div className="f-card__head">
-          <span className="f-card__dot" style={{background:'#1B3A6B'}}/>
-          <span style={{color:'rgba(255,255,255,.4)',fontSize:'.68rem',fontFamily:'monospace'}}>StudioZero.java</span>
-        </div>
-        <pre className="f-card__code">
-          <span style={{color:'#4A80CC'}}>public class</span> <span style={{color:'#fff'}}>StudioZero</span> {'{'}<br/>
-          {'  '}<span style={{color:'#6B9FE0'}}>String</span> <span style={{color:'#9EC0F0'}}>client</span> <span style={{color:'rgba(255,255,255,.4)'}}>=</span> <span style={{color:'#7AC080'}}>"TuNegocio"</span>;<br/>
-          {'  '}<span style={{color:'#4A80CC'}}>void</span> <span style={{color:'#9EC0F0'}}>build</span>() {'{'}<br/>
-          {'    '}<span style={{color:'rgba(255,255,255,.3)'}}></span><br/>
-          {'  }'}<br/>
-          {'}'}
-        </pre>
-      </div>
-    )
-  },
-  {
-    id: 'api', depth: 0.35,
-    style: { top: '38%', left: '3%' },
-    content: (
-      <div className="f-glass-card f-glass-card--sm">
-        <div className="f-api__method">POST</div>
-        <div className="f-api__endpoint">/api/pedidos</div>
-        <div className="f-api__status">
-          <span className="f-api__dot" style={{background:'#22C55E'}}/>
-          <span style={{color:'#22C55E',fontSize:'.72rem',fontWeight:700}}>200 OK</span>
-        </div>
-        <div style={{marginTop:8,fontSize:'.65rem',color:'rgba(255,255,255,.3)',fontFamily:'monospace'}}>
-          {'{'} "id": 1842, "status": "ok" {'}'}
-        </div>
-      </div>
-    )
-  },
-  {
-    id: 'stats', depth: 0.6,
-    style: { bottom: '22%', left: '5%' },
-    content: (
-      <div className="f-glass-card f-glass-card--sm">
-        <div className="f-stat">
-          <span className="f-stat__num">5</span>
-          <span className="f-stat__label">días entrega</span>
-        </div>
-        <div className="f-stat__bar-wrap">
-          <div className="f-stat__bar"/>
-        </div>
-        <div className="f-stat" style={{marginTop:12}}>
-          <span className="f-stat__num">100<small>%</small></span>
-          <span className="f-stat__label">mobile ready</span>
-        </div>
-      </div>
-    )
-  },
-  {
-    id: 'badges', depth: 0.4,
-    style: { top: '60%', right: '4%' },
-    content: (
-      <div style={{display:'flex',flexDirection:'column',gap:7}}>
-        {['React','Java','SQL Server','Android','Node.js'].map((b,i) => (
-          <span key={i} className="f-badge">{b}</span>
-        ))}
-      </div>
-    )
-  },
-  {
-    id: 'db', depth: 0.5,
-    style: { top: '38%', right: '3%' },
-    content: (
-      <div className="f-glass-card f-glass-card--xs">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{marginBottom:6}}>
-          <ellipse cx="12" cy="5" rx="9" ry="3" stroke="#4A80CC" strokeWidth="1.5"/>
-          <path d="M3 5v6c0 1.657 4.03 3 9 3s9-1.343 9-3V5" stroke="#4A80CC" strokeWidth="1.5"/>
-          <path d="M3 11v6c0 1.657 4.03 3 9 3s9-1.343 9-3v-6" stroke="#4A80CC" strokeWidth="1.5"/>
-        </svg>
-        <span style={{color:'rgba(255,255,255,.6)',fontSize:'.7rem',fontWeight:600}}>SQL Server</span>
-        <div style={{fontSize:'.6rem',color:'rgba(255,255,255,.25)',marginTop:2}}>Seguro · Escalable</div>
-      </div>
-    )
-  },
+  { num: '01', title: 'Backend & APIs REST', desc: 'Desarrollo de lógica de negocio, endpoints seguros, webhooks y arquitectura escalable.', tags: ['Java', 'REST API', 'Webhooks'], img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80&auto=format&fit=crop' },
+  { num: '02', title: 'Bases de Datos & SQL', desc: 'Modelado relacional, normalización y consultas optimizadas e íntegras en SQL Server.', tags: ['Java', 'SQL Server', 'Seguridad'], img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80&auto=format&fit=crop' },
+  { num: '03', title: 'Aplicaciones Móviles', desc: 'Apps nativas en Android con diseño intuitivo, algoritmos eficientes y persistencia local.', tags: ['Android', 'Kotlin', 'APK'], img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop' },
+  { num: '04', title: 'Desarrollo Frontend React', desc: 'Interfaces web modernas, responsivas, animadas con fluidez y optimizadas para rendimiento.', tags: ['React', 'JavaScript', 'GSAP'], img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80&auto=format&fit=crop' },
 ];
 
 export default function Home() {
-  const heroRef      = useRef(null);
-  const titleRef     = useRef(null);
-  const marquee1Ref  = useRef(null);
-  const marquee2Ref  = useRef(null);
-  const svcImgRef    = useRef(null);
+  const heroRef   = useRef(null);
+  const titleRef  = useRef(null);
+  const svcImgRef = useRef(null);
 
   useEffect(() => {
-    document.title = 'Studio Zero — Desarrollo de Software y Web · Chimbote';
+    document.title = 'Lionel — Desarrollador de Software';
     window.scrollTo(0, 0);
   }, []);
 
@@ -256,7 +114,6 @@ export default function Home() {
       gsap.fromTo('.split-immersive__visual', { opacity: 0, x: -60, clipPath: 'inset(0 30% 0 0)' }, { opacity: 1, x: 0, clipPath: 'inset(0 0% 0 0)', duration: 1.1, ease: 'expo.out', scrollTrigger: st('.split-immersive__inner') });
       gsap.fromTo('.split-immersive__body', { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: st('.split-immersive__inner') });
       gsap.fromTo('.checklist li', { opacity: 0, x: 24 }, { opacity: 1, x: 0, stagger: .09, duration: .6, ease: 'power3.out', scrollTrigger: st('.checklist', { start: 'top 90%' }) });
-      gsap.fromTo('.gallery__head', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: .75, ease: 'power3.out', scrollTrigger: st('.gallery__head') });
       document.querySelectorAll('.stat-block__num[data-count]').forEach(el => {
         const target = parseFloat(el.dataset.count);
         const obj = { val: 0 };
@@ -268,15 +125,6 @@ export default function Home() {
       });
     });
     return () => ctx.revert();
-  }, []);
-
-  useEffect(() => {
-    [marquee1Ref, marquee2Ref].forEach(ref => {
-      const el = ref.current;
-      if (!el || el.dataset.duped) return;
-      el.innerHTML += el.innerHTML;
-      el.dataset.duped = '1';
-    });
   }, []);
 
   return (
@@ -298,7 +146,7 @@ export default function Home() {
         <div className="hz__cards" aria-hidden="true">
           <div className="hz__card hz__card--code" data-depth="0.3">
             <div className="hz__win-bar"><span/><span/><span/></div>
-            <pre className="hz__code-pre"><span style={{color:'rgba(255,255,255,.35)'}}>const </span><span style={{color:'rgba(255,255,255,.7)'}}>result</span><span style={{color:'rgba(255,255,255,.35)'}}> = await </span><span style={{color:'rgba(255,255,255,.85)'}}>studioZero</span><span style={{color:'rgba(255,255,255,.35)'}}>.</span><span style={{color:'rgba(255,255,255,.75)'}}>execute</span><span style={{color:'rgba(255,255,255,.35)'}}>{'();'}</span></pre>
+            <pre className="hz__code-pre"><span style={{color:'rgba(255,255,255,.35)'}}>const </span><span style={{color:'rgba(255,255,255,.7)'}}>developer</span><span style={{color:'rgba(255,255,255,.35)'}}> = await </span><span style={{color:'rgba(255,255,255,.85)'}}>LionelDev</span><span style={{color:'rgba(255,255,255,.35)'}}>.</span><span style={{color:'rgba(255,255,255,.75)'}}>init</span><span style={{color:'rgba(255,255,255,.35)'}}>{'();'}</span></pre>
           </div>
 
           <div className="hz__card hz__card--node" data-depth="0.45">
@@ -324,19 +172,19 @@ export default function Home() {
         <div className="container hz__center" ref={titleRef}>
           <h1 className="hz__title">
             <div className="hz__title-overflow">
-              <span className="hz__studio">STUDIO</span>
+              <span className="hz__studio">LIONEL</span>
             </div>
             <div className="hz__title-overflow">
-              <span className="hz__zero">ZERO</span>
+              <span className="hz__zero">DEV</span>
             </div>
           </h1>
           <p className="hz__sub">
-            Desarrollo de software premium.<br/>
-            Código propio. Trato directo. Resultados reales.
+            Desarrollador de Software · Backend & Mobile.<br/>
+            Ingeniería de sistemas, bases de datos y soluciones robustas.
           </p>
           <div className="hz__ctas">
-            <a className="btn btn-light btn-lg" href={wspUrl('Hola Studio Zero, quiero cotizar el desarrollo de un sistema o web')} target="_blank" rel="noopener noreferrer">Empezar proyecto</a>
-            <Link className="btn btn-outline-light btn-lg" to="/portafolio">Ver portafolio →</Link>
+            <Link className="btn btn-light btn-lg" to="/portafolio">Ver proyectos →</Link>
+            <Link className="btn btn-outline-light btn-lg" to="/contacto">Contactar</Link>
           </div>
         </div>
 
@@ -352,34 +200,31 @@ export default function Home() {
       <section className="about-intro section">
         <div className="container about-intro__inner">
           <div className="about-intro__text">
-            <span className="eyebrow">Quién soy</span>
-            <h2 className="section-title">Ingeniero de software con enfoque en <em>soluciones reales</em>.</h2>
+            <span className="eyebrow">Sobre mí</span>
+            <h2 className="section-title">Ingeniería de software con enfoque en <em>soluciones robustas</em>.</h2>
             <p className="about-intro__desc">
-              Soy desarrollador full-stack especializado en sistemas web, aplicaciones móviles y arquitectura backend. 
-              Trabajo desde Chimbote, Perú, creando software a medida para negocios locales que quieren 
-              digitalizar sus operaciones con código propio, seguro y escalable.
+              Soy Lionel, desarrollador de software con formación en Ingeniería de Sistemas. Me especializo en el desarrollo backend, diseño de bases de datos relacionales y creación de aplicaciones móviles.
             </p>
             <p className="about-intro__desc">
-              Cada proyecto lo construyo desde cero — sin plantillas, sin WordPress. 
-              Trato directo, precio fijo, entrega en días.
+              Cada proyecto lo construyo con bases técnicas sólidas: consultas SQL Server optimizadas, lógica orientada a objetos en Java y desarrollo frontend interactivo y reactivo.
             </p>
           </div>
           <div className="about-intro__stats">
             <div className="about-stat">
-              <span className="about-stat__num">+5</span>
-              <span className="about-stat__label">Años de experiencia en desarrollo</span>
+              <span className="about-stat__num">Java</span>
+              <span className="about-stat__label">Backend & Arquitectura</span>
             </div>
             <div className="about-stat">
-              <span className="about-stat__num">100%</span>
-              <span className="about-stat__label">Código propio, sin plantillas</span>
+              <span className="about-stat__num">SQL</span>
+              <span className="about-stat__label">SQL Server & Datos</span>
             </div>
             <div className="about-stat">
-              <span className="about-stat__num">5</span>
-              <span className="about-stat__label">Días de entrega promedio</span>
+              <span className="about-stat__num">Android</span>
+              <span className="about-stat__label">Kotlin & Apps Móviles</span>
             </div>
             <div className="about-stat">
-              <span className="about-stat__num">50/50</span>
-              <span className="about-stat__label">Forma de pago sin riesgo</span>
+              <span className="about-stat__num">React</span>
+              <span className="about-stat__label">Frontend Reactivo</span>
             </div>
           </div>
         </div>
@@ -393,14 +238,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="services-v2 section" id="servicios">
+      <section className="services-v2 section" id="especialidades">
         <div className="container">
           <div className="services-v2__head">
             <div>
-              <span className="eyebrow">Lo que hacemos</span>
-              <h2 className="section-title">Soluciones que <em>resuelven problemas reales</em>.</h2>
+              <span className="eyebrow">Especialidades</span>
+              <h2 className="section-title">Áreas de enfoque y <em>capacidades</em>.</h2>
             </div>
-            <Link className="btn btn-ghost" to="/servicios">Ver todos →</Link>
+            <Link className="btn btn-ghost" to="/sobre-mi">Ver perfil completo →</Link>
           </div>
           <div className="services-v2__grid">
             {SERVICES.map((s) => (
@@ -423,45 +268,45 @@ export default function Home() {
       <section className="work-showcase section" id="portafolio">
         <div className="container">
           <div className="section-head work-showcase__head">
-            <span className="eyebrow">Portafolio</span>
-            <h2 className="section-title">Ejemplos reales que <em>puedes probar</em>.</h2>
-            <p className="lead">Demostraciones funcionales de los tipos de proyecto que entregamos.</p>
+            <span className="eyebrow">Proyectos</span>
+            <h2 className="section-title">Sistemas reales <em>construidos desde cero</em>.</h2>
+            <p className="lead">Demostraciones funcionales y arquitectura de software real.</p>
           </div>
           <div className="work-bento">
             <Link to="/portafolio" className="work-card work-card--main">
               <div className="parallax-wrap" style={{position:'absolute',inset:0}}>
-                <img className="parallax-img" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&q=80&auto=format&fit=crop" alt="Carta digital restaurante" loading="lazy"/>
+                <img className="parallax-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop" alt="Sistema POS Peripollos" loading="lazy"/>
               </div>
               <div className="work-card__overlay"/>
               <span className="work-card__arrow">↗</span>
               <div className="work-card__body">
-                <span className="work-card__cat">Restaurante</span>
-                <h3 className="work-card__title">Carta digital con QR</h3>
-                <p className="work-card__desc">Menú por categorías y pedido directo por WhatsApp.</p>
+                <span className="work-card__cat">Backend · Sistema POS</span>
+                <h3 className="work-card__title">Sistema de Gestión "Peripollos"</h3>
+                <p className="work-card__desc">POS en Java con base de datos SQL Server, webhooks y chatbot integrado.</p>
               </div>
             </Link>
             <Link to="/portafolio" className="work-card">
               <div className="parallax-wrap" style={{position:'absolute',inset:0}}>
-                <img className="parallax-img" src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=700&q=80&auto=format&fit=crop" alt="Catálogo" loading="lazy"/>
+                <img className="parallax-img" src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=700&q=80&auto=format&fit=crop" alt="App Móvil MetaBit" loading="lazy"/>
               </div>
               <div className="work-card__overlay"/>
               <span className="work-card__arrow">↗</span>
               <div className="work-card__body">
-                <span className="work-card__cat">Comercio</span>
-                <h3 className="work-card__title">Catálogo con pedidos</h3>
-                <p className="work-card__desc">Vitrina en línea con carrito y cobro por Yape.</p>
+                <span className="work-card__cat">Móvil · Finanzas</span>
+                <h3 className="work-card__title">App Móvil "MetaBit"</h3>
+                <p className="work-card__desc">Aplicación Android nativa para cálculo y proyección de metas de ahorro.</p>
               </div>
             </Link>
             <Link to="/portafolio" className="work-card">
               <div className="parallax-wrap" style={{position:'absolute',inset:0}}>
-                <img className="parallax-img" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=700&q=80&auto=format&fit=crop" alt="Educación" loading="lazy"/>
+                <img className="parallax-img" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=700&q=80&auto=format&fit=crop" alt="Desarrollo Web React" loading="lazy"/>
               </div>
               <div className="work-card__overlay"/>
               <span className="work-card__arrow">↗</span>
               <div className="work-card__body">
-                <span className="work-card__cat">Educación</span>
-                <h3 className="work-card__title">Web con inscripción</h3>
-                <p className="work-card__desc">Cursos, horarios y matrícula en línea.</p>
+                <span className="work-card__cat">Web · Frontend</span>
+                <h3 className="work-card__title">Interfaces Web Modernas</h3>
+                <p className="work-card__desc">Desarrollo interactivo con React, animaciones fluidas y buenas prácticas.</p>
               </div>
             </Link>
           </div>
@@ -472,56 +317,46 @@ export default function Home() {
         <div className="container split-immersive__inner">
           <div className="split-immersive__visual">
             <div className="split-immersive__frame">
-              <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80&auto=format&fit=crop" alt="Trato directo" loading="lazy"/>
+              <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80&auto=format&fit=crop" alt="Código y arquitectura" loading="lazy"/>
             </div>
-            <div className="split-immersive__badge"><b>+5 años</b><span>experiencia en desarrollo</span></div>
+            <div className="split-immersive__badge"><b>Ingeniería</b><span>código propio y limpio</span></div>
           </div>
           <div className="split-immersive__body">
-            <span className="eyebrow">Por qué elegirnos</span>
-            <h2>Trato directo, trabajo a medida y <em>resultados claros</em>.</h2>
-            <p>No somos una fábrica de plantillas. Cada proyecto se diseña desde cero según tu marca y tu rubro. Hablas siempre con la persona que construye tu sitio.</p>
+            <span className="eyebrow">Filosofía técnica</span>
+            <h2>Bases de ingeniería, <em>código mantenible y seguridad</em>.</h2>
+            <p>Entiendo el desarrollo como una disciplina de ingeniería: cada base de datos se modela con normalización y reglas de integridad, y cada componente de software se estructura de forma modular.</p>
             <ul className="checklist">
-              {['Diseño exclusivo adaptado a tu identidad y colores.','Optimizado para celular y para aparecer en Google.','Precio fijo acordado por escrito, sin sorpresas.','La propiedad del sitio queda a tu nombre.'].map((item, i) => (
+              {[
+                'Modelado y diseño relacional riguroso en SQL Server.',
+                'Backend estructurado en Java con control de excepciones y validaciones.',
+                'Prevención activa contra inyecciones SQL y vulnerabilidades.',
+                'Arquitecturas orientadas a escalabilidad y fácil mantenimiento.'
+              ].map((item, i) => (
                 <li key={i}>
                   <span className="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>
                   {item}
                 </li>
               ))}
             </ul>
-            <Link className="btn btn-primary" to="/nosotros">Conocer el estudio →</Link>
+            <Link className="btn btn-primary" to="/sobre-mi">Conocer más sobre mí →</Link>
           </div>
         </div>
       </section>
 
-      <section className="gallery" aria-label="Rubros">
-        <div className="gallery__head container">
-          <span className="eyebrow">Para todo tipo de negocio</span>
-          <h2 className="section-title">Diseñamos para rubros <em>como el tuyo</em>.</h2>
-        </div>
-        <div className="marquee-wrap">
-          <div className="marquee-row" ref={marquee1Ref}>
-            {MARQUEE_ROW_1.map((item, i) => (<figure key={i} className="gimg"><img src={item.src} alt={item.label} loading="lazy"/><span>{item.label}</span></figure>))}
-          </div>
-          <div className="marquee-row marquee-row--rev" ref={marquee2Ref}>
-            {MARQUEE_ROW_2.map((item, i) => (<figure key={i} className="gimg"><img src={item.src} alt={item.label} loading="lazy"/><span>{item.label}</span></figure>))}
-          </div>
-        </div>
-      </section>
-
-      <section className="stats-dark" aria-label="Números clave">
+      <section className="stats-dark" aria-label="Principios técnicos">
         <div className="stats-dark__glow stats-dark__glow--1" aria-hidden="true"/>
         <div className="stats-dark__glow stats-dark__glow--2" aria-hidden="true"/>
         <div className="container stats-grid">
           {[
-            { val:'5', suffix:'días', label:'Entrega promedio', count:'5' },
-            { val:'100', suffix:'%', label:'Adaptado a celular', count:'100' },
-            { val:'50', suffix:'/50', label:'Forma de pago sin riesgo', count:null },
-            { val:'24', suffix:'h', label:'Tiempo de respuesta', count:null },
+            { val:'100', suffix:'%', label:'Código propio y estructurado', count:'100' },
+            { val:'Java', suffix:'', label:'Arquitectura Backend y OOP', count:null },
+            { val:'SQL', suffix:'', label:'Modelado Relacional Seguro', count:null },
+            { val:'REST', suffix:'', label:'APIs e Integración de Servicios', count:null },
           ].map((s,i) => (
             <div key={i} className="stat-block">
               <div style={{display:'flex',alignItems:'baseline',gap:4,justifyContent:'center'}}>
                 <span className="stat-block__num" data-count={s.count||undefined}>{s.val}</span>
-                <span style={{color:'rgba(255,255,255,.5)',fontFamily:'var(--head)',fontSize:'clamp(1.2rem,2vw,2rem)',fontWeight:700}}>{s.suffix}</span>
+                {s.suffix && <span style={{color:'rgba(255,255,255,.5)',fontFamily:'var(--head)',fontSize:'clamp(1.2rem,2vw,2rem)',fontWeight:700}}>{s.suffix}</span>}
               </div>
               <span className="stat-block__label">{s.label}</span>
             </div>
@@ -530,12 +365,12 @@ export default function Home() {
       </section>
 
       <CtaBand
-        title="¿Listo para que tu negocio <em>se vea profesional</em>?"
-        subtitle="Conversemos sobre tu proyecto. Te respondemos el mismo día, sin compromiso."
-        primaryText="Escribir por WhatsApp"
-        primaryMsg="Hola Studio Zero, quiero conversar sobre un proyecto"
-        secondaryText="Llamar: 952 102 805"
-        secondaryLink="tel:+51952102805"
+        title="¿Buscas un desarrollador o quieres <em>conversar sobre un proyecto</em>?"
+        subtitle="Conectemos para conversar sobre retos técnicos, requerimientos o futuras colaboraciones."
+        primaryText="Enviar un mensaje"
+        primaryLink="/contacto"
+        secondaryText="Ver mi GitHub"
+        secondaryLink="https://github.com/lxionel"
       />
     </div>
   );

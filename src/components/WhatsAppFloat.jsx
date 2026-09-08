@@ -19,7 +19,7 @@ export default function WhatsAppFloat() {
     <>
       <a
         className={`float-wsp${visible ? '' : ' float-wsp--hidden'}`}
-        href={wspUrl('Hola Studio Zero, vi su web y quiero información')}
+        href={wspUrl('Hola Lionel, vi tu portafolio y me gustaría conectar contigo')}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp"
