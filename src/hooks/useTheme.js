@@ -5,9 +5,9 @@ export function useTheme() {
     try {
       const saved = window.localStorage.getItem('sz-theme');
       if (saved) return saved;
-      return 'dark';
+      return 'light';
     } catch {
-      return 'dark';
+      return 'light';
     }
   });
 

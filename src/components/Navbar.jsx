@@ -1,25 +1,18 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import ThemeToggle from './ThemeToggle';
 
 const LINKS = [
   { id: 'inicio', label: 'Inicio' },
   { id: 'proyectos', label: 'Proyectos' },
-  { id: 'stack', label: 'Habilidades' },
   { id: 'sobre-mi', label: 'Sobre mí' },
   { id: 'contacto', label: 'Contacto' },
 ];
 
-const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
-
 export default function Navbar({ theme, toggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
-  const [pillStyle, setPillStyle] = useState({ opacity: 0 });
-  const navMenuRef = useRef(null);
 
   const scrollToSection = useCallback((id) => {
-    setMenuOpen(false);
     setActiveSection(id);
     const el = document.getElementById(id);
     if (el) {
@@ -34,7 +27,7 @@ export default function Navbar({ theme, toggleTheme }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 30);
 
       const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 80);
       if (isAtBottom) {
@@ -43,7 +36,7 @@ export default function Navbar({ theme, toggleTheme }) {
       }
 
       const scrollPos = window.scrollY + 140;
-      const ids = ['inicio', 'proyectos', 'stack', 'sobre-mi', 'contacto'];
+      const ids = ['inicio', 'proyectos', 'sobre-mi', 'contacto'];
       for (let i = ids.length - 1; i >= 0; i--) {
         const el = document.getElementById(ids[i]);
         if (el) {
@@ -61,52 +54,28 @@ export default function Navbar({ theme, toggleTheme }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const updatePill = useCallback(() => {
-    const menu = navMenuRef.current;
-    if (!menu) return;
-    const active = menu.querySelector(`a[data-section="${activeSection}"]`);
-    if (!active) { setPillStyle({ opacity: 0 }); return; }
-    const mr = menu.getBoundingClientRect();
-    const ar = active.getBoundingClientRect();
-    setPillStyle({ left: ar.left - mr.left + 'px', width: ar.width + 'px', opacity: 1 });
-  }, [activeSection]);
-
-  useEffect(() => { updatePill(); }, [updatePill]);
-  useEffect(() => {
-    window.addEventListener('resize', updatePill, { passive: true });
-    return () => window.removeEventListener('resize', updatePill);
-  }, [updatePill]);
-
-  const closeMenu = () => setMenuOpen(false);
-
   return (
-    <header
-      className={`nav${scrolled ? ' scrolled' : ''}`}
-      id="nav"
-    >
-      <div className="container nav-inner">
+    <header className={`heckhoff-header${scrolled ? ' scrolled' : ''}`} id="nav">
+      <div className="heckhoff-header-inner">
         <a
-          className="logo"
+          className="heckhoff-header-logo"
           href="#inicio"
           onClick={(e) => {
             e.preventDefault();
             scrollToSection('inicio');
           }}
-          aria-label="Lionel Dev"
+          aria-label="Lionel Aguirre Gomero"
         >
-          <img className="logo-mark" src={publicAsset('/img/logo.svg')} alt="" width="34" height="34"
-            onError={e => { e.target.style.display='none'; }} />
-          <span className="logo-text">Lionel<span>.dev</span></span>
+          <span className="heckhoff-logo-mark">LA</span>
+          <span className="heckhoff-logo-text">Lionel Aguirre</span>
         </a>
 
-        <nav ref={navMenuRef} className={`nav-menu${menuOpen ? ' open' : ''}`} aria-label="Principal">
-          <span className="nav-pill" style={pillStyle} aria-hidden="true" />
+        <nav className="heckhoff-header-nav" aria-label="Navegacion principal">
           {LINKS.map(({ id, label }) => (
             <a
               key={id}
               href={`#${id}`}
-              data-section={id}
-              className={activeSection === id ? 'active' : ''}
+              className={`heckhoff-nav-link${activeSection === id ? ' active' : ''}`}
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection(id);
@@ -117,10 +86,10 @@ export default function Navbar({ theme, toggleTheme }) {
           ))}
         </nav>
 
-        <div className="nav-actions">
+        <div className="heckhoff-header-right">
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
           <a
-            className="btn btn-sm btn-primary"
+            className="heckhoff-btn heckhoff-btn-accent size-sm"
             href="#contacto"
             onClick={(e) => {
               e.preventDefault();
@@ -129,14 +98,6 @@ export default function Navbar({ theme, toggleTheme }) {
           >
             Contactar
           </a>
-          <button
-            className={`nav-toggle${menuOpen ? ' open' : ''}`}
-            aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen(o => !o)}
-          >
-            <span /><span /><span />
-          </button>
         </div>
       </div>
     </header>
