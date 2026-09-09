@@ -35,6 +35,6 @@ export const tagLabels = {
   glsl: "GLSL",
   java: "Java 17",
   sqlserver: "SQL Server",
-  android: "Android SDK",
+  android: "Android",
   kotlin: "Kotlin",
 } as const satisfies Record<TagVariant, string>;
