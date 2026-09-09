@@ -62,7 +62,7 @@ export default function HeroParticles() {
       draw() {
         ctx.save();
         ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = '#a0b8d8';
+        ctx.fillStyle = '#D8BE9B';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -82,7 +82,7 @@ export default function HeroParticles() {
             const alpha = (1 - dist / MAX_CONN) * 0.12;
             ctx.save();
             ctx.globalAlpha = alpha;
-            ctx.strokeStyle = '#4A80CC';
+            ctx.strokeStyle = '#C5A880';
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -97,9 +97,9 @@ export default function HeroParticles() {
     function drawMouseGlow() {
       if (mouse.x === -9999) return;
       const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 200);
-      grad.addColorStop(0, 'rgba(60,100,180,0.06)');
-      grad.addColorStop(0.4, 'rgba(60,100,180,0.025)');
-      grad.addColorStop(1, 'rgba(60,100,180,0)');
+      grad.addColorStop(0, 'rgba(197, 168, 128, 0.08)');
+      grad.addColorStop(0.4, 'rgba(197, 168, 128, 0.025)');
+      grad.addColorStop(1, 'rgba(197, 168, 128, 0)');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
