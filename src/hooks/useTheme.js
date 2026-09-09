@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 export function useTheme() {
   const [theme, setTheme] = useState(() => {
     try {
-      return window.localStorage.getItem('sz-theme') || 'light';
+      const saved = window.localStorage.getItem('sz-theme');
+      if (saved) return saved;
+      return 'dark';
     } catch {
-      return 'light';
+      return 'dark';
     }
   });
 

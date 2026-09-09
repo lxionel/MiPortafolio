@@ -160,3 +160,143 @@ export function setupPageAnimations(gsap, ScrollTrigger) {
     });
   }
 }
+
+export function setupLandingAnimations(gsap, ScrollTrigger) {
+  const st = (trigger, extra = {}) => ({
+    trigger,
+    start: 'top 85%',
+    toggleActions: 'play none none none',
+    ...extra,
+  });
+
+  // 1. Hero Entrance Timeline
+  const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+  if (document.querySelector('.hero-status')) {
+    heroTl.fromTo('.hero-status',
+      { opacity: 0, y: -15, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.6 }
+    );
+  }
+  if (document.querySelector('.hero-name')) {
+    heroTl.fromTo('.hero-name',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8 },
+      '-=0.3'
+    );
+  }
+  if (document.querySelector('.hero-title')) {
+    heroTl.fromTo('.hero-title',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      '-=0.4'
+    );
+  }
+  if (document.querySelector('.hero-bio')) {
+    heroTl.fromTo('.hero-bio',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      '-=0.4'
+    );
+  }
+  if (document.querySelector('.hero-actions')) {
+    heroTl.fromTo('.hero-actions .btn',
+      { opacity: 0, y: 18 },
+      { opacity: 1, y: 0, stagger: 0.1, duration: 0.6 },
+      '-=0.3'
+    );
+  }
+  if (document.querySelector('.hero-socials')) {
+    heroTl.fromTo('.hero-social-link',
+      { opacity: 0, x: -15 },
+      { opacity: 1, x: 0, stagger: 0.08, duration: 0.5 },
+      '-=0.3'
+    );
+  }
+  if (document.querySelector('.engineer-card')) {
+    heroTl.fromTo('.engineer-card',
+      { opacity: 0, y: 35, scale: 0.96 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'expo.out' },
+      '-=0.7'
+    );
+  }
+
+  // 2. Metrics Ribbon Stagger
+  if (document.querySelector('.metrics-ribbon')) {
+    gsap.fromTo('.metric-card',
+      { opacity: 0, y: 25, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.6, ease: 'back.out(1.2)',
+        scrollTrigger: st('.metrics-ribbon', { start: 'top 92%' }) }
+    );
+  }
+
+  // 3. Section Headers
+  gsap.utils.toArray('.pro-header').forEach((header) => {
+    gsap.fromTo(header.querySelectorAll('.pro-header__eyebrow, .pro-header__title, .pro-header__desc'),
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out', scrollTrigger: st(header) }
+    );
+  });
+
+  // 4. Bento Grid Cards
+  if (document.querySelector('.work-bento')) {
+    gsap.fromTo('.work-card',
+      { opacity: 0, y: 40, scale: 0.98 },
+      { opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: st('.work-bento') }
+    );
+  }
+
+  // 5. Skills Grid
+  if (document.querySelector('.skills-grid')) {
+    gsap.fromTo('.skill-card',
+      { opacity: 0, y: 35 },
+      { opacity: 1, y: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: st('.skills-grid') }
+    );
+  }
+
+  // 6. Interactive Code Explorer
+  if (document.querySelector('.code-explorer')) {
+    gsap.fromTo('.code-explorer',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: st('.code-explorer') }
+    );
+  }
+
+  // 7. About Grid
+  if (document.querySelector('.about-pro-grid')) {
+    gsap.fromTo('.about-profile-card',
+      { opacity: 0, x: -30 },
+      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: st('.about-pro-grid') }
+    );
+    gsap.fromTo('.about-narrative',
+      { opacity: 0, x: 30 },
+      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: st('.about-pro-grid') }
+    );
+  }
+
+  // 8. Principles Grid
+  if (document.querySelector('.principles-grid')) {
+    gsap.fromTo('.principle-card',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, stagger: 0.12, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: st('.principles-grid') }
+    );
+  }
+
+  // 9. Contact Channels & Form
+  if (document.querySelector('.contact-grid')) {
+    gsap.fromTo('.contact-channels .channel',
+      { opacity: 0, x: -25 },
+      { opacity: 1, x: 0, stagger: 0.08, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: st('.contact-grid') }
+    );
+    gsap.fromTo('.contact-grid .form',
+      { opacity: 0, y: 35 },
+      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: st('.contact-grid') }
+    );
+  }
+}
