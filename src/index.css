@@ -103,7 +103,10 @@
 
 /* ── RESET ── */
 * { margin: 0; padding: 0; box-sizing: border-box }
-html { -webkit-text-size-adjust: 100% }
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
 body {
   font-family: var(--sans);
   color: var(--text);
@@ -127,6 +130,7 @@ input, textarea, select { font-family: inherit; font-size: 1rem }
   padding: 0 var(--gutter);
 }
 .section { padding: 120px 0 }
+section[id] { scroll-margin-top: 80px }
 
 /* ── TYPOGRAPHY ── */
 h1, h2, h3, h4 {
@@ -1646,4 +1650,111 @@ h1, h2, h3, h4 {
   color: var(--text);
   line-height: 1.6;
   margin: 0;
+}
+
+/* ── LANDING PAGE ABOUT GRID ── */
+.about-pro-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 50px;
+  align-items: start;
+  margin-bottom: 50px;
+}
+@media (max-width: 960px) {
+  .about-pro-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+.about-profile-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.about-photo-wrap {
+  width: 100%;
+  aspect-ratio: 4/5;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--dark-hero);
+  margin-bottom: 18px;
+}
+.about-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+.about-profile-name {
+  font-family: var(--head);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.about-profile-role {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.about-meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.about-meta-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+}
+.about-meta-item span:first-child {
+  color: var(--muted);
+}
+.about-meta-item span:last-child {
+  font-weight: 600;
+  color: var(--ink);
+}
+.about-narrative h3 {
+  font-family: var(--head);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.about-narrative p {
+  font-size: 0.98rem;
+  color: var(--text);
+  line-height: 1.75;
+  margin-bottom: 16px;
+}
+.about-narrative strong {
+  color: var(--ink);
+}
+.about-narrative-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+/* ── CONTACT SECTION ENHANCEMENTS ── */
+.contact-actions-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.form-feedback {
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--glass-border);
 }

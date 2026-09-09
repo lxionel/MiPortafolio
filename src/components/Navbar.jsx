@@ -1,13 +1,12 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
-import { wspUrl } from '../utils/whatsapp';
 
 const LINKS = [
-  { to: '/', label: 'Inicio', end: true },
-  { to: '/portafolio', label: 'Proyectos' },
-  { to: '/sobre-mi', label: 'Sobre mí' },
-  { to: '/contacto', label: 'Contacto' },
+  { id: 'inicio', label: 'Inicio' },
+  { id: 'proyectos', label: 'Proyectos' },
+  { id: 'stack', label: 'Habilidades' },
+  { id: 'sobre-mi', label: 'Sobre mí' },
+  { id: 'contacto', label: 'Contacto' },
 ];
 
 const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
@@ -15,35 +14,64 @@ const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, 
 export default function Navbar({ theme, toggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('inicio');
   const [pillStyle, setPillStyle] = useState({ opacity: 0 });
   const navMenuRef = useRef(null);
-  const location = useLocation();
-  const isHome = location.pathname === '/';
+
+  const scrollToSection = useCallback((id) => {
+    setMenuOpen(false);
+    setActiveSection(id);
+    const el = document.getElementById(id);
+    if (el) {
+      if (window.__lenis) {
+        window.__lenis.scrollTo(el, { offset: -70 });
+      } else {
+        const top = el.getBoundingClientRect().top + window.pageYOffset - 70;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+  }, []);
 
   useEffect(() => {
-    const THRESHOLD = typeof window !== 'undefined'
-      ? window.innerHeight * 0.75
-      : 500;
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
 
-    const onScroll = () => {
-      setScrolled(window.scrollY > THRESHOLD);
+      const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 80);
+      if (isAtBottom) {
+        setActiveSection('contacto');
+        return;
+      }
+
+      const scrollPos = window.scrollY + 140;
+      const ids = ['inicio', 'proyectos', 'stack', 'sobre-mi', 'contacto'];
+      for (let i = ids.length - 1; i >= 0; i--) {
+        const el = document.getElementById(ids[i]);
+        if (el) {
+          const top = el.offsetTop;
+          if (scrollPos >= top) {
+            setActiveSection(ids[i]);
+            break;
+          }
+        }
+      }
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const updatePill = useCallback(() => {
     const menu = navMenuRef.current;
     if (!menu) return;
-    const active = menu.querySelector('a.active');
+    const active = menu.querySelector(`a[data-section="${activeSection}"]`);
     if (!active) { setPillStyle({ opacity: 0 }); return; }
     const mr = menu.getBoundingClientRect();
     const ar = active.getBoundingClientRect();
     setPillStyle({ left: ar.left - mr.left + 'px', width: ar.width + 'px', opacity: 1 });
-  }, []);
+  }, [activeSection]);
 
-  useEffect(() => { updatePill(); }, [location.pathname, updatePill]);
+  useEffect(() => { updatePill(); }, [updatePill]);
   useEffect(() => {
     window.addEventListener('resize', updatePill, { passive: true });
     return () => window.removeEventListener('resize', updatePill);
@@ -57,28 +85,50 @@ export default function Navbar({ theme, toggleTheme }) {
       id="nav"
     >
       <div className="container nav-inner">
-        <Link className="logo" to="/" onClick={closeMenu} aria-label="Lionel Dev">
+        <a
+          className="logo"
+          href="#inicio"
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToSection('inicio');
+          }}
+          aria-label="Lionel Dev"
+        >
           <img className="logo-mark" src={publicAsset('/img/logo.svg')} alt="" width="34" height="34"
             onError={e => { e.target.style.display='none'; }} />
           <span className="logo-text">Lionel<span>.dev</span></span>
-        </Link>
+        </a>
 
         <nav ref={navMenuRef} className={`nav-menu${menuOpen ? ' open' : ''}`} aria-label="Principal">
           <span className="nav-pill" style={pillStyle} aria-hidden="true" />
-          {LINKS.map(({ to, label, end }) => (
-            <NavLink key={to} to={to} end={end} onClick={closeMenu}>{label}</NavLink>
+          {LINKS.map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              data-section={id}
+              className={activeSection === id ? 'active' : ''}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection(id);
+              }}
+            >
+              {label}
+            </a>
           ))}
         </nav>
 
         <div className="nav-actions">
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
-          <Link
+          <a
             className="btn btn-sm btn-primary"
-            to="/contacto"
-            onClick={closeMenu}
+            href="#contacto"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('contacto');
+            }}
           >
             Contactar
-          </Link>
+          </a>
           <button
             className={`nav-toggle${menuOpen ? ' open' : ''}`}
             aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}

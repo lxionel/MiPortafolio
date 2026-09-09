@@ -1,25 +1,44 @@
-import { Link } from 'react-router-dom';
 import { wspUrl } from '../utils/whatsapp';
 
 const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
 
 export default function Footer() {
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      if (window.__lenis) {
+        window.__lenis.scrollTo(el, { offset: -70 });
+      } else {
+        const top = el.getBoundingClientRect().top + window.pageYOffset - 70;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="container footer-grid">
         <div className="footer-brand">
-          <Link className="logo" to="/">
+          <a
+            className="logo"
+            href="#inicio"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('inicio');
+            }}
+          >
             <img className="logo-mark" src={publicAsset('/img/logo.svg')} alt="" />
             <span className="logo-text">Lionel<span>.dev</span></span>
-          </Link>
+          </a>
           <p>Desarrollador de software enfocado en backend, bases de datos y aplicaciones móviles.</p>
         </div>
         <div className="footer-col">
           <h4>Navegación</h4>
-          <Link to="/">Inicio</Link>
-          <Link to="/portafolio">Proyectos</Link>
-          <Link to="/sobre-mi">Sobre mí</Link>
-          <Link to="/contacto">Contacto</Link>
+          <a href="#inicio" onClick={(e) => { e.preventDefault(); scrollToSection('inicio'); }}>Inicio</a>
+          <a href="#proyectos" onClick={(e) => { e.preventDefault(); scrollToSection('proyectos'); }}>Proyectos</a>
+          <a href="#stack" onClick={(e) => { e.preventDefault(); scrollToSection('stack'); }}>Habilidades</a>
+          <a href="#sobre-mi" onClick={(e) => { e.preventDefault(); scrollToSection('sobre-mi'); }}>Sobre mí</a>
+          <a href="#contacto" onClick={(e) => { e.preventDefault(); scrollToSection('contacto'); }}>Contacto</a>
         </div>
         <div className="footer-col">
           <h4>Especialidades</h4>
