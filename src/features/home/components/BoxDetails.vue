@@ -193,6 +193,9 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     border: var(--stroke-sm) solid var(--color-cyan-400);
     border-radius: var(--radius-md);
     background: linear-gradient(to bottom, var(--color-hologram-top) 0%, var(--color-hologram-bottom) 100%);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 16px rgba(223, 165, 92, 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     gap: var(--space-xxs);
     display: flex;
     flex-direction: row;
@@ -226,18 +229,18 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     font-size: 10px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-cyan-300, #38d6ff);
-    background: rgba(0, 200, 255, 0.12);
+    color: var(--color-text-cyan-300);
+    background: rgba(223, 165, 92, 0.12);
     padding: 2px 7px;
     border-radius: 10px;
-    border: 1px solid rgba(0, 200, 255, 0.35);
+    border: 1px solid rgba(223, 165, 92, 0.35);
 
     &-dot {
       width: 5px;
       height: 5px;
       border-radius: 50%;
-      background-color: #00ffcc;
-      box-shadow: 0 0 6px #00ffcc;
+      background-color: #00e699;
+      box-shadow: 0 0 6px #00e699;
       display: inline-block;
       animation: pulseDot 2s infinite ease-in-out;
     }

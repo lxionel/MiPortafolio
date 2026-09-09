@@ -132,7 +132,9 @@ onMounted(() => {
       background-color 0.1s ease-in-out;
 
     &-dark {
-      background-color: var(--color-dark-blue-500);
+      background-color: rgba(28, 24, 20, 0.88);
+      border: 1px solid rgba(223, 165, 92, 0.3);
+      backdrop-filter: blur(12px);
       color: var(--color-white-400);
     }
   }
@@ -153,7 +155,7 @@ onMounted(() => {
     opacity: 0;
 
     &-dark {
-      background-color: var(--color-cyan-500);
+      background-color: var(--color-orange-400);
     }
 
     &-active {

@@ -12,8 +12,8 @@ let geometry: PlaneGeometry | null = null;
 let material: ShaderMaterial | null = null;
 
 const uniforms = {
-  uColor: { value: new Color("#0157A0").convertLinearToSRGB() },
-  uLineColor: { value: new Color("#34BCFD").convertLinearToSRGB() },
+  uColor: { value: new Color("#161310").convertLinearToSRGB() },
+  uLineColor: { value: new Color("#dfa55c").convertLinearToSRGB() },
   uOpacity: { value: 0 },
   uTime: { value: 0 },
   uProgress: { value: 0 },

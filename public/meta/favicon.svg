@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 61" width="512" height="512">
-  <path d="M3 14 24 2C28 0 28 0 32 2L53 14C56 16 56 17 56 19L56 43C56 46 55 47 51 49L32 59C28 61 28 61 24 59L5 49C1 47 0 46 0 43L0 19C0 17 0 16 3 14 M28 4 5 17 28 28 51 17 28 4 M53 20 30 31 30 56 53 44 53 20 M9 23.5L15.5 27.2L15.5 41L24 45.8L24 52L9 43.5Z" fill="#FF923E" fill-rule="evenodd" />
-  <style>
-    @media (prefers-color-scheme: light) { :root { filter: none; } }
-    @media (prefers-color-scheme: dark) { :root { filter: none; } }
-  </style>
+  <polygon points="12,12 20,5 34,5 26,12" fill="#FFB95F" stroke="#231E19" stroke-width="2.5" stroke-linejoin="round" />
+  <polygon points="26,38 34,31 52,31 44,38" fill="#FFB95F" stroke="#231E19" stroke-width="2.5" stroke-linejoin="round" />
+  <polygon points="26,12 34,5 34,31 26,38" fill="#D76919" stroke="#231E19" stroke-width="2.5" stroke-linejoin="round" />
+  <polygon points="44,38 52,31 52,45 44,52" fill="#D76919" stroke="#231E19" stroke-width="2.5" stroke-linejoin="round" />
+  <polygon points="12,12 26,12 26,38 44,38 44,52 12,52" fill="#FF8E2A" stroke="#231E19" stroke-width="2.5" stroke-linejoin="round" />
+  <polyline points="26,12 26,38 44,38" fill="none" stroke="#231E19" stroke-width="2.5" stroke-linejoin="round" />
 </svg>

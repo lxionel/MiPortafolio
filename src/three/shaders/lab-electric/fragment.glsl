@@ -8,7 +8,7 @@ uniform float uOpacity;
 #define MIN_LINE_STRENGTH 0.1
 #define LINE_STRENGTH_SPEED 6.0
 
-#define COLOR vec3(0.3, 1., 1.)
+#define COLOR vec3(1.0, 0.82, 0.52)
 
 void main() {
     // Three horizontal lines at different y positions

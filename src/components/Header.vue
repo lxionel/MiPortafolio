@@ -94,6 +94,7 @@ const getInTouchClassNames = computed(() => {
       data-cursor="circle-white"
     >
       <Logo class="header-logo-image" />
+      <span class="header-logo-text">Lionel Aguirre</span>
     </div>
     <div class="header-right">
       <Button
@@ -226,13 +227,26 @@ const getInTouchClassNames = computed(() => {
     }
 
     &-text {
-      font-weight: 900;
-      font-size: 18px;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+      align-self: center;
+      color: var(--color-text-400);
+      white-space: nowrap;
+      display: none;
+
+      @include mixins.mq("sm") {
+        display: inline-block;
+      }
 
       @include mixins.mq("md") {
-        font-size: 20px;
+        font-size: 18px;
       }
     }
+  }
+
+  &.header-dark &-logo-text {
+    color: var(--color-white-400);
   }
 }
 </style>
