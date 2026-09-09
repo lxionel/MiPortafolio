@@ -238,13 +238,39 @@ export function setupLandingAnimations(gsap, ScrollTrigger) {
     );
   });
 
-  // 4. Bento Grid Cards
-  if (document.querySelector('.work-bento')) {
-    gsap.fromTo('.work-card',
-      { opacity: 0, y: 40, scale: 0.98 },
-      { opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 0.8, ease: 'power3.out',
-        scrollTrigger: st('.work-bento') }
-    );
+  // 4. Cinematic Stacking Cards ScrollTrigger
+  const cards = gsap.utils.toArray('.cinematic-project-card');
+  if (cards.length > 0) {
+    cards.forEach((card, i) => {
+      // Entrance for each card
+      gsap.fromTo(card,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
+          scrollTrigger: st(card, { start: 'top 90%' }) }
+      );
+
+      // Stacking scroll effect when next card overlaps
+      if (i < cards.length - 1 && cards[i + 1]) {
+        ScrollTrigger.create({
+          trigger: cards[i + 1],
+          start: 'top 80%',
+          end: 'top 15%',
+          scrub: true,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            const scale = 1 - progress * 0.06;
+            const brightness = 1 - progress * 0.45;
+            const y = -progress * 25;
+            gsap.set(card, {
+              scale,
+              y,
+              filter: `brightness(${brightness})`,
+              transformOrigin: 'top center',
+            });
+          },
+        });
+      }
+    });
   }
 
   // 5. Skills Grid

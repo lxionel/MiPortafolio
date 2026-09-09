@@ -146,10 +146,37 @@ export function useOrdersSync(cartItems, deliveryInfo) {
 
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [projectFilter, setProjectFilter] = useState('all');
   const [activeSnippet, setActiveSnippet] = useState('java');
   const [copiedCode, setCopiedCode] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+
+  // Interactive Simulator 1: MetaBit Savings Calculator
+  const [metaMonto, setMetaMonto] = useState(4800);
+  const [metaMeses, setMetaMeses] = useState(12);
+  const cuotaMensual = Math.round(metaMonto / (metaMeses || 1));
+
+  // Interactive Simulator 2: POS Live Transactions Feed
+  const [posFeed, setPosFeed] = useState([
+    { id: 2104, mesa: '02', total: 78.00, time: '14:22:05', status: 'COMMIT SQL (6ms)' },
+    { id: 2105, mesa: '07', total: 145.50, time: '14:28:18', status: 'COMMIT SQL (9ms)' },
+    { id: 2106, mesa: '03', total: 54.00, time: '14:31:40', status: 'COMMIT SQL (7ms)' },
+  ]);
+
+  const simularNuevaVenta = () => {
+    const mesas = ['01', '04', '05', '08', '11', 'Delivery'];
+    const randomMesa = mesas[Math.floor(Math.random() * mesas.length)];
+    const randomTotal = (Math.floor(Math.random() * 80) + 35).toFixed(2);
+    const now = new Date().toTimeString().split(' ')[0];
+    const newTx = {
+      id: posFeed[posFeed.length - 1].id + 1,
+      mesa: randomMesa,
+      total: parseFloat(randomTotal),
+      time: now,
+      status: 'COMMIT SQL (8ms)',
+    };
+    setPosFeed(prev => [...prev.slice(-3), newTx]);
+    showToast(`Transacción #${newTx.id} registrada en SQL Server`);
+  };
 
   // Form state
   const [nombre, setNombre] = useState('');
@@ -259,21 +286,20 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      {/* ── SECCIÓN 1: HERO (INICIO) ── */}
+      {/* ── SECCIÓN 1: HERO EDITORIAL CLÁSICO (INICIO) ── */}
       <section className="hero-pro" id="inicio">
         <div className="container hero-pro__grid">
           <div>
             <div className="hero-status">
               <span className="hero-status__dot" aria-hidden="true" />
-              <span>Disponible para desarrollo de software</span>
+              <span>Ingeniería de Sistemas · Chimbote, Perú</span>
             </div>
 
             <h1 className="hero-name">Lionel Aguirre Gomero</h1>
-            <p className="hero-title">Desarrollador de Software · Backend & Móvil</p>
+            <p className="hero-title">Desarrollo de Software & Arquitectura Backend</p>
 
             <p className="hero-bio">
-              Formación en Ingeniería de Sistemas. Me especializo en la arquitectura y construcción
-              de sistemas con <strong>Java</strong>, bases de datos relacionales en <strong>SQL Server</strong> y aplicaciones móviles nativas para <strong>Android</strong>.
+              Construcción rigurosa de sistemas de información con <strong>Java</strong>, bases de datos relacionales en <strong>Microsoft SQL Server</strong> y desarrollo móvil nativo para <strong>Android</strong>. Enfoque integral en la integridad de transacciones, código desacoplado y rendimiento.
             </p>
 
             <div className="hero-actions">
@@ -285,7 +311,7 @@ export default function Home() {
                   scrollToSection('proyectos');
                 }}
               >
-                Ver proyectos desarrollados
+                Explorar sistemas desarrollados
               </a>
               <a
                 className="btn btn-secondary"
@@ -295,7 +321,7 @@ export default function Home() {
                   scrollToSection('contacto');
                 }}
               >
-                Contactar
+                Iniciar contacto
               </a>
             </div>
 
@@ -336,6 +362,14 @@ export default function Home() {
                 <span>lioneldavora1@gmail.com</span>
               </a>
             </div>
+
+            <div
+              className="hero-scroll-cue"
+              onClick={() => scrollToSection('proyectos')}
+            >
+              <div className="hero-scroll-line" />
+              <span>Desliza para explorar proyectos</span>
+            </div>
           </div>
 
           <div
@@ -364,196 +398,262 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ── CINTA DE MÉTRICAS DE INGENIERÍA ── */}
+        {/* ── CINTA DE MÉTRICAS CLÁSICA ── */}
         <div className="container">
           <div className="metrics-ribbon">
             <div className="metric-card spotlight-card" onMouseMove={handleSpotlight}>
               <div className="metric-card__val">
-                +3 <span>Sistemas</span>
+                03 <span>Sistemas</span>
               </div>
-              <div className="metric-card__label">Desarrollados y probados en escenarios reales</div>
+              <div className="metric-card__label">Desarrollados y probados en entornos reales</div>
             </div>
 
             <div className="metric-card spotlight-card" onMouseMove={handleSpotlight}>
               <div className="metric-card__val">
                 100<span>%</span>
               </div>
-              <div className="metric-card__label">Integridad de datos con arquitectura relacional SQL</div>
+              <div className="metric-card__label">Integridad referencial y transacciones ACID en SQL</div>
             </div>
 
             <div className="metric-card spotlight-card" onMouseMove={handleSpotlight}>
               <div className="metric-card__val">
                 Java <span>17+</span>
               </div>
-              <div className="metric-card__label">Lógica de negocio desacoplada con patrones DAO/MVC</div>
+              <div className="metric-card__label">Arquitectura por capas con patrones DAO y MVC</div>
             </div>
 
             <div className="metric-card spotlight-card" onMouseMove={handleSpotlight}>
               <div className="metric-card__val">
                 Nativo <span>Android</span>
               </div>
-              <div className="metric-card__label">Desarrollo móvil enfocado en rendimiento y APKs limpios</div>
+              <div className="metric-card__label">Compilación de APK funcional con persistencia local</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── SECCIÓN 2: PROYECTOS DESARROLLADOS CON FILTRO INTERACTIVO ── */}
-      <section className="section-pro" id="proyectos">
+      {/* ── SECCIÓN 2: ESCENARIO CINEMATOGRÁFICO DE PROYECTOS (STACKING CARDS) ── */}
+      <section className="section-pro stack-section" id="proyectos">
         <div className="container">
           <div className="pro-header">
-            <span className="pro-header__eyebrow">Proyectos Desarrollados</span>
-            <h2 className="pro-header__title">Sistemas Reales y Funcionales</h2>
+            <span className="pro-header__eyebrow">Sistemas & Casos Reales</span>
+            <h2 className="pro-header__title">Proyectos en Producción</h2>
             <p className="pro-header__desc">
-              Software construido desde el diseño de la base de datos relacional y la lógica de negocio hasta la entrega en producción.
+              Cada proyecto se fija en pantalla conforme te desplazas, demostrando la arquitectura técnica y la lógica funcional del software.
             </p>
           </div>
 
-          {/* Filtro interactivo de proyectos */}
-          <div className="project-filter-row">
-            <button
-              className={`filter-tab ${projectFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setProjectFilter('all')}
-            >
-              Todos los proyectos (3)
-            </button>
-            <button
-              className={`filter-tab ${projectFilter === 'mobile' ? 'active' : ''}`}
-              onClick={() => setProjectFilter('mobile')}
-            >
-              Móvil / Android (1)
-            </button>
-            <button
-              className={`filter-tab ${projectFilter === 'backend' ? 'active' : ''}`}
-              onClick={() => setProjectFilter('backend')}
-            >
-              Backend / POS Java (1)
-            </button>
-            <button
-              className={`filter-tab ${projectFilter === 'web' ? 'active' : ''}`}
-              onClick={() => setProjectFilter('web')}
-            >
-              Web en Vivo (1)
-            </button>
-          </div>
+          <div className="stack-cards-wrapper">
+            {/* ── TARJETA 01: METABIT (APP MÓVIL) ── */}
+            <article className="cinematic-project-card spotlight-card" onMouseMove={handleSpotlight}>
+              <div className="cinematic-project-card__grid">
+                <div>
+                  <div className="cinematic-badge">
+                    <span className="cinematic-badge__num">01 / 03</span>
+                    <span>Android Nativo · Finanzas Personales</span>
+                  </div>
 
-          <div className="work-bento">
-            {/* CARD 1 (MAIN VERTICAL): METABIT */}
-            {(projectFilter === 'all' || projectFilter === 'mobile') && (
-              <div
-                className="work-card work-card--main spotlight-card"
-                onMouseMove={handleSpotlight}
-              >
-                <div className="work-card__inner">
-                  <div className="work-card__header">
-                    <span className="work-card__cat">Móvil · Finanzas Personales</span>
-                    <h3 className="work-card__title">App Móvil "MetaBit"</h3>
-                    <p className="work-card__desc">
-                      Aplicación Android nativa para cálculo y proyección de metas de ahorro financiero personal. Desarrollada con persistencia local, algoritmos de proyección periódica e interfaz táctil optimizada.
-                    </p>
-                    <div className="engineer-pills" style={{ marginTop: 12 }}>
-                      <span className="engineer-pill">Android SDK</span>
-                      <span className="engineer-pill">Kotlin</span>
-                      <span className="engineer-pill">Room / SQLite</span>
-                      <span className="engineer-pill">APK Compilado</span>
-                    </div>
-                  </div>
-                  <div className="work-card__preview work-card__preview--phone-main">
-                    <div className="mock-phone mock-phone--hero">
-                      <div className="mock-phone-notch" />
-                      <img src={publicAsset('/img/metabit-app.jpg')} alt="App Móvil MetaBit" loading="lazy"/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+                  <h3 className="cinematic-title">App Móvil "MetaBit"</h3>
+                  <p className="cinematic-desc">
+                    Aplicación Android desarrollada de forma nativa para el cálculo y proyección algorítmica de metas de ahorro financiero. Implementa persistencia local en base de datos Room/SQLite, desacoplamiento con MVVM y generación de estados predictivos.
+                  </p>
 
-            {/* CARD 2 (HORIZONTAL): SISTEMA POS PERIPOLLOS */}
-            {(projectFilter === 'all' || projectFilter === 'backend') && (
-              <div
-                className="work-card spotlight-card"
-                onMouseMove={handleSpotlight}
-              >
-                <div className="work-card__inner">
-                  <div className="work-card__header">
-                    <span className="work-card__cat">Backend & Escritorio · Sistema POS</span>
-                    <h3 className="work-card__title">Sistema de Gestión "Peripollos"</h3>
-                    <p className="work-card__desc">
-                      Software de escritorio en Java conectado con SQL Server para control de comandas, facturación y stock en pollería. Sincronización mediante webhooks y chatbot de atención integrado.
-                    </p>
-                    <div className="engineer-pills" style={{ marginTop: 12 }}>
-                      <span className="engineer-pill">Java 17</span>
-                      <span className="engineer-pill">SQL Server</span>
-                      <span className="engineer-pill">JDBC Transaccional</span>
-                      <span className="engineer-pill">Webhooks</span>
-                    </div>
-                  </div>
-                  <div className="work-card__preview">
-                    <div className="mock-window">
-                      <div className="mock-window-bar">
-                        <span className="mock-dot mock-dot--red" />
-                        <span className="mock-dot mock-dot--yellow" />
-                        <span className="mock-dot mock-dot--green" />
-                        <span className="mock-window-title">peripollos_pos_v2.0 — Java / SQL Server</span>
+                  {/* Simulador Interactivo de Ahorro */}
+                  <div className="cinematic-simulation">
+                    <div className="cinematic-sim-header">
+                      <div className="sim-live-pulse">
+                        <span className="sim-live-dot" />
+                        <span>Simulador Algorítmico MetaBit</span>
                       </div>
-                      <div className="mock-window-screen">
-                        <img src={publicAsset('/img/peripollos-pos.png')} alt="Sistema POS Peripollos" loading="lazy"/>
+                      <span>Room DB Persist</span>
+                    </div>
+                    <div className="sim-interactive-calc">
+                      <div className="sim-slider-row">
+                        <span>Meta: S/ {metaMonto.toLocaleString()}</span>
+                        <input
+                          type="range"
+                          min="1000"
+                          max="20000"
+                          step="500"
+                          value={metaMonto}
+                          onChange={(e) => setMetaMonto(Number(e.target.value))}
+                        />
+                      </div>
+                      <div className="sim-slider-row">
+                        <span>Plazo: {metaMeses} meses</span>
+                        <input
+                          type="range"
+                          min="3"
+                          max="36"
+                          step="1"
+                          value={metaMeses}
+                          onChange={(e) => setMetaMeses(Number(e.target.value))}
+                        />
+                      </div>
+                      <div className="sim-result-box">
+                        <span className="sim-result-label">Aporte mensual proyectado:</span>
+                        <span className="sim-result-val">S/ {cuotaMensual.toLocaleString()} / mes</span>
                       </div>
                     </div>
                   </div>
+
+                  <div className="engineer-pills">
+                    <span className="engineer-pill">Android SDK</span>
+                    <span className="engineer-pill">Kotlin</span>
+                    <span className="engineer-pill">Room Database</span>
+                    <span className="engineer-pill">StateFlow</span>
+                    <span className="engineer-pill">APK Compilado</span>
+                  </div>
+                </div>
+
+                <div className="cinematic-visual cinematic-visual--phone">
+                  <div className="mock-phone mock-phone--hero">
+                    <div className="mock-phone-notch" />
+                    <img
+                      src={publicAsset('/img/metabit-app.jpg')}
+                      alt="Aplicación Móvil MetaBit"
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
               </div>
-            )}
+            </article>
 
-            {/* CARD 3 (HORIZONTAL): PLATAFORMA WEB PERIPOLLOS */}
-            {(projectFilter === 'all' || projectFilter === 'web') && (
-              <div
-                className="work-card spotlight-card"
-                onMouseMove={handleSpotlight}
-              >
-                <div className="work-card__inner">
-                  <div className="work-card__header">
-                    <span className="work-card__cat">Web · En Vivo (Netlify)</span>
-                    <h3 className="work-card__title">Plataforma Web "Peripollos"</h3>
-                    <p className="work-card__desc">
-                      Carta digital interactiva y sistema de pedidos directo por WhatsApp. Proyecto desplegado y operativo en producción sobre Netlify.
-                    </p>
-                    <div style={{ marginTop: 14 }}>
-                      <a
-                        className="btn btn-sm btn-secondary"
-                        href="https://peripollos.netlify.app/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
+            {/* ── TARJETA 02: SISTEMA POS PERIPOLLOS (ESCRITORIO) ── */}
+            <article className="cinematic-project-card spotlight-card" onMouseMove={handleSpotlight}>
+              <div className="cinematic-project-card__grid">
+                <div>
+                  <div className="cinematic-badge">
+                    <span className="cinematic-badge__num">02 / 03</span>
+                    <span>Backend Java · Microsoft SQL Server</span>
+                  </div>
+
+                  <h3 className="cinematic-title">Sistema de Gestión POS "Peripollos"</h3>
+                  <p className="cinematic-desc">
+                    Software de escritorio para punto de venta comercial en pollería. Arquitectura en capas (DAO/Model/View) con conexión JDBC directa a SQL Server. Control integral de stock, emisión de comprobantes y persistencia de transacciones en tiempo real.
+                  </p>
+
+                  {/* Simulador Interactivo de Transacciones POS */}
+                  <div className="cinematic-simulation">
+                    <div className="cinematic-sim-header">
+                      <div className="sim-live-pulse">
+                        <span className="sim-live-dot" />
+                        <span>Monitor de Transacciones SQL Server</span>
+                      </div>
+                      <button
+                        className="channel-copy-btn"
+                        onClick={simularNuevaVenta}
+                        style={{ margin: 0, padding: '2px 8px', fontSize: '0.72rem' }}
                       >
-                        <span>Abrir sitio web en vivo</span>
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                          <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7h-2v7H5V7h7V5H5z"/>
-                        </svg>
-                      </a>
+                        + Simular Venta
+                      </button>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {posFeed.map((tx) => (
+                        <div key={tx.id} className="sim-metric-row">
+                          <span className="sim-metric-label">
+                            Tx #{tx.id} · Mesa {tx.mesa} ({tx.time})
+                          </span>
+                          <span className="sim-metric-val">
+                            S/ {tx.total.toFixed(2)} · <span style={{ color: 'var(--accent)' }}>{tx.status}</span>
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="work-card__preview">
-                    <div className="mock-window">
-                      <div className="mock-window-bar">
-                        <span className="mock-dot mock-dot--red" />
-                        <span className="mock-dot mock-dot--yellow" />
-                        <span className="mock-dot mock-dot--green" />
-                        <span className="mock-browser-url">peripollos.netlify.app</span>
-                      </div>
-                      <div className="mock-window-screen">
-                        <img src={publicAsset('/img/peripollos-web.png')} alt="Plataforma Web Peripollos" loading="lazy"/>
-                      </div>
+
+                  <div className="engineer-pills">
+                    <span className="engineer-pill">Java 17</span>
+                    <span className="engineer-pill">SQL Server</span>
+                    <span className="engineer-pill">Transacciones ACID</span>
+                    <span className="engineer-pill">Patrón DAO</span>
+                    <span className="engineer-pill">Webhooks</span>
+                  </div>
+                </div>
+
+                <div className="cinematic-visual">
+                  <div className="mock-window">
+                    <div className="mock-window-bar">
+                      <span className="mock-dot mock-dot--red" />
+                      <span className="mock-dot mock-dot--yellow" />
+                      <span className="mock-dot mock-dot--green" />
+                      <span className="mock-window-title">peripollos_pos_v2.0 — Java / SQL Server</span>
+                    </div>
+                    <div className="mock-window-screen">
+                      <img
+                        src={publicAsset('/img/peripollos-pos.png')}
+                        alt="Sistema POS Peripollos"
+                        loading="lazy"
+                      />
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+            </article>
+
+            {/* ── TARJETA 03: PLATAFORMA WEB PERIPOLLOS (EN VIVO) ── */}
+            <article className="cinematic-project-card spotlight-card" onMouseMove={handleSpotlight}>
+              <div className="cinematic-project-card__grid">
+                <div>
+                  <div className="cinematic-badge">
+                    <span className="cinematic-badge__num">03 / 03</span>
+                    <span>Plataforma Web · Despliegue en Producción</span>
+                  </div>
+
+                  <h3 className="cinematic-title">Plataforma Web "Peripollos"</h3>
+                  <p className="cinematic-desc">
+                    Carta digital y canal de pedidos interactivo en línea. Diseñada con React y desplegada en producción sobre Netlify. Permite estructurar pedidos en vivo con enlace directo al canal de atención de WhatsApp.
+                  </p>
+
+                  <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 24 }}>
+                    <a
+                      className="btn btn-primary"
+                      href="https://peripollos.netlify.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
+                    >
+                      <span>Abrir sitio web en Netlify</span>
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                        <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7h-2v7H5V7h7V5H5z"/>
+                      </svg>
+                    </a>
+                  </div>
+
+                  <div className="engineer-pills">
+                    <span className="engineer-pill">React</span>
+                    <span className="engineer-pill">Vite</span>
+                    <span className="engineer-pill">Netlify Hosting</span>
+                    <span className="engineer-pill">API WhatsApp</span>
+                    <span className="engineer-pill">Diseño Responsive</span>
+                  </div>
+                </div>
+
+                <div className="cinematic-visual">
+                  <div className="mock-window">
+                    <div className="mock-window-bar">
+                      <span className="mock-dot mock-dot--red" />
+                      <span className="mock-dot mock-dot--yellow" />
+                      <span className="mock-dot mock-dot--green" />
+                      <span className="mock-browser-url">peripollos.netlify.app</span>
+                    </div>
+                    <div className="mock-window-screen">
+                      <img
+                        src={publicAsset('/img/peripollos-web.png')}
+                        alt="Plataforma Web Peripollos en Netlify"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* ── SECCIÓN 3: STACK TÉCNICO Y EXPLORADOR DE CÓDIGO INTERACTIVO ── */}
+      {/* ── SECCIÓN 3: STACK TÉCNICO Y EXPLORADOR DE ARQUITECTURA ── */}
       <section className="section-pro section-pro--alt" id="stack">
         <div className="container">
           <div className="pro-header">
@@ -680,7 +780,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── SECCIÓN 4: SOBRE MÍ Y TRAYECTORIA ── */}
+      {/* ── SECCIÓN 4: SOBRE MÍ Y PRINCIPIOS DE INGENIERÍA ── */}
       <section className="section-pro" id="sobre-mi">
         <div className="container">
           <div className="pro-header">
@@ -969,7 +1069,7 @@ export default function Home() {
       {/* ── TOAST NOTIFICATION FLOTANTE ── */}
       {toastMessage && (
         <div className="toast-notification">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="#3B82F6">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="var(--accent)">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
           </svg>
           <span>{toastMessage}</span>
