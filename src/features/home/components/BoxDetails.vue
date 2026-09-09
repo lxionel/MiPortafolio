@@ -118,7 +118,7 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
         </div>
         <div class="box-details-items">
           <div class="box-details-item">
-            <p class="box-details-role">Desarrollador de Software</p>
+            <p class="box-details-role">Ing. de Sistemas e Informática</p>
           </div>
           <div class="box-details-item">
             <PinIcon class="box-details-icon" />
