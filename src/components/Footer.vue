@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import Social from "./Social.vue";
-import Link from "./Link.vue";
-import Clickable from "./Clickable.vue";
-import LangSwitch from "./LangSwitch.vue";
 import NotchSection from "./NotchSection.vue";
-import { t } from "../i18n/utils/translate";
-import { locale } from "../i18n/store";
 import ButtonRound from "./ButtonRound.vue";
 import { lenis } from "../composables/useScroll";
 import ArrowRightLong from "./icons/ArrowRightLong.vue";
@@ -20,7 +15,6 @@ const handleBackToTop = () => {
 };
 
 const { withSocial = true } = defineProps<Props>();
-const showAttribution = import.meta.env.VITE_SHOW_ATTRIBUTION !== "false";
 </script>
 
 <template>
@@ -41,65 +35,8 @@ const showAttribution = import.meta.env.VITE_SHOW_ATTRIBUTION !== "false";
       </div>
       <div class="footer-top">
         <Social v-if="withSocial" />
-        <div class="footer-top-links">
-          <div class="footer-top-links-legal">
-            <Clickable renderAs="div">
-              <Link
-                :href="locale === 'de' ? '/de/privacy' : '/privacy'"
-                class="footer-link"
-                :external="true"
-                data-cursor="circle-white"
-                data-sound="click"
-                data-hoversound="hover"
-                >{{ t("privacy") }}</Link
-              >
-            </Clickable>
-            <Clickable renderAs="div">
-              <Link
-                :href="locale === 'de' ? '/de/legal' : '/legal'"
-                class="footer-link children-unclickable"
-                :external="true"
-                data-cursor="circle-white"
-                data-sound="click"
-                data-hoversound="hover"
-                >{{ t("legal") }}</Link
-              >
-            </Clickable>
-          </div>
-          <LangSwitch />
-        </div>
       </div>
       <div class="footer-credits">
-        <div v-if="showAttribution" class="footer-credits-built">
-          <p>
-            {{ t("original-concept-by") }}
-          </p>
-          <Clickable renderAs="div">
-            <Link
-              href="https://david-hckh.com"
-              class="footer-link children-unclickable"
-              external
-              data-cursor="circle-white"
-              data-hoversound="hover"
-              >David Heckhoff</Link
-            >
-          </Clickable>
-        </div>
-        <div class="footer-credits-music">
-          <p>
-            {{ t("music-produced-by") }}
-          </p>
-          <Clickable renderAs="div">
-            <Link
-              href="https://soundcloud.com/hmsurf"
-              class="footer-link children-unclickable"
-              external
-              data-cursor="circle-white"
-              data-hoversound="hover"
-              >HM Surf</Link
-            >
-          </Clickable>
-        </div>
         <p>© {{ new Date().getFullYear() }} Lionel Aguirre Gomero</p>
       </div>
     </div>
@@ -142,36 +79,11 @@ const showAttribution = import.meta.env.VITE_SHOW_ATTRIBUTION !== "false";
 
   &-top {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: var(--space-xl);
-
-    @include mixins.mq("md") {
-      gap: var(--space-md);
-      flex-direction: row;
-    }
-
-    &-links {
-      display: flex;
-      flex-direction: column-reverse;
-      align-items: center;
-      gap: var(--space-md);
-
-      &-legal {
-        display: flex;
-        flex-direction: row;
-        gap: var(--space-md);
-      }
-
-      @include mixins.mq("md") {
-        gap: var(--space-lg);
-        flex-direction: row;
-        position: relative;
-        margin-left: auto;
-      }
-    }
+    gap: var(--space-md);
   }
 
   &-link {
@@ -186,14 +98,7 @@ const showAttribution = import.meta.env.VITE_SHOW_ATTRIBUTION !== "false";
     width: 100%;
     font-size: var(--font-size-sm);
     text-align: center;
-
-    &-built,
-    &-music {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: var(--space-xxs);
-    }
+    color: var(--color-text-300);
   }
 
   &-notch {

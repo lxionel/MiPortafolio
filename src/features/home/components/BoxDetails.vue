@@ -102,15 +102,24 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
   <ProjectedElement :point="point">
     <div ref="wrapperRef" class="box-details">
       <div class="box-details-content">
-        <div class="box-details-title">
-          <AppearingText
-            text="Lionel"
-            :steps="1"
-            :duration="0.35"
-            @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0)"
-          />
+        <div class="box-details-header">
+          <div class="box-details-title">
+            <AppearingText
+              text="Lionel Aguirre"
+              :steps="1"
+              :duration="0.35"
+              @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0)"
+            />
+          </div>
+          <div class="box-details-status">
+            <span class="box-details-status-dot"></span>
+            <span class="box-details-status-text">Disponible</span>
+          </div>
         </div>
         <div class="box-details-items">
+          <div class="box-details-item">
+            <p class="box-details-role">Desarrollador de Software</p>
+          </div>
           <div class="box-details-item">
             <PinIcon class="box-details-icon" />
             <AppearingText
@@ -139,13 +148,13 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     position: absolute;
     padding-bottom: 3px;
     padding-right: var(--line-length);
-    width: 240px;
-    max-width: calc(var(--svw) * 30);
+    width: 270px;
+    max-width: calc(var(--svw) * 32);
     transform: translate(-100%, -50%);
   }
 
   @include mixins.landscape-large {
-    width: 240px;
+    width: 280px;
   }
 
   &::after,
@@ -201,6 +210,50 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     }
   }
 
+  &-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    width: 100%;
+  }
+
+  &-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-cyan-300, #38d6ff);
+    background: rgba(0, 200, 255, 0.12);
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 200, 255, 0.35);
+
+    &-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: #00ffcc;
+      box-shadow: 0 0 6px #00ffcc;
+      display: inline-block;
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    &-text {
+      line-height: 1;
+      font-weight: 700;
+    }
+  }
+
+  &-role {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.02em;
+  }
+
   &-item {
     display: flex;
     align-items: center;
@@ -233,6 +286,7 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     display: flex;
     font-size: var(--font-size-sm);
     flex-direction: column;
+    gap: 2px;
 
     @include mixins.mq("md") {
       font-size: var(--font-size-md);
@@ -241,6 +295,17 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     &-copy {
       flex: 0.5;
     }
+  }
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.75);
   }
 }
 </style>

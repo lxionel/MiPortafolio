@@ -108,18 +108,22 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
 
 const SERVICES_EN = [
   { name: "Java 17 & Spring Boot" },
-  { name: "SQL Server & ACID" },
+  { name: "SQL Server & Transacciones ACID" },
   { name: "Android SDK & Kotlin" },
-  { name: "Room DB & MVVM" },
-  { name: "React & TypeScript" },
+  { name: "Room DB, SQLite & MVVM" },
+  { name: "React, TypeScript & Tailwind" },
+  { name: "APIs RESTful & Clean Architecture" },
+  { name: "Git, GitHub & Docker" },
 ] as const satisfies { name: string }[];
 
 const SERVICES_DE = [
   { name: "Java 17 & Spring Boot" },
-  { name: "SQL Server & ACID" },
+  { name: "SQL Server & Transacciones ACID" },
   { name: "Android SDK & Kotlin" },
-  { name: "Room DB & MVVM" },
-  { name: "React & TypeScript" },
+  { name: "Room DB, SQLite & MVVM" },
+  { name: "React, TypeScript & Tailwind" },
+  { name: "APIs RESTful & Clean Architecture" },
+  { name: "Git, GitHub & Docker" },
 ] as const satisfies { name: string }[];
 
 const services = computed(() => {
@@ -145,8 +149,8 @@ const services = computed(() => {
               <AppearingText
                 :text="service.name"
                 :steps="1"
-                :duration="0.35"
-                @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0.15 + index * 0.1)"
+                :duration="0.3"
+                @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0.12 + index * 0.07)"
               />
             </p>
           </div>

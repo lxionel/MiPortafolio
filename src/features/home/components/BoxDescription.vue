@@ -114,6 +114,11 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
             @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0)"
           />
         </div>
+        <div class="box-description-tags">
+          <span class="box-description-badge">Java & SQL Server</span>
+          <span class="box-description-badge">Android MVVM</span>
+          <span class="box-description-badge">React & TypeScript</span>
+        </div>
       </div>
     </div>
   </ProjectedElement>
@@ -246,6 +251,28 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     @include mixins.landscape-large {
       font-size: var(--font-size-lg);
     }
+  }
+
+  &-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 var(--space-md) var(--space-sm);
+
+    @include mixins.landscape {
+      padding: var(--space-xs) 0 0;
+    }
+  }
+
+  &-badge {
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--color-cyan-300, #38d6ff);
+    background: rgba(0, 200, 255, 0.09);
+    border: 1px solid rgba(0, 200, 255, 0.28);
+    border-radius: var(--radius-sm);
+    padding: 2px 7px;
+    white-space: nowrap;
   }
 }
 </style>

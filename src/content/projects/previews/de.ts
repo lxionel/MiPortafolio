@@ -1,5 +1,5 @@
 import thumbnailPos from "../../../assets/thumbnails/pos.png";
-import thumbnailMetabit from "../../../assets/thumbnails/metabit.jpg";
+import thumbnailMetabit from "../../../assets/thumbnails/metabit.png";
 import thumbnailPeripollos from "../../../assets/thumbnails/peripollos.png";
 
 import type { ProjectPreview } from "../../types";
