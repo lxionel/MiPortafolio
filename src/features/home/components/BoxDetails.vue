@@ -131,6 +131,10 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
               @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0.1)"
             />
           </div>
+          <div class="box-details-badges">
+            <span class="box-details-badge">Backend & BD</span>
+            <span class="box-details-badge">Android Nativo</span>
+          </div>
         </div>
       </div>
     </div>
@@ -298,6 +302,25 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     &-copy {
       flex: 0.5;
     }
+  }
+
+  &-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 4px;
+  }
+
+  &-badge {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(223, 165, 92, 0.15);
+    border: 1px solid rgba(223, 165, 92, 0.35);
+    color: var(--color-orange-400);
   }
 }
 

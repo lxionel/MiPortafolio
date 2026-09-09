@@ -118,6 +118,7 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
           <span class="box-description-badge">Java & SQL Server</span>
           <span class="box-description-badge">Android MVVM</span>
           <span class="box-description-badge">React & TypeScript</span>
+          <span class="box-description-badge">Transacciones ACID</span>
         </div>
       </div>
     </div>

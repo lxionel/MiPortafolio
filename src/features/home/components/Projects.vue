@@ -8,6 +8,8 @@ import Banner from "../../../components/Banner.vue";
 import { t } from "../../../i18n/utils/translate";
 import { isFeatureEnabled } from "../../../utils/features";
 
+import TechStack from "./TechStack.vue";
+
 import type { ProjectPreview } from "../../../content/types";
 
 const loadedPreviews = ref<ProjectPreview[] | null>(null);
@@ -46,6 +48,9 @@ onMounted(loadPreviews);
         <PreviewCard v-if="isFeatureEnabled('startProject')" />
       </div>
     </div>
+
+    <!-- Bloque de Especialización Técnica y Principios de Ingeniería -->
+    <TechStack />
   </div>
 </template>
 

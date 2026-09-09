@@ -26,5 +26,8 @@
   "source-code": "Código Fuente",
   "switch-to-project": "Ver proyecto {project}",
   "version": "Versión",
-  "view-project": "Ver proyecto"
+  "view-project": "Ver proyecto",
+  "tech-stack": "Stack Técnico",
+  "engineering-principles": "Ingeniería",
+  "expertise": "Especialización"
 }
