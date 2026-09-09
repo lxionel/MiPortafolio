@@ -1,182 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useGsap, setupLandingAnimations } from '../hooks/useGsap';
 import { wspUrl } from '../utils/whatsapp';
 
 const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
 
-const CODE_SNIPPETS = {
-  java: {
-    title: 'PedidoDAOImpl.java',
-    tag: 'Java 17 · Patrón DAO · Transacciones ACID',
-    code: `// Capa de Acceso a Datos con JDBC Transaccional
-public class PedidoDAOImpl implements PedidoDAO {
-    private final ConnectionPool pool;
-
-    @Override
-    public boolean registrarVenta(Venta venta, List<DetalleVenta> items) throws SQLException {
-        String sqlVenta = "INSERT INTO Ventas (cliente_id, total, fecha) VALUES (?, ?, ?)";
-        String sqlDetalle = "INSERT INTO DetalleVentas (venta_id, producto_id, cantidad, precio) VALUES (?, ?, ?, ?)";
-
-        try (Connection conn = pool.getConnection()) {
-            conn.setAutoCommit(false); // Transacción atómica
-            try (PreparedStatement psVenta = conn.prepareStatement(sqlVenta, Statement.RETURN_GENERATED_KEYS)) {
-                psVenta.setInt(1, venta.getClienteId());
-                psVenta.setBigDecimal(2, venta.getTotal());
-                psVenta.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-                psVenta.executeUpdate();
-
-                ResultSet rs = psVenta.getGeneratedKeys();
-                if (rs.next()) {
-                    int ventaId = rs.getInt(1);
-                    try (PreparedStatement psDet = conn.prepareStatement(sqlDetalle)) {
-                        for (DetalleVenta item : items) {
-                            psDet.setInt(1, ventaId);
-                            psDet.setInt(2, item.getProductoId());
-                            psDet.setInt(3, item.getCantidad());
-                            psDet.setBigDecimal(4, item.getPrecioUnitario());
-                            psDet.addBatch();
-                        }
-                        psDet.executeBatch();
-                    }
-                }
-                conn.commit(); // Confirmación de transacción
-                return true;
-            } catch (SQLException ex) {
-                conn.rollback(); // Rollback estricto ante excepciones
-                throw ex;
-            }
-        }
-    }
-}`,
-    desc: 'Arquitectura desacoplada en Java para sistemas POS. Garantiza atomicidad y persistencia consistente en base de datos relacional sin riesgo de transacciones huérfanas.',
-  },
-  sql: {
-    title: 'sp_ProcesarPedidoPOS.sql',
-    tag: 'Microsoft SQL Server · T-SQL · Integridad Transaccional',
-    code: `-- Procedimiento Almacenado con Bloque Transaccional ACID
-CREATE OR ALTER PROCEDURE dbo.sp_ProcesarPedidoPOS
-    @ClienteId INT,
-    @Total DECIMAL(10,2),
-    @MetodoPago VARCHAR(50),
-    @VentaId INT OUTPUT
-AS
-BEGIN
-    SET NOCOUNT ON;
-    SET XACT_ABORT ON; -- Cancela y hace rollback automático ante error severo
-
-    BEGIN TRY
-        BEGIN TRANSACTION;
-
-        -- 1. Inserción en cabecera de ventas
-        INSERT INTO dbo.Ventas (ClienteId, FechaHora, Total, MetodoPago, Estado)
-        VALUES (@ClienteId, SYSDATETIME(), @Total, @MetodoPago, 'COMPLETADO');
-
-        SET @VentaId = SCOPE_IDENTITY();
-
-        -- 2. Registro en bitácora de auditoría
-        INSERT INTO dbo.AuditoriaTransacciones (VentaId, Accion, Usuario, Fecha)
-        VALUES (@VentaId, 'REGISTRO_VENTA_POS', SYSTEM_USER, SYSDATETIME());
-
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
-
-        THROW;
-    END CATCH
-END;`,
-    desc: 'Procedimiento almacenado en SQL Server diseñado para operaciones concurrentes en puntos de venta, con control de errores TRY...CATCH y auditoría.',
-  },
-  kotlin: {
-    title: 'MetaAhorroViewModel.kt',
-    tag: 'Android · Kotlin · MVVM & Corrutinas',
-    code: `// ViewModel con Corrutinas y Flujo de Estado Reactivo
-class MetaAhorroViewModel(
-    private val repository: MetaRepository
-) : ViewModel() {
-
-    private val _uiState = MutableStateFlow<MetaUiState>(MetaUiState.Initial)
-    val uiState: StateFlow<MetaUiState> = _uiState.asStateFlow()
-
-    fun calcularProyeccion(montoObjetivo: Double, plazoMeses: Int, aporteMensual: Double) {
-        viewModelScope.launch(Dispatchers.Default) {
-            val resultado = repository.calcularProyeccionAhorro(
-                montoObjetivo, 
-                plazoMeses, 
-                aporteMensual
-            )
-            _uiState.value = MetaUiState.Success(resultado)
-        }
-    }
-
-    fun guardarMeta(meta: MetaEntity) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertarMeta(meta)
-    }
-}`,
-    desc: 'Patrón MVVM en Android con StateFlow reactivo. Los cálculos pesados de proyección financiera se ejecutan en subprocesos en segundo plano.',
-  },
-  react: {
-    title: 'useOrdersSync.js',
-    tag: 'React · Hooks · Webhooks & Mensajería',
-    code: `// Sincronización reactiva del carrito y generación de orden
-export function useOrdersSync(cartItems, deliveryInfo) {
-  const total = useMemo(() => {
-    return cartItems.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
-  }, [cartItems]);
-
-  const despacharPedido = useCallback(() => {
-    const lineas = [
-      '*NUEVO PEDIDO DESDE CARTA WEB*',
-      \`Cliente: \${deliveryInfo.nombre}\`,
-      \`Dirección: \${deliveryInfo.direccion}\`,
-      \`Total: S/ \${total.toFixed(2)}\`,
-      '--- Detalle ---',
-      ...cartItems.map(i => \`• \${i.cantidad}x \${i.nombre} - S/ \${(i.precio * i.cantidad).toFixed(2)}\`)
-    ].join('\\n');
-
-    window.open(wspUrl(lineas), '_blank');
-  }, [cartItems, deliveryInfo, total]);
-
-  return { total, despacharPedido };
-}`,
-    desc: 'Hook de React que transforma el estado de la carta interactiva de pedidos en un payload estructurado para recepción inmediata en WhatsApp.',
-  },
-};
-
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeSnippet, setActiveSnippet] = useState('java');
-  const [copiedCode, setCopiedCode] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-
-  // Interactive Simulator 1: MetaBit Savings Calculator
-  const [metaMonto, setMetaMonto] = useState(4800);
-  const [metaMeses, setMetaMeses] = useState(12);
-  const cuotaMensual = Math.round(metaMonto / (metaMeses || 1));
-
-  // Interactive Simulator 2: POS Live Transactions Feed
-  const [posFeed, setPosFeed] = useState([
-    { id: 2104, mesa: '02', total: 78.00, time: '14:22:05', status: 'COMMIT SQL (6ms)' },
-    { id: 2105, mesa: '07', total: 145.50, time: '14:28:18', status: 'COMMIT SQL (9ms)' },
-    { id: 2106, mesa: '03', total: 54.00, time: '14:31:40', status: 'COMMIT SQL (7ms)' },
-  ]);
-
-  const simularNuevaVenta = () => {
-    const mesas = ['01', '04', '05', '08', '11', 'Delivery'];
-    const randomMesa = mesas[Math.floor(Math.random() * mesas.length)];
-    const randomTotal = (Math.floor(Math.random() * 80) + 35).toFixed(2);
-    const now = new Date().toTimeString().split(' ')[0];
-    const newTx = {
-      id: posFeed[posFeed.length - 1].id + 1,
-      mesa: randomMesa,
-      total: parseFloat(randomTotal),
-      time: now,
-      status: 'COMMIT SQL (8ms)',
-    };
-    setPosFeed(prev => [...prev.slice(-3), newTx]);
-    showToast(`Transacción #${newTx.id} registrada en SQL Server`);
-  };
 
   // Form state
   const [nombre, setNombre] = useState('');
@@ -218,32 +48,15 @@ export default function Home() {
     }
   }, []);
 
-  // Interactive mouse spotlight handler
-  const handleSpotlight = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
-    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
-  };
-
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 3500);
   };
 
   const copyEmailToClipboard = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     navigator.clipboard.writeText('lioneldavora1@gmail.com');
     showToast('Correo lioneldavora1@gmail.com copiado al portapapeles');
-  };
-
-  const copySnippetCode = () => {
-    const code = CODE_SNIPPETS[activeSnippet].code;
-    navigator.clipboard.writeText(code);
-    setCopiedCode(true);
-    showToast('Fragmento de código copiado al portapapeles');
-    setTimeout(() => setCopiedCode(false), 2000);
   };
 
   const handleSendWhatsApp = (e) => {
@@ -254,398 +67,367 @@ export default function Home() {
     }
 
     const lines = [
-      'Hola Lionel, te contacto desde la landing page de tu portafolio.',
+      'Hola Lionel, te contacto desde tu portafolio.',
       nombre ? `Nombre: ${nombre}` : '',
-      contacto ? `Contacto / Correo: ${contacto}` : '',
+      contacto ? `Contacto: ${contacto}` : '',
       motivo ? `Motivo: ${motivo}` : '',
       mensaje ? `\nMensaje:\n${mensaje}` : '',
     ].filter(Boolean).join('\n');
 
     window.open(wspUrl(lines), '_blank', 'noopener,noreferrer');
     setFeedback('Mensaje preparado en WhatsApp.');
-    showToast('Abriendo WhatsApp con tu mensaje');
+    showToast('Abriendo WhatsApp...');
   };
 
   const handleSendMail = (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Contacto Portafolio - ${motivo} (${nombre || 'Interesado'})`);
+    const subject = encodeURIComponent(`Contacto Portafolio — ${motivo} (${nombre || 'Interesado'})`);
     const body = encodeURIComponent(
       `Nombre: ${nombre}\nContacto: ${contacto}\nMotivo: ${motivo}\n\nMensaje:\n${mensaje}`
     );
     window.location.href = `mailto:lioneldavora1@gmail.com?subject=${subject}&body=${body}`;
     setFeedback('Abriendo cliente de correo electrónico.');
-    showToast('Abriendo tu cliente de correo');
+    showToast('Abriendo tu cliente de correo...');
   };
 
   return (
-    <div ref={scope}>
-      {/* ── BARRA SUPERIOR DE PROGRESO DE LECTURA ── */}
+    <div ref={scope} className="editorial-page">
+      {/* ── LÍNEA DE PROGRESO DE LECTURA ── */}
       <div
-        className="scroll-progress-bar"
+        className="editorial-progress-line"
         style={{ width: `${scrollProgress}%` }}
         aria-hidden="true"
       />
 
-      {/* ── SECCIÓN 1: HERO EDITORIAL CLÁSICO (INICIO) ── */}
-      <section className="hero-pro" id="inicio">
-        <div className="container hero-pro__grid">
-          <div>
-            <div className="hero-status">
-              <span className="hero-status__dot" aria-hidden="true" />
-              <span>Ingeniería de Sistemas · Chimbote, Perú</span>
-            </div>
+      {/* ── SECCIÓN 1: HERO EDITORIAL ── */}
+      <section className="editorial-hero" id="inicio">
+        <div className="container">
+          <div className="editorial-hero__meta">
+            <span className="editorial-kicker">Ingeniería de Sistemas · Chimbote, Perú</span>
+            <span className="editorial-availability">
+              <span className="availability-dot" aria-hidden="true" />
+              Disponible para proyectos & desarrollo
+            </span>
+          </div>
 
-            <h1 className="hero-name">Lionel Aguirre Gomero</h1>
-            <p className="hero-title">Desarrollo de Software & Arquitectura Backend</p>
+          <h1 className="editorial-hero__title">
+            Lionel Aguirre Gomero
+          </h1>
 
-            <p className="hero-bio">
-              Construcción rigurosa de sistemas de información con <strong>Java</strong>, bases de datos relacionales en <strong>Microsoft SQL Server</strong> y desarrollo móvil nativo para <strong>Android</strong>. Enfoque integral en la integridad de transacciones, código desacoplado y rendimiento.
+          <p className="editorial-hero__headline">
+            Desarrollo de Software enfocado en Backend, Bases de Datos Relacionales y Aplicaciones Móviles.
+          </p>
+
+          <div className="editorial-hero__body-grid">
+            <p className="editorial-hero__lead">
+              Construyo sistemas con <strong>Java</strong>, <strong>Microsoft SQL Server</strong>, <strong>Android nativo</strong> y <strong>React</strong>. Mi prioridad es la estabilidad de la lógica de negocio, la integridad referencial en bases de datos y la resolución práctica de necesidades comerciales reales, sin artificios ni dependencias innecesarias.
             </p>
 
-            <div className="hero-actions">
-              <a
-                className="btn btn-primary"
-                href="#proyectos"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection('proyectos');
-                }}
-              >
-                Explorar sistemas desarrollados
-              </a>
-              <a
-                className="btn btn-secondary"
-                href="#contacto"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection('contacto');
-                }}
-              >
-                Iniciar contacto
-              </a>
-            </div>
-
-            <div className="hero-socials">
-              <a
-                className="hero-social-link"
-                href="https://github.com/lxionel"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                </svg>
-                <span>GitHub / lxionel</span>
-              </a>
-
-              <a
-                className="hero-social-link"
-                href="https://www.linkedin.com/in/lionel-aguirre-gomero-53a7052a9"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-                </svg>
-                <span>LinkedIn</span>
-              </a>
-
-              <a
-                className="hero-social-link"
-                href="mailto:lioneldavora1@gmail.com"
-                onClick={copyEmailToClipboard}
-                title="Hacer clic para copiar correo"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                </svg>
-                <span>lioneldavora1@gmail.com</span>
-              </a>
-            </div>
-
-            <div
-              className="hero-scroll-cue"
-              onClick={() => scrollToSection('proyectos')}
-            >
-              <div className="hero-scroll-line" />
-              <span>Desliza para explorar proyectos</span>
-            </div>
-          </div>
-
-          <div
-            className="engineer-card spotlight-card"
-            onMouseMove={handleSpotlight}
-          >
-            <div className="engineer-portrait-wrap">
-              <img
-                src={publicAsset('/img/lionel.png')}
-                alt="Lionel Aguirre Gomero — Desarrollador de Software"
-                loading="eager"
-              />
-            </div>
-            <div className="engineer-card-details">
-              <h2 className="engineer-card-name">Lionel Aguirre Gomero</h2>
-              <p className="engineer-card-spec">Ingeniería de Sistemas · Chimbote, Perú</p>
-              <div className="engineer-pills">
-                <span className="engineer-pill">Java 17</span>
-                <span className="engineer-pill">SQL Server</span>
-                <span className="engineer-pill">Android (Kotlin)</span>
-                <span className="engineer-pill">React</span>
-                <span className="engineer-pill">REST APIs</span>
-                <span className="engineer-pill">Git</span>
+            <div className="editorial-hero__actions">
+              <div className="editorial-btn-group">
+                <a
+                  className="editorial-btn editorial-btn--primary"
+                  href="#proyectos"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection('proyectos');
+                  }}
+                >
+                  Explorar sistemas desarrollados
+                </a>
+                <a
+                  className="editorial-btn editorial-btn--secondary"
+                  href="#contacto"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection('contacto');
+                  }}
+                >
+                  Iniciar contacto
+                </a>
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* ── CINTA DE MÉTRICAS CLÁSICA ── */}
-        <div className="container">
-          <div className="metrics-ribbon">
-            <div className="metric-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="metric-card__val">
-                03 <span>Sistemas</span>
-              </div>
-              <div className="metric-card__label">Desarrollados y probados en entornos reales</div>
-            </div>
+              <div className="editorial-hero__links">
+                <a
+                  href="https://github.com/lxionel"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="editorial-text-link"
+                >
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                  </svg>
+                  <span>GitHub</span>
+                </a>
 
-            <div className="metric-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="metric-card__val">
-                100<span>%</span>
-              </div>
-              <div className="metric-card__label">Integridad referencial y transacciones ACID en SQL</div>
-            </div>
+                <a
+                  href="https://www.linkedin.com/in/lionel-aguirre-gomero-53a7052a9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="editorial-text-link"
+                >
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                  </svg>
+                  <span>LinkedIn</span>
+                </a>
 
-            <div className="metric-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="metric-card__val">
-                Java <span>17+</span>
+                <button
+                  onClick={copyEmailToClipboard}
+                  className="editorial-text-link editorial-text-link--btn"
+                  title="Copiar correo electrónico"
+                >
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+                    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                  </svg>
+                  <span>lioneldavora1@gmail.com</span>
+                </button>
               </div>
-              <div className="metric-card__label">Arquitectura por capas con patrones DAO y MVC</div>
-            </div>
-
-            <div className="metric-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="metric-card__val">
-                Nativo <span>Android</span>
-              </div>
-              <div className="metric-card__label">Compilación de APK funcional con persistencia local</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── SECCIÓN 2: ESCENARIO CINEMATOGRÁFICO DE PROYECTOS (STACKING CARDS) ── */}
-      <section className="section-pro stack-section" id="proyectos">
+      {/* ── SECCIÓN 2: PROYECTOS / MONOGRAFÍAS DE INGENIERÍA ── */}
+      <section className="editorial-section" id="proyectos">
         <div className="container">
-          <div className="pro-header">
-            <span className="pro-header__eyebrow">Sistemas & Casos Reales</span>
-            <h2 className="pro-header__title">Proyectos en Producción</h2>
-            <p className="pro-header__desc">
-              Cada proyecto se fija en pantalla conforme te desplazas, demostrando la arquitectura técnica y la lógica funcional del software.
-            </p>
+          <div className="editorial-section__header">
+            <span className="editorial-section__num">01</span>
+            <div className="editorial-section__title-block">
+              <h2 className="editorial-section__title">Sistemas Desarrollados</h2>
+              <p className="editorial-section__desc">
+                Proyectos reales estructurados con criterio de ingeniería, atendiendo la arquitectura de persistencia, control transaccional y experiencia de uso.
+              </p>
+            </div>
           </div>
 
-          <div className="stack-cards-wrapper">
-            {/* ── TARJETA 01: METABIT (APP MÓVIL) ── */}
-            <article className="cinematic-project-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="cinematic-project-card__grid">
-                <div>
-                  <div className="cinematic-badge">
-                    <span className="cinematic-badge__num">01 / 03</span>
-                    <span>Android Nativo · Finanzas Personales</span>
-                  </div>
-
-                  <h3 className="cinematic-title">App Móvil "MetaBit"</h3>
-                  <p className="cinematic-desc">
-                    Aplicación Android desarrollada de forma nativa para el cálculo y proyección algorítmica de metas de ahorro financiero. Implementa persistencia local en base de datos Room/SQLite, desacoplamiento con MVVM y generación de estados predictivos.
-                  </p>
-
-                  {/* Simulador Interactivo de Ahorro */}
-                  <div className="cinematic-simulation">
-                    <div className="cinematic-sim-header">
-                      <div className="sim-live-pulse">
-                        <span className="sim-live-dot" />
-                        <span>Simulador Algorítmico MetaBit</span>
-                      </div>
-                      <span>Room DB Persist</span>
-                    </div>
-                    <div className="sim-interactive-calc">
-                      <div className="sim-slider-row">
-                        <span>Meta: S/ {metaMonto.toLocaleString()}</span>
-                        <input
-                          type="range"
-                          min="1000"
-                          max="20000"
-                          step="500"
-                          value={metaMonto}
-                          onChange={(e) => setMetaMonto(Number(e.target.value))}
-                        />
-                      </div>
-                      <div className="sim-slider-row">
-                        <span>Plazo: {metaMeses} meses</span>
-                        <input
-                          type="range"
-                          min="3"
-                          max="36"
-                          step="1"
-                          value={metaMeses}
-                          onChange={(e) => setMetaMeses(Number(e.target.value))}
-                        />
-                      </div>
-                      <div className="sim-result-box">
-                        <span className="sim-result-label">Aporte mensual proyectado:</span>
-                        <span className="sim-result-val">S/ {cuotaMensual.toLocaleString()} / mes</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="engineer-pills">
-                    <span className="engineer-pill">Android SDK</span>
-                    <span className="engineer-pill">Kotlin</span>
-                    <span className="engineer-pill">Room Database</span>
-                    <span className="engineer-pill">StateFlow</span>
-                    <span className="engineer-pill">APK Compilado</span>
-                  </div>
-                </div>
-
-                <div className="cinematic-visual cinematic-visual--phone">
-                  <div className="mock-phone mock-phone--hero">
-                    <div className="mock-phone-notch" />
-                    <img
-                      src={publicAsset('/img/metabit-app.jpg')}
-                      alt="Aplicación Móvil MetaBit"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
+          <div className="editorial-projects-list">
+            {/* ── CASO 01: POS PERIPOLLOS (JAVA 17 + SQL SERVER) ── */}
+            <article className="project-case">
+              <div className="project-case__meta-bar">
+                <div className="project-case__index">Caso 01 / 03</div>
+                <div className="project-case__type">Sistema de Escritorio & Backend Transaccional</div>
               </div>
-            </article>
 
-            {/* ── TARJETA 02: SISTEMA POS PERIPOLLOS (ESCRITORIO) ── */}
-            <article className="cinematic-project-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="cinematic-project-card__grid">
-                <div>
-                  <div className="cinematic-badge">
-                    <span className="cinematic-badge__num">02 / 03</span>
-                    <span>Backend Java · Microsoft SQL Server</span>
-                  </div>
-
-                  <h3 className="cinematic-title">Sistema de Gestión POS "Peripollos"</h3>
-                  <p className="cinematic-desc">
-                    Software de escritorio para punto de venta comercial en pollería. Arquitectura en capas (DAO/Model/View) con conexión JDBC directa a SQL Server. Control integral de stock, emisión de comprobantes y persistencia de transacciones en tiempo real.
+              <div className="project-case__layout">
+                <div className="project-case__info">
+                  <h3 className="project-case__title">Sistema POS para Gestión Comercial y Facturación Local</h3>
+                  <p className="project-case__subtitle">
+                    Control operativo de comandas, mesas, facturación y caja diaria para restaurante de alta rotación.
                   </p>
 
-                  {/* Simulador Interactivo de Transacciones POS */}
-                  <div className="cinematic-simulation">
-                    <div className="cinematic-sim-header">
-                      <div className="sim-live-pulse">
-                        <span className="sim-live-dot" />
-                        <span>Monitor de Transacciones SQL Server</span>
-                      </div>
-                      <button
-                        className="channel-copy-btn"
-                        onClick={simularNuevaVenta}
-                        style={{ margin: 0, padding: '2px 8px', fontSize: '0.72rem' }}
-                      >
-                        + Simular Venta
-                      </button>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      {posFeed.map((tx) => (
-                        <div key={tx.id} className="sim-metric-row">
-                          <span className="sim-metric-label">
-                            Tx #{tx.id} · Mesa {tx.mesa} ({tx.time})
-                          </span>
-                          <span className="sim-metric-val">
-                            S/ {tx.total.toFixed(2)} · <span style={{ color: 'var(--accent)' }}>{tx.status}</span>
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="project-case__detail-block">
+                    <h4 className="detail-block__label">El Problema</h4>
+                    <p className="detail-block__text">
+                      En entornos gastronómicos con alta concurrencia, la toma manual de comandas genera extravíos de pedidos, desajustes en el inventario y lentitud en el cuadre de caja al cierre del turno. Adicionalmente, las caídas del servicio de internet impiden operar sistemas que dependen exclusivamente de la nube.
+                    </p>
                   </div>
 
-                  <div className="engineer-pills">
-                    <span className="engineer-pill">Java 17</span>
-                    <span className="engineer-pill">SQL Server</span>
-                    <span className="engineer-pill">Transacciones ACID</span>
-                    <span className="engineer-pill">Patrón DAO</span>
-                    <span className="engineer-pill">Webhooks</span>
+                  <div className="project-case__detail-block">
+                    <h4 className="detail-block__label">Solución & Arquitectura</h4>
+                    <p className="detail-block__text">
+                      Se diseñó una aplicación de escritorio autónoma construida sobre <strong>Java 17</strong> y <strong>Microsoft SQL Server</strong>. Opera de forma completamente local, garantizando disponibilidad total aún sin conexión externa.
+                    </p>
+                    <ul className="project-case__features">
+                      <li>
+                        <strong>Arquitectura por capas con Patrón DAO:</strong> Desacoplamiento total entre la lógica del negocio, las pantallas de usuario y el acceso a datos mediante JDBC nativo.
+                      </li>
+                      <li>
+                        <strong>Transacciones ACID en SQL Server:</strong> Procedimientos almacenados con control atómico para garantizar que el registro de una venta, la emisión del comprobante y el descuento de stock ocurran como una única unidad indivisible.
+                      </li>
+                      <li>
+                        <strong>Monitoreo de mesas en tiempo real:</strong> Matriz visual interactiva para apertura de mesas, adición de pedidos y consolidación inmediata de cuentas.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="project-case__tech-tags">
+                    <span className="case-tag">Java 17</span>
+                    <span className="case-tag">Microsoft SQL Server</span>
+                    <span className="case-tag">Transacciones ACID</span>
+                    <span className="case-tag">Patrón DAO</span>
+                    <span className="case-tag">JDBC</span>
+                    <span className="case-tag">Arquitectura por Capas</span>
                   </div>
                 </div>
 
-                <div className="cinematic-visual">
-                  <div className="mock-window">
-                    <div className="mock-window-bar">
-                      <span className="mock-dot mock-dot--red" />
-                      <span className="mock-dot mock-dot--yellow" />
-                      <span className="mock-dot mock-dot--green" />
-                      <span className="mock-window-title">peripollos_pos_v2.0 — Java / SQL Server</span>
+                <div className="project-case__visual">
+                  <div className="mockup-frame mockup-frame--desktop">
+                    <div className="mockup-frame__bar">
+                      <div className="mockup-frame__dots">
+                        <span className="dot dot--red" />
+                        <span className="dot dot--yellow" />
+                        <span className="dot dot--green" />
+                      </div>
+                      <span className="mockup-frame__title">Sistema POS — Java 17 / Microsoft SQL Server</span>
                     </div>
-                    <div className="mock-window-screen">
+                    <div className="mockup-frame__screen">
                       <img
                         src={publicAsset('/img/peripollos-pos.png')}
-                        alt="Sistema POS Peripollos"
+                        alt="Captura completa del Sistema POS Peripollos desarrollado en Java y SQL Server"
                         loading="lazy"
                       />
                     </div>
                   </div>
+                  <span className="project-case__caption">
+                    Interfaz de ventas y comandas del sistema POS. Captura real de la aplicación de escritorio en ejecución.
+                  </span>
                 </div>
               </div>
             </article>
 
-            {/* ── TARJETA 03: PLATAFORMA WEB PERIPOLLOS (EN VIVO) ── */}
-            <article className="cinematic-project-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="cinematic-project-card__grid">
-                <div>
-                  <div className="cinematic-badge">
-                    <span className="cinematic-badge__num">03 / 03</span>
-                    <span>Plataforma Web · Despliegue en Producción</span>
-                  </div>
+            {/* ── CASO 02: METABIT (ANDROID NATIVO) ── */}
+            <article className="project-case">
+              <div className="project-case__meta-bar">
+                <div className="project-case__index">Caso 02 / 03</div>
+                <div className="project-case__type">Aplicación Móvil Nativa (Android)</div>
+              </div>
 
-                  <h3 className="cinematic-title">Plataforma Web "Peripollos"</h3>
-                  <p className="cinematic-desc">
-                    Carta digital y canal de pedidos interactivo en línea. Diseñada con React y desplegada en producción sobre Netlify. Permite estructurar pedidos en vivo con enlace directo al canal de atención de WhatsApp.
+              <div className="project-case__layout">
+                <div className="project-case__info">
+                  <h3 className="project-case__title">App Móvil "MetaBit" — Planificación Financiera Personal</h3>
+                  <p className="project-case__subtitle">
+                    Cálculo algorítmico de metas de ahorro con persistencia local y funcionamiento offline-first.
                   </p>
 
-                  <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 24 }}>
+                  <div className="project-case__detail-block">
+                    <h4 className="detail-block__label">El Problema</h4>
+                    <p className="detail-block__text">
+                      Las aplicaciones convencionales de finanzas personales exigen registros forzosos en servidores externos, envían información privada a la nube y dejan de funcionar cuando el usuario no tiene conexión de datos o cobertura móvil.
+                    </p>
+                  </div>
+
+                  <div className="project-case__detail-block">
+                    <h4 className="detail-block__label">Solución & Arquitectura</h4>
+                    <p className="detail-block__text">
+                      Desarrollo nativo para el ecosistema <strong>Android</strong> orientado a la privacidad y la inmediatez. La aplicación almacena y procesa la totalidad de la información directamente en el dispositivo móvil.
+                    </p>
+                    <ul className="project-case__features">
+                      <li>
+                        <strong>Persistencia local con Room Database / SQLite:</strong> Modelado relacional interno con entidades estructuradas y consultas asíncronas para garantizar que los datos estén siempre accesibles.
+                      </li>
+                      <li>
+                        <strong>Patrón MVVM (Model-View-ViewModel):</strong> Desacoplamiento estricto de la interfaz gráfica respecto a las operaciones lógicas, optimizando el ciclo de vida de la aplicación ante rotaciones o pausas de pantalla.
+                      </li>
+                      <li>
+                        <strong>Algoritmo de cálculo de cuotas y plazos:</strong> Proyecciones dinámicas que determinan el ritmo de ahorro mensual necesario para alcanzar metas dentro de plazos definidos.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="project-case__tech-tags">
+                    <span className="case-tag">Android SDK</span>
+                    <span className="case-tag">Kotlin</span>
+                    <span className="case-tag">Room DB / SQLite</span>
+                    <span className="case-tag">Arquitectura MVVM</span>
+                    <span className="case-tag">Offline-First</span>
+                    <span className="case-tag">APK Compilado</span>
+                  </div>
+                </div>
+
+                <div className="project-case__visual">
+                  <div className="mockup-frame mockup-frame--phone">
+                    <div className="mockup-phone-shell">
+                      <div className="mockup-phone-camera" />
+                      <div className="mockup-phone-screen">
+                        <img
+                          src={publicAsset('/img/metabit.png')}
+                          alt="Captura vertical completa de la aplicación móvil MetaBit en Android"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <span className="project-case__caption">
+                    Pantalla vertical completa de MetaBit. Se aprecia el formulario de meta, plazos y visualización de progreso.
+                  </span>
+                </div>
+              </div>
+            </article>
+
+            {/* ── CASO 03: PLATAFORMA WEB PERIPOLLOS (REACT EN VIVO) ── */}
+            <article className="project-case">
+              <div className="project-case__meta-bar">
+                <div className="project-case__index">Caso 03 / 03</div>
+                <div className="project-case__type">Plataforma Web en Producción (Netlify)</div>
+              </div>
+
+              <div className="project-case__layout">
+                <div className="project-case__info">
+                  <h3 className="project-case__title">Plataforma Web "PeriPollos" — Carta Digital & Despacho</h3>
+                  <p className="project-case__subtitle">
+                    Canal interactivo de pedidos en línea desplegado en producción con conexión a WhatsApp.
+                  </p>
+
+                  <div className="project-case__detail-block">
+                    <h4 className="detail-block__label">El Problema</h4>
+                    <p className="detail-block__text">
+                      Las plataformas de delivery tradicionales cobran comisiones significativas por cada orden. El negocio requería un canal directo, ligero y accesible desde cualquier navegador móvil sin forzar la descarga de una app externa.
+                    </p>
+                  </div>
+
+                  <div className="project-case__detail-block">
+                    <h4 className="detail-block__label">Solución & Arquitectura</h4>
+                    <p className="detail-block__text">
+                      Construcción de una aplicación web responsiva en <strong>React</strong>, optimizada para tiempos de carga mínimos y alojada en <strong>Netlify</strong> con canal de entrega continuo.
+                    </p>
+                    <ul className="project-case__features">
+                      <li>
+                        <strong>Estado reactivo para el carrito:</strong> Adición de platos, complementos y promociones con cálculo instantáneo de totales en memoria.
+                      </li>
+                      <li>
+                        <strong>Generador de payload para WhatsApp:</strong> Estructura el resumen de la comanda con precios y cantidades para despacharlo directamente al chat del restaurante.
+                      </li>
+                      <li>
+                        <strong>Diseño responsivo móvil:</strong> Interfaz adaptada con precisión tanto para teléfonos inteligentes como para computadoras de escritorio.
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="project-case__actions">
                     <a
-                      className="btn btn-primary"
+                      className="editorial-btn editorial-btn--primary"
                       href="https://peripollos.netlify.app/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
                     >
-                      <span>Abrir sitio web en Netlify</span>
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                      <span>Abrir sitio web en vivo</span>
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
                         <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM5 5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7h-2v7H5V7h7V5H5z"/>
                       </svg>
                     </a>
                   </div>
 
-                  <div className="engineer-pills">
-                    <span className="engineer-pill">React</span>
-                    <span className="engineer-pill">Vite</span>
-                    <span className="engineer-pill">Netlify Hosting</span>
-                    <span className="engineer-pill">API WhatsApp</span>
-                    <span className="engineer-pill">Diseño Responsive</span>
+                  <div className="project-case__tech-tags">
+                    <span className="case-tag">React</span>
+                    <span className="case-tag">JavaScript ES6+</span>
+                    <span className="case-tag">Netlify Hosting</span>
+                    <span className="case-tag">API WhatsApp</span>
+                    <span className="case-tag">Responsive Design</span>
                   </div>
                 </div>
 
-                <div className="cinematic-visual">
-                  <div className="mock-window">
-                    <div className="mock-window-bar">
-                      <span className="mock-dot mock-dot--red" />
-                      <span className="mock-dot mock-dot--yellow" />
-                      <span className="mock-dot mock-dot--green" />
-                      <span className="mock-browser-url">peripollos.netlify.app</span>
+                <div className="project-case__visual">
+                  <div className="mockup-frame mockup-frame--desktop">
+                    <div className="mockup-frame__bar">
+                      <div className="mockup-frame__dots">
+                        <span className="dot dot--red" />
+                        <span className="dot dot--yellow" />
+                        <span className="dot dot--green" />
+                      </div>
+                      <span className="mockup-frame__url">peripollos.netlify.app</span>
                     </div>
-                    <div className="mock-window-screen">
+                    <div className="mockup-frame__screen">
                       <img
                         src={publicAsset('/img/peripollos-web.png')}
-                        alt="Plataforma Web Peripollos en Netlify"
+                        alt="Captura completa de la carta digital de PeriPollos desplegada en Netlify"
                         loading="lazy"
                       />
                     </div>
                   </div>
+                  <span className="project-case__caption">
+                    Carta digital interactiva en producción. Despliegue activo en la red de Netlify.
+                  </span>
                 </div>
               </div>
             </article>
@@ -653,193 +435,148 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── SECCIÓN 3: STACK TÉCNICO Y EXPLORADOR DE ARQUITECTURA ── */}
-      <section className="section-pro section-pro--alt" id="stack">
+      {/* ── SECCIÓN 3: COMPETENCIAS TÉCNICAS & METODOLOGÍA ── */}
+      <section className="editorial-section editorial-section--alt" id="stack">
         <div className="container">
-          <div className="pro-header">
-            <span className="pro-header__eyebrow">Competencias Técnicas</span>
-            <h2 className="pro-header__title">Stack Tecnológico & Ingeniería</h2>
-            <p className="pro-header__desc">
-              Herramientas y lenguajes aplicados en proyectos funcionales y diseño de sistemas.
-            </p>
-          </div>
-
-          <div className="skills-grid">
-            <div className="skill-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="skill-card__header">
-                <div className="skill-card__icon">
-                  <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4zm2 2v8h12V8z"/></svg>
-                </div>
-                <h3 className="skill-card__title">Backend & Arquitectura</h3>
-              </div>
-              <div className="skill-card__tech">Java 17+ · POO · MVC · REST APIs</div>
-              <p className="skill-card__desc">
-                Desarrollo de lógica orientada a objetos, arquitectura por capas, control riguroso de excepciones, consumo e integración de webhooks y servicios automatizados.
-              </p>
-            </div>
-
-            <div className="skill-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="skill-card__header">
-                <div className="skill-card__icon">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 4.02 2 6.5v11C2 19.98 6.48 22 12 22s10-2.02 10-4.5v-11C22 4.02 17.52 2 12 2zm0 2c4.42 0 8 1.34 8 2.5S16.42 9 12 9 4 7.66 4 6.5 7.58 4 12 4zm0 16c-4.42 0-8-1.34-8-2.5V14.8c1.88 1.11 4.74 1.7 8 1.7s6.12-.59 8-1.7v2.7c0 1.16-3.58 2.5-8 2.5zm0-5c-4.42 0-8-1.34-8-2.5V9.8c1.88 1.11 4.74 1.7 8 1.7s6.12-.59 8-1.7v2.7c0 1.16-3.58 2.5-8 2.5z"/></svg>
-                </div>
-                <h3 className="skill-card__title">Bases de Datos Relacionales</h3>
-              </div>
-              <div className="skill-card__tech">Microsoft SQL Server · T-SQL · Normalización</div>
-              <p className="skill-card__desc">
-                Diseño relacional riguroso (ER, 3NF), consultas optimizadas, procedimientos almacenados, integridad referencial y prevención activa de inyecciones SQL.
-              </p>
-            </div>
-
-            <div className="skill-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="skill-card__header">
-                <div className="skill-card__icon">
-                  <svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg>
-                </div>
-                <h3 className="skill-card__title">Desarrollo Móvil</h3>
-              </div>
-              <div className="skill-card__tech">Android Nativo · Kotlin · Persistencia</div>
-              <p className="skill-card__desc">
-                Construcción de aplicaciones nativas para Android, control del ciclo de vida de componentes, algoritmos de cálculo local y compilación de APKs listos para distribución.
-              </p>
-            </div>
-
-            <div className="skill-card spotlight-card" onMouseMove={handleSpotlight}>
-              <div className="skill-card__header">
-                <div className="skill-card__icon">
-                  <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                </div>
-                <h3 className="skill-card__title">Frontend & Herramientas</h3>
-              </div>
-              <div className="skill-card__tech">React · JavaScript · Git / GitHub · Vite</div>
-              <p className="skill-card__desc">
-                Desarrollo de interfaces web reactivas, maquetación responsive, control de versiones con Git, despliegue continuo y optimización de rendimiento.
+          <div className="editorial-section__header">
+            <span className="editorial-section__num">02</span>
+            <div className="editorial-section__title-block">
+              <h2 className="editorial-section__title">Competencias Técnicas</h2>
+              <p className="editorial-section__desc">
+                Criterios de ingeniería y tecnologías aplicadas en la solución de problemas de software.
               </p>
             </div>
           </div>
 
-          {/* ── VISOR INTERACTIVO DE ARQUITECTURA & CÓDIGO ── */}
-          <div className="code-explorer">
-            <div className="code-explorer__header">
-              <div className="code-explorer__tabs">
-                <button
-                  className={`code-explorer__tab ${activeSnippet === 'java' ? 'active' : ''}`}
-                  onClick={() => setActiveSnippet('java')}
-                >
-                  <span>Java 17 (Capa DAO)</span>
-                </button>
-                <button
-                  className={`code-explorer__tab ${activeSnippet === 'sql' ? 'active' : ''}`}
-                  onClick={() => setActiveSnippet('sql')}
-                >
-                  <span>SQL Server (SP Transaccional)</span>
-                </button>
-                <button
-                  className={`code-explorer__tab ${activeSnippet === 'kotlin' ? 'active' : ''}`}
-                  onClick={() => setActiveSnippet('kotlin')}
-                >
-                  <span>Android Kotlin (MVVM)</span>
-                </button>
-                <button
-                  className={`code-explorer__tab ${activeSnippet === 'react' ? 'active' : ''}`}
-                  onClick={() => setActiveSnippet('react')}
-                >
-                  <span>React (Hooks & Integración)</span>
-                </button>
-              </div>
-
-              <button
-                className="code-explorer__copy-btn"
-                onClick={copySnippetCode}
-                title="Copiar código fuente"
-              >
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                </svg>
-                <span>{copiedCode ? '¡Copiado!' : 'Copiar código'}</span>
-              </button>
+          <div className="editorial-stack-grid">
+            <div className="stack-card">
+              <div className="stack-card__num">01</div>
+              <h3 className="stack-card__title">Sistemas Backend & Escritorio</h3>
+              <p className="stack-card__lead">
+                Java 17+ · Patrón DAO · Arquitectura MVC · JDBC · Manejo de Excepciones
+              </p>
+              <p className="stack-card__desc">
+                Desarrollo orientado a objetos con tipado estricto. Construcción de capas de acceso a datos modulares, control estructurado de fallas y lógica transaccional para sistemas que requieran continuidad operativa.
+              </p>
             </div>
 
-            <div className="code-explorer__content">
-              <div className="code-explorer__meta">
-                <span className="code-explorer__tag">{CODE_SNIPPETS[activeSnippet].tag}</span>
-                <span style={{ fontSize: '0.8rem', color: 'var(--muted)', fontFamily: 'monospace' }}>
-                  {CODE_SNIPPETS[activeSnippet].title}
-                </span>
-              </div>
+            <div className="stack-card">
+              <div className="stack-card__num">02</div>
+              <h3 className="stack-card__title">Bases de Datos Relacionales</h3>
+              <p className="stack-card__lead">
+                Microsoft SQL Server · T-SQL · Normalización 3NF · Transacciones ACID
+              </p>
+              <p className="stack-card__desc">
+                Diseño de esquemas relacionales con integridad referencial estricta. Creación de procedimientos almacenados, prevención activa de inyecciones SQL y optimización de consultas para consistencia total en operaciones críticas.
+              </p>
+            </div>
 
-              <pre className="code-explorer__pre">
-                <code>{CODE_SNIPPETS[activeSnippet].code}</code>
-              </pre>
+            <div className="stack-card">
+              <div className="stack-card__num">03</div>
+              <h3 className="stack-card__title">Desarrollo Móvil Nativo</h3>
+              <p className="stack-card__lead">
+                Android SDK · Kotlin · Room Database · SQLite · Arquitectura MVVM
+              </p>
+              <p className="stack-card__desc">
+                Aplicaciones para Android que respetan el ciclo de vida del sistema operativo. Implementación de bases de datos locales para funcionamiento autónomo (offline-first) y compilación de paquetes APK funcionales.
+              </p>
+            </div>
 
-              <p className="code-explorer__desc">
-                {CODE_SNIPPETS[activeSnippet].desc}
+            <div className="stack-card">
+              <div className="stack-card__num">04</div>
+              <h3 className="stack-card__title">Frontend & Herramientas de Entorno</h3>
+              <p className="stack-card__lead">
+                React · JavaScript Moderno · Vite · Git / GitHub · Netlify CI/CD
+              </p>
+              <p className="stack-card__desc">
+                Desarrollo de interfaces web reactivas y adaptables a cualquier dispositivo. Control riguroso de versiones con Git, automatización de compilaciones y despliegues continuos en plataformas de producción.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── SECCIÓN 4: SOBRE MÍ Y PRINCIPIOS DE INGENIERÍA ── */}
-      <section className="section-pro" id="sobre-mi">
+      {/* ── SECCIÓN 4: SOBRE MÍ & TRAYECTORIA ── */}
+      <section className="editorial-section" id="sobre-mi">
         <div className="container">
-          <div className="pro-header">
-            <span className="pro-header__eyebrow">Trayectoria y Perfil</span>
-            <h2 className="pro-header__title">Desarrollo con Enfoque de Ingeniería</h2>
-            <p className="pro-header__desc">
-              Compromiso con el código limpio, la consistencia de datos y la resolución práctica de necesidades.
-            </p>
+          <div className="editorial-section__header">
+            <span className="editorial-section__num">03</span>
+            <div className="editorial-section__title-block">
+              <h2 className="editorial-section__title">Trayectoria & Perfil</h2>
+              <p className="editorial-section__desc">
+                Formación académica, enfoque personal de trabajo y compromiso profesional.
+              </p>
+            </div>
           </div>
 
-          <div className="about-pro-grid">
-            <div
-              className="about-profile-card spotlight-card"
-              onMouseMove={handleSpotlight}
-            >
-              <div className="about-photo-wrap">
+          <div className="editorial-about-grid">
+            <div className="editorial-portrait-card">
+              <div className="editorial-portrait-frame">
                 <img
                   src={publicAsset('/img/lionel.png')}
                   alt="Lionel Aguirre Gomero — Desarrollador de Software"
                   loading="lazy"
                 />
               </div>
-              <div className="about-profile-name">Lionel Aguirre Gomero</div>
-              <div className="about-profile-role">Ingeniería de Sistemas · Software Dev</div>
-              <div className="about-meta-list">
-                <div className="about-meta-item">
-                  <span>Ubicación:</span>
-                  <span>Chimbote, Perú</span>
-                </div>
-                <div className="about-meta-item">
-                  <span>Enfoque principal:</span>
-                  <span>Backend & Móvil</span>
-                </div>
-                <div className="about-meta-item">
-                  <span>Modalidad:</span>
-                  <span>Remoto / Híbrido</span>
-                </div>
-                <div className="about-meta-item">
-                  <span>Disponibilidad:</span>
-                  <span style={{ color: 'var(--accent)', fontWeight: 700 }}>Inmediata</span>
+              <div className="editorial-portrait-info">
+                <h3 className="portrait-name">Lionel Aguirre Gomero</h3>
+                <p className="portrait-spec">Estudiante de Ingeniería de Sistemas</p>
+                <div className="portrait-meta-rows">
+                  <div className="meta-row">
+                    <span>Ubicación:</span>
+                    <span>Chimbote, Perú</span>
+                  </div>
+                  <div className="meta-row">
+                    <span>Enfoque principal:</span>
+                    <span>Backend & Móvil</span>
+                  </div>
+                  <div className="meta-row">
+                    <span>Disponibilidad:</span>
+                    <span className="meta-row__highlight">Inmediata</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="about-narrative">
-              <h3>Ingeniería de software aplicada a problemas reales.</h3>
-              <p>
-                Me encuentro en formación y constante especialización en la carrera de <strong>Ingeniería de Sistemas</strong>. Mi trabajo se centra en diseñar y programar soluciones tecnológicas que optimicen procesos comerciales y operativos.
+            <div className="editorial-bio-content">
+              <h3 className="bio-title">Ingeniería de software aplicada a necesidades reales.</h3>
+              <p className="bio-paragraph">
+                Mi nombre es Lionel Aguirre Gomero. Curso la carrera de <strong>Ingeniería de Sistemas</strong> y me dedico al diseño y programación de aplicaciones orientadas a optimizar operaciones comerciales y de gestión.
               </p>
-              <p>
-                En lugar de quedarme únicamente en la superficie visual, pongo especial atención en el modelado de datos en <strong>SQL Server</strong>, la arquitectura modular en <strong>Java</strong> y la estabilidad de aplicaciones nativas en <strong>Android</strong>. Creo firmemente que un buen sistema se define por la robustez de sus cimientos.
+              <p className="bio-paragraph">
+                Lejos de enfocarme únicamente en la apariencia visual, pongo especial atención en las bases de un sistema: cómo se modelan las tablas en <strong>SQL Server</strong> para que la información nunca se corrompa, cómo se organiza el código en <strong>Java</strong> para que sea mantenible con los años, y cómo se concibe una aplicación móvil en <strong>Android</strong> para que responda con fluidez aún sin internet.
               </p>
-              <p>
-                Busco colaborar en equipos y proyectos donde pueda aplicar disciplina técnica, escribir código mantenible y continuar aprendiendo las mejores prácticas de la industria.
+              <p className="bio-paragraph">
+                No ofrezco fórmulas mágicas ni soluciones infladas con palabras de moda. Mi objetivo es ejercer la programación con disciplina técnica, aprender de los desafíos de cada proyecto y colaborar con equipos que valoren la calidad del código y la seriedad profesional.
               </p>
 
-              <div className="about-narrative-actions">
+              <div className="editorial-bio-principles">
+                <div className="bio-principle">
+                  <span className="principle-number">I</span>
+                  <div>
+                    <h4>Integridad sobre artificio</h4>
+                    <p>Las bases de datos deben garantizar transaccionalidad estricta antes de priorizar efectos cosméticos.</p>
+                  </div>
+                </div>
+                <div className="bio-principle">
+                  <span className="principle-number">II</span>
+                  <div>
+                    <h4>Código legible y desacoplado</h4>
+                    <p>Separar capas de datos, negocio y presentación facilita la auditoría, depuración y mantenimiento a futuro.</p>
+                  </div>
+                </div>
+                <div className="bio-principle">
+                  <span className="principle-number">III</span>
+                  <div>
+                    <h4>Soluciones prácticas y medibles</h4>
+                    <p>El software debe resolver un problema operativo concreto: agilizar cobros, controlar comandas o proyectar ahorros.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="editorial-bio-actions">
                 <a
-                  className="btn btn-primary"
+                  className="editorial-btn editorial-btn--primary"
                   href="#contacto"
                   onClick={(e) => {
                     e.preventDefault();
@@ -849,7 +586,7 @@ export default function Home() {
                   Contactar conmigo
                 </a>
                 <a
-                  className="btn btn-secondary"
+                  className="editorial-btn editorial-btn--secondary"
                   href="https://www.linkedin.com/in/lionel-aguirre-gomero-53a7052a9"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -859,139 +596,101 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          {/* Criterios y Principios de Ingeniería */}
-          <div className="principles-grid">
-            <div className="principle-card spotlight-card" onMouseMove={handleSpotlight}>
-              <span className="principle-card__num">01</span>
-              <h3 className="principle-card__title">Integridad y Seguridad de Datos</h3>
-              <p className="principle-card__desc">
-                Cada tabla y relación se concibe con reglas de integridad referencial, asegurando que los datos no se corrompan ante operaciones concurrentes y validando siempre las entradas.
-              </p>
-            </div>
-
-            <div className="principle-card spotlight-card" onMouseMove={handleSpotlight}>
-              <span className="principle-card__num">02</span>
-              <h3 className="principle-card__title">Código Modular y Mantenible</h3>
-              <p className="principle-card__desc">
-                Separación clara entre capas de presentación, lógica de negocio y acceso a datos. Código estructurado para facilitar la depuración, auditoría y escalabilidad futura.
-              </p>
-            </div>
-
-            <div className="principle-card spotlight-card" onMouseMove={handleSpotlight}>
-              <span className="principle-card__num">03</span>
-              <h3 className="principle-card__title">Soluciones para Necesidades Reales</h3>
-              <p className="principle-card__desc">
-                Enfoque pragmático en resolver problemas operativos reales: control de comandas, facturación comercial, proyecciones financieras y toma de pedidos digital.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* ── SECCIÓN 5: CONTACTO DIRECTO ── */}
-      <section className="section-pro section-pro--alt" id="contacto">
+      <section className="editorial-section editorial-section--alt" id="contacto">
         <div className="container">
-          <div className="pro-header">
-            <span className="pro-header__eyebrow">Comunicación Directa</span>
-            <h2 className="pro-header__title">¿Tienes un proyecto o consulta técnica? Conversemos.</h2>
-            <p className="pro-header__desc">
-              Disponible para oportunidades laborales, desarrollo backend o proyectos de software independientes.
-            </p>
+          <div className="editorial-section__header">
+            <span className="editorial-section__num">04</span>
+            <div className="editorial-section__title-block">
+              <h2 className="editorial-section__title">Comunicación Directa</h2>
+              <p className="editorial-section__desc">
+                Disponible para oportunidades laborales, desarrollo de sistemas de software o colaboraciones técnicas.
+              </p>
+            </div>
           </div>
 
-          <div className="contact-grid">
-            <div>
-              <div className="contact-channels">
-                <a
-                  className="channel spotlight-card"
-                  href="https://www.linkedin.com/in/lionel-aguirre-gomero-53a7052a9"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onMouseMove={handleSpotlight}
-                >
-                  <span className="channel-ico ico-call">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-                    </svg>
-                  </span>
-                  <div>
-                    <b>LinkedIn</b>
-                    <span className="val">Lionel Aguirre Gomero</span>
-                    <br />
-                    <span className="hint">Perfil profesional y red</span>
-                  </div>
-                </a>
-
-                <a
-                  className="channel spotlight-card"
-                  href="https://github.com/lxionel"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onMouseMove={handleSpotlight}
-                >
-                  <span className="channel-ico ico-call">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                    </svg>
-                  </span>
-                  <div>
-                    <b>GitHub</b>
-                    <span className="val">@lxionel</span>
-                    <br />
-                    <span className="hint">Código y repositorios</span>
-                  </div>
-                </a>
-
-                <div
-                  className="channel spotlight-card"
-                  onMouseMove={handleSpotlight}
-                  style={{ cursor: 'pointer' }}
-                  onClick={copyEmailToClipboard}
-                >
-                  <span className="channel-ico ico-mail">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                    </svg>
-                  </span>
-                  <div style={{ flex: 1 }}>
-                    <b>Correo Electrónico</b>
-                    <span className="val">lioneldavora1@gmail.com</span>
-                    <br />
-                    <button className="channel-copy-btn" onClick={copyEmailToClipboard}>
-                      Hacer clic para copiar correo
-                    </button>
-                  </div>
+          <div className="editorial-contact-grid">
+            <div className="contact-channels-column">
+              <a
+                className="editorial-channel-card"
+                href="https://www.linkedin.com/in/lionel-aguirre-gomero-53a7052a9"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="channel-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                  </svg>
                 </div>
+                <div>
+                  <span className="channel-label">LinkedIn Profesional</span>
+                  <strong className="channel-value">Lionel Aguirre Gomero</strong>
+                  <span className="channel-hint">Perfil y red de contactos</span>
+                </div>
+              </a>
 
-                <a
-                  className="channel spotlight-card"
-                  href={wspUrl('Hola Lionel, vi tu portafolio y me gustaría ponerme en contacto contigo')}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onMouseMove={handleSpotlight}
-                >
-                  <span className="channel-ico ico-wsp">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/>
-                    </svg>
-                  </span>
-                  <div>
-                    <b>WhatsApp Directo</b>
-                    <span className="val">+51 952 102 805</span>
-                    <br />
-                    <span className="hint">Respuesta rápida</span>
-                  </div>
-                </a>
+              <a
+                className="editorial-channel-card"
+                href="https://github.com/lxionel"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="channel-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                  </svg>
+                </div>
+                <div>
+                  <span className="channel-label">Repositorios & Código</span>
+                  <strong className="channel-value">@lxionel</strong>
+                  <span className="channel-hint">Proyectos en GitHub</span>
+                </div>
+              </a>
+
+              <div
+                className="editorial-channel-card editorial-channel-card--copy"
+                onClick={copyEmailToClipboard}
+              >
+                <div className="channel-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                  </svg>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <span className="channel-label">Correo Electrónico</span>
+                  <strong className="channel-value">lioneldavora1@gmail.com</strong>
+                  <span className="channel-hint">Clic para copiar al portapapeles</span>
+                </div>
               </div>
+
+              <a
+                className="editorial-channel-card"
+                href={wspUrl('Hola Lionel, vi tu portafolio y me gustaría ponerme en contacto contigo.')}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="channel-icon-wrap channel-icon-wrap--wsp">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="#25D366">
+                    <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/>
+                  </svg>
+                </div>
+                <div>
+                  <span className="channel-label">WhatsApp Directo</span>
+                  <strong className="channel-value">+51 952 102 805</strong>
+                  <span className="channel-hint">Respuesta rápida</span>
+                </div>
+              </a>
             </div>
 
-            <div>
-              <form className="form" onSubmit={handleSendWhatsApp}>
-                <div className="field">
-                  <label htmlFor="landing-name">Tu nombre o empresa</label>
+            <div className="contact-form-column">
+              <form className="editorial-form" onSubmit={handleSendWhatsApp}>
+                <div className="form-field">
+                  <label htmlFor="ed-name">Tu nombre o empresa</label>
                   <input
-                    id="landing-name"
+                    id="ed-name"
                     type="text"
                     placeholder="Ej. Carlos Mendoza"
                     value={nombre}
@@ -1000,10 +699,10 @@ export default function Home() {
                   />
                 </div>
 
-                <div className="field">
-                  <label htmlFor="landing-contact">Correo electrónico o teléfono</label>
+                <div className="form-field">
+                  <label htmlFor="ed-contact">Correo o teléfono de contacto</label>
                   <input
-                    id="landing-contact"
+                    id="ed-contact"
                     type="text"
                     placeholder="Ej. carlos@empresa.com o +51 987..."
                     value={contacto}
@@ -1011,19 +710,19 @@ export default function Home() {
                   />
                 </div>
 
-                <div className="field">
-                  <label>Motivo de contacto</label>
-                  <div className="motive-pills">
+                <div className="form-field">
+                  <label>Motivo de comunicación</label>
+                  <div className="motive-chips">
                     {[
                       'Oportunidad laboral',
-                      'Desarrollo de sistema',
+                      'Desarrollo de software',
                       'Consulta técnica',
                       'Colaboración',
                     ].map((m) => (
                       <button
                         key={m}
                         type="button"
-                        className={`motive-pill ${motivo === m ? 'active' : ''}`}
+                        className={`motive-chip ${motivo === m ? 'motive-chip--active' : ''}`}
                         onClick={() => setMotivo(m)}
                       >
                         {m}
@@ -1032,44 +731,42 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="field">
-                  <label htmlFor="landing-msg">Mensaje</label>
+                <div className="form-field">
+                  <label htmlFor="ed-msg">Mensaje</label>
                   <textarea
-                    id="landing-msg"
-                    placeholder="Detalla tu requerimiento, propuesta o consulta..."
+                    id="ed-msg"
+                    rows="4"
+                    placeholder="Describe tu propuesta, requerimiento técnico o consulta..."
                     value={mensaje}
                     onChange={(e) => setMensaje(e.target.value)}
                     required
                   />
                 </div>
 
-                <div className="contact-actions-row">
-                  <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
-                    Enviar vía WhatsApp
+                <div className="form-actions-row">
+                  <button type="submit" className="editorial-btn editorial-btn--primary">
+                    Enviar a WhatsApp
                   </button>
                   <button
                     type="button"
-                    className="btn btn-secondary"
+                    className="editorial-btn editorial-btn--secondary"
                     onClick={handleSendMail}
                   >
                     Enviar por Correo
                   </button>
                 </div>
 
-                {feedback && <div className="form-feedback">{feedback}</div>}
-                <p className="form-note">
-                  Los mensajes se envían directamente a mi canal personal de atención.
-                </p>
+                {feedback && <div className="editorial-form-feedback">{feedback}</div>}
               </form>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── TOAST NOTIFICATION FLOTANTE ── */}
+      {/* ── TOAST NOTIFICATION ── */}
       {toastMessage && (
-        <div className="toast-notification">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="var(--accent)">
+        <div className="editorial-toast">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
           </svg>
           <span>{toastMessage}</span>

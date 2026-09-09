@@ -199,130 +199,70 @@ export function setupLandingAnimations(gsap, ScrollTrigger) {
       '-=0.4'
     );
   }
-  if (document.querySelector('.hero-actions')) {
-    heroTl.fromTo('.hero-actions .btn',
-      { opacity: 0, y: 18 },
-      { opacity: 1, y: 0, stagger: 0.1, duration: 0.6 },
+  if (document.querySelector('.editorial-hero__lead')) {
+    heroTl.fromTo('.editorial-hero__lead',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
+      '-=0.4'
+    );
+  }
+  if (document.querySelector('.editorial-hero__actions')) {
+    heroTl.fromTo('.editorial-hero__actions',
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
       '-=0.3'
     );
   }
-  if (document.querySelector('.hero-socials')) {
-    heroTl.fromTo('.hero-social-link',
-      { opacity: 0, x: -15 },
-      { opacity: 1, x: 0, stagger: 0.08, duration: 0.5 },
-      '-=0.3'
-    );
-  }
-  if (document.querySelector('.engineer-card')) {
-    heroTl.fromTo('.engineer-card',
-      { opacity: 0, y: 35, scale: 0.96 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'expo.out' },
-      '-=0.7'
-    );
-  }
 
-  // 2. Metrics Ribbon Stagger
-  if (document.querySelector('.metrics-ribbon')) {
-    gsap.fromTo('.metric-card',
-      { opacity: 0, y: 25, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.6, ease: 'back.out(1.2)',
-        scrollTrigger: st('.metrics-ribbon', { start: 'top 92%' }) }
-    );
-  }
-
-  // 3. Section Headers
-  gsap.utils.toArray('.pro-header').forEach((header) => {
-    gsap.fromTo(header.querySelectorAll('.pro-header__eyebrow, .pro-header__title, .pro-header__desc'),
-      { opacity: 0, y: 24 },
-      { opacity: 1, y: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out', scrollTrigger: st(header) }
+  // 2. Editorial Section Headers
+  gsap.utils.toArray('.editorial-section__header').forEach((header) => {
+    gsap.fromTo(header,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: st(header) }
     );
   });
 
-  // 4. Cinematic Stacking Cards ScrollTrigger
-  const cards = gsap.utils.toArray('.cinematic-project-card');
-  if (cards.length > 0) {
-    cards.forEach((card, i) => {
-      // Entrance for each card
-      gsap.fromTo(card,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
-          scrollTrigger: st(card, { start: 'top 90%' }) }
-      );
+  // 3. Project Case Studies
+  gsap.utils.toArray('.project-case').forEach((caseStudy) => {
+    gsap.fromTo(caseStudy,
+      { opacity: 0, y: 45 },
+      { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: st(caseStudy, { start: 'top 85%' }) }
+    );
+  });
 
-      // Stacking scroll effect when next card overlaps
-      if (i < cards.length - 1 && cards[i + 1]) {
-        ScrollTrigger.create({
-          trigger: cards[i + 1],
-          start: 'top 80%',
-          end: 'top 15%',
-          scrub: true,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            const scale = 1 - progress * 0.06;
-            const brightness = 1 - progress * 0.45;
-            const y = -progress * 25;
-            gsap.set(card, {
-              scale,
-              y,
-              filter: `brightness(${brightness})`,
-              transformOrigin: 'top center',
-            });
-          },
-        });
-      }
-    });
-  }
-
-  // 5. Skills Grid
-  if (document.querySelector('.skills-grid')) {
-    gsap.fromTo('.skill-card',
+  // 4. Technical Stack Cards
+  if (document.querySelector('.editorial-stack-grid')) {
+    gsap.fromTo('.stack-card',
       { opacity: 0, y: 35 },
       { opacity: 1, y: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out',
-        scrollTrigger: st('.skills-grid') }
+        scrollTrigger: st('.editorial-stack-grid') }
     );
   }
 
-  // 6. Interactive Code Explorer
-  if (document.querySelector('.code-explorer')) {
-    gsap.fromTo('.code-explorer',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-        scrollTrigger: st('.code-explorer') }
-    );
-  }
-
-  // 7. About Grid
-  if (document.querySelector('.about-pro-grid')) {
-    gsap.fromTo('.about-profile-card',
+  // 5. About & Biography Grid
+  if (document.querySelector('.editorial-about-grid')) {
+    gsap.fromTo('.editorial-portrait-card',
       { opacity: 0, x: -30 },
-      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: st('.about-pro-grid') }
+      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: st('.editorial-about-grid') }
     );
-    gsap.fromTo('.about-narrative',
+    gsap.fromTo('.editorial-bio-content',
       { opacity: 0, x: 30 },
-      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: st('.about-pro-grid') }
+      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: st('.editorial-about-grid') }
     );
   }
 
-  // 8. Principles Grid
-  if (document.querySelector('.principles-grid')) {
-    gsap.fromTo('.principle-card',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, stagger: 0.12, duration: 0.7, ease: 'power3.out',
-        scrollTrigger: st('.principles-grid') }
-    );
-  }
-
-  // 9. Contact Channels & Form
-  if (document.querySelector('.contact-grid')) {
-    gsap.fromTo('.contact-channels .channel',
-      { opacity: 0, x: -25 },
+  // 6. Contact Channels & Form
+  if (document.querySelector('.editorial-contact-grid')) {
+    gsap.fromTo('.editorial-channel-card',
+      { opacity: 0, x: -20 },
       { opacity: 1, x: 0, stagger: 0.08, duration: 0.6, ease: 'power3.out',
-        scrollTrigger: st('.contact-grid') }
+        scrollTrigger: st('.editorial-contact-grid') }
     );
-    gsap.fromTo('.contact-grid .form',
-      { opacity: 0, y: 35 },
+    gsap.fromTo('.editorial-form',
+      { opacity: 0, y: 30 },
       { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-        scrollTrigger: st('.contact-grid') }
+        scrollTrigger: st('.editorial-contact-grid') }
     );
   }
 }
