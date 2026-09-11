@@ -6,13 +6,9 @@ import {
   SRGBColorSpace,
   LinearFilter,
   Uint16BufferAttribute,
-  Raycaster,
-  Vector2,
 } from "three";
 import type { BufferAttribute, Material } from "three";
 import { resources } from "../../../utils/resources";
-import { camera } from "../../core/camera";
-import gsap from "gsap";
 
 // 138 triangles (414 indices) defining the authentic 3D frame from room.glb
 // (removes the default placeholder mountain illustration and preserves the beveled chassis)
@@ -25,77 +21,6 @@ let originalIndex: BufferAttribute | null = null;
 let originalMaterial: Material | Material[] | null = null;
 let pictureContainer: Group | null = null;
 
-let photoMesh: Mesh | null = null;
-let certMesh: Mesh | null = null;
-let photoMat: MeshBasicMaterial | null = null;
-let certMat: MeshBasicMaterial | null = null;
-
-let isShowingCert = false;
-let isHovered = false;
-
-const raycaster = new Raycaster();
-const mouse = new Vector2();
-
-const handlePointerMove = (e: MouseEvent) => {
-  if (!frameMeshRef || !pictureContainer) return;
-  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera.instance);
-  const intersects = raycaster.intersectObjects([frameMeshRef, ...pictureContainer.children], true);
-
-  if (intersects.length > 0) {
-    if (!isHovered) {
-      isHovered = true;
-      document.body.style.cursor = "pointer";
-    }
-  } else if (isHovered) {
-    isHovered = false;
-    document.body.style.cursor = "auto";
-  }
-};
-
-const handleClick = (e: MouseEvent) => {
-  if (!frameMeshRef || !pictureContainer) return;
-  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera.instance);
-  const intersects = raycaster.intersectObjects([frameMeshRef, ...pictureContainer.children], true);
-
-  if (intersects.length > 0) {
-    togglePicture();
-  }
-};
-
-const togglePicture = () => {
-  if (!photoMesh || !certMesh || !photoMat || !certMat) return;
-
-  isShowingCert = !isShowingCert;
-
-  if (isShowingCert) {
-    certMesh.visible = true;
-    gsap.to(photoMat, { opacity: 0, duration: 0.35 });
-    gsap.to(certMat, {
-      opacity: 1,
-      duration: 0.35,
-      onComplete: () => {
-        if (photoMesh) photoMesh.visible = false;
-      },
-    });
-  } else {
-    photoMesh.visible = true;
-    gsap.to(certMat, { opacity: 0, duration: 0.35 });
-    gsap.to(photoMat, {
-      opacity: 1,
-      duration: 0.35,
-      onComplete: () => {
-        if (certMesh) certMesh.visible = false;
-      },
-    });
-  }
-};
-
 export const wallFrames = {
   init: (frameMesh: Mesh) => {
     if (frameMeshRef) return;
@@ -103,13 +28,13 @@ export const wallFrames = {
     frameMeshRef = frameMesh;
     frameMesh.visible = true;
 
-    // Preserve exact position so it perfectly aligns with the baked shadow on the wall
-    // DO NOT move it away or elevate it!
+    // Keep exact original position so it aligns seamlessly with its baked shadow on the wall
+    // (frameMesh.position remains [0, 0, -2.22869])
 
-    // Replace the default celeste/light-blue material with an elegant warm obsidian frame
+    // Match the exact light birch wood / warm beige color of the corkboard frame (#deccac)
     originalMaterial = frameMesh.material;
-    const warmObsidianMat = new MeshBasicMaterial({ color: 0x221d18 });
-    frameMesh.material = warmObsidianMat;
+    const birchFrameMat = new MeshBasicMaterial({ color: 0xdeccac });
+    frameMesh.material = birchFrameMat;
 
     // Filter mesh geometry to only render the frame chassis and canvas,
     // hiding the mountain and sun artwork
@@ -118,41 +43,27 @@ export const wallFrames = {
     }
     frameMesh.geometry.setIndex(new Uint16BufferAttribute(FRAME_INDICES, 1));
 
-    // Build the picture assembly inside the frame's recessed canvas
+    // Build the certificate display assembly inside the frame's recessed canvas
     pictureContainer = new Group();
     // Canvas center in frame local coordinates: X = -2.650, Y = 3.2655, Z = -0.6607
     pictureContainer.position.set(-2.650, 3.2655, -0.6607);
     pictureContainer.rotation.y = Math.PI / 2;
 
-    // 1. Backing mat board (matte obsidian)
+    // 1. Backing mat board in dark espresso (#1a1613) to create contrast and depth
     const matBoardGeo = new PlaneGeometry(1.16, 1.00);
-    const matBoardMat = new MeshBasicMaterial({ color: 0x181512 });
+    const matBoardMat = new MeshBasicMaterial({ color: 0x1a1613 });
     const matBoardMesh = new Mesh(matBoardGeo, matBoardMat);
     matBoardMesh.position.z = 0.001;
     pictureContainer.add(matBoardMesh);
 
-    // 2. Fine champagne gold inner trim accent
-    const trimGeo = new PlaneGeometry(1.15, 0.99);
+    // 2. Fine champagne gold inner trim accent (#dfa55c)
+    const trimGeo = new PlaneGeometry(1.15, 0.79);
     const goldTrimMat = new MeshBasicMaterial({ color: 0xdfa55c });
     const trimMesh = new Mesh(trimGeo, goldTrimMat);
     trimMesh.position.z = 0.002;
     pictureContainer.add(trimMesh);
 
-    // 3. Lionel's Personal Photo (Default view)
-    const photoTex = resources.items["personal-photo"];
-    if (photoTex) {
-      photoTex.colorSpace = SRGBColorSpace;
-      photoTex.minFilter = LinearFilter;
-      photoTex.magFilter = LinearFilter;
-      photoTex.generateMipmaps = true;
-    }
-    const photoGeo = new PlaneGeometry(1.14, 0.98);
-    photoMat = new MeshBasicMaterial({ map: photoTex, transparent: true, opacity: 1 });
-    photoMesh = new Mesh(photoGeo, photoMat);
-    photoMesh.position.z = 0.004;
-    pictureContainer.add(photoMesh);
-
-    // 4. Cisco Certification (Toggleable on click)
+    // 3. Official Cisco Certification Texture
     const certTex = resources.items["cisco-cert"];
     if (certTex) {
       certTex.colorSpace = SRGBColorSpace;
@@ -160,30 +71,21 @@ export const wallFrames = {
       certTex.magFilter = LinearFilter;
       certTex.generateMipmaps = true;
     }
-    const certGeo = new PlaneGeometry(1.14, 0.77);
-    certMat = new MeshBasicMaterial({ map: certTex, transparent: true, opacity: 0 });
-    certMesh = new Mesh(certGeo, certMat);
-    certMesh.position.z = 0.005;
-    certMesh.visible = false;
+    const certGeo = new PlaneGeometry(1.13, 0.765); // Aspect ratio matching 1536x1040 diploma
+    const certMat = new MeshBasicMaterial({ map: certTex });
+    const certMesh = new Mesh(certGeo, certMat);
+    certMesh.position.z = 0.004;
     pictureContainer.add(certMesh);
 
     // Attach directly to the frame mesh
     frameMesh.add(pictureContainer);
-
-    // Setup click & hover interactions
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("click", handleClick);
   },
 
   tick: () => {
-    // Frame is firmly mounted on the wall aligning with its baked shadow.
+    // Frame is mounted solidly on the wall aligning with its baked shadow.
   },
 
   destroy: () => {
-    window.removeEventListener("pointermove", handlePointerMove);
-    window.removeEventListener("click", handleClick);
-    document.body.style.cursor = "auto";
-
     if (pictureContainer) {
       pictureContainer.removeFromParent();
       pictureContainer = null;
@@ -197,15 +99,7 @@ export const wallFrames = {
       }
       frameMeshRef = null;
     }
-    photoMat?.dispose();
-    certMat?.dispose();
-    photoMat = null;
-    certMat = null;
-    photoMesh = null;
-    certMesh = null;
     originalIndex = null;
     originalMaterial = null;
-    isShowingCert = false;
-    isHovered = false;
   },
 };
