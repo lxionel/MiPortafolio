@@ -1,34 +1,69 @@
 import {
   Group,
   Mesh,
-  BoxGeometry,
   PlaneGeometry,
   MeshBasicMaterial,
   SRGBColorSpace,
   LinearFilter,
+  Uint16BufferAttribute,
 } from "three";
+import type { BufferAttribute } from "three";
 import { resources } from "../../../utils/resources";
+import gsap from "gsap";
 
-let wallFramesGroup: Group | null = null;
+// 138 triangles (414 indices) defining the authentic 3D cartoon frame from room.glb
+// (removes the default placeholder mountain illustration and preserves the beveled frame)
+const FRAME_INDICES = new Uint16Array([
+  232, 234, 245, 232, 245, 287, 194, 196, 237, 194, 237, 233, 195, 197, 239, 195, 239, 235, 184, 183, 212, 184, 212, 214, 182, 188, 222, 182, 222, 211, 188, 190, 226, 188, 226, 222, 191, 176, 200, 191, 200, 228, 198, 187, 220, 198, 220, 241, 177, 178, 204, 177, 204, 202, 180, 179, 205, 180, 205, 208, 179, 181, 209, 179, 209, 205, 185, 184, 214, 185, 214, 216, 186, 185, 216, 186, 216, 218, 189, 191, 228, 189, 228, 224, 181, 193, 231, 181, 231, 209, 192, 194, 233, 192, 233, 230, 197, 199, 242, 197, 242, 239, 196, 195, 235, 196, 235, 237, 178, 180, 208, 178, 208, 204, 187, 186, 218, 187, 218, 220, 190, 189, 224, 190, 224, 226, 281, 279, 323, 281, 323, 326, 201, 203, 272, 201, 272, 262, 234, 238, 247, 234, 247, 245, 240, 243, 270, 240, 270, 251, 207, 206, 274, 207, 274, 276, 236, 240, 251, 236, 251, 249, 238, 236, 249, 238, 249, 247, 206, 210, 278, 206, 278, 274, 215, 213, 253, 215, 253, 256, 203, 207, 276, 203, 276, 272, 217, 215, 256, 217, 256, 280, 213, 223, 257, 213, 257, 253, 221, 219, 282, 221, 282, 267, 219, 217, 280, 219, 280, 282, 223, 227, 259, 223, 259, 257, 227, 225, 283, 227, 283, 259, 225, 229, 264, 225, 264, 283, 229, 201, 262, 229, 262, 264, 210, 232, 287, 210, 287, 278, 243, 221, 267, 243, 267, 270, 303, 327, 308, 308, 305, 315, 315, 319, 317, 317, 321, 329, 329, 288, 290, 290, 292, 294, 294, 312, 310, 310, 325, 324, 324, 300, 297, 297, 301, 303, 303, 308, 315, 315, 317, 329, 329, 290, 294, 294, 310, 324, 324, 297, 303, 303, 315, 329, 329, 294, 324, 329, 324, 303, 258, 260, 304, 258, 304, 302, 260, 284, 328, 260, 328, 304, 284, 265, 309, 284, 309, 328, 265, 263, 307, 265, 307, 309, 277, 285, 330, 277, 330, 322, 268, 266, 311, 268, 311, 313, 286, 244, 289, 286, 289, 331, 261, 271, 316, 261, 316, 306, 244, 246, 291, 244, 291, 289, 250, 269, 314, 250, 314, 295, 275, 273, 318, 275, 318, 320, 248, 250, 295, 248, 295, 293, 246, 248, 293, 246, 293, 291, 273, 277, 322, 273, 322, 318, 255, 252, 296, 255, 296, 299, 271, 275, 320, 271, 320, 316, 279, 255, 299, 279, 299, 323, 254, 258, 302, 254, 302, 298, 266, 281, 326, 266, 326, 311
+]);
+
+let frameMeshRef: Mesh | null = null;
+let originalIndex: BufferAttribute | null = null;
+let originalPosY = 0;
+let basePosY = 0;
+let certContainer: Group | null = null;
+let goldMat: MeshBasicMaterial | null = null;
 
 export const wallFrames = {
   init: (frameMesh: Mesh) => {
-    if (wallFramesGroup) return;
+    if (frameMeshRef) return;
 
-    // Hide the original generic mountain illustration frame
-    frameMesh.visible = false;
+    frameMeshRef = frameMesh;
+    frameMesh.visible = true;
 
-    wallFramesGroup = new Group();
-
-    // Textures
-    const photoTex = resources.items["personal-photo"];
-    if (photoTex) {
-      photoTex.colorSpace = SRGBColorSpace;
-      photoTex.minFilter = LinearFilter;
-      photoTex.magFilter = LinearFilter;
-      photoTex.generateMipmaps = true;
+    // Filter mesh geometry to only render the frame chassis and canvas,
+    // hiding the mountain and sun artwork
+    if (!originalIndex && frameMesh.geometry.index) {
+      originalIndex = frameMesh.geometry.index as BufferAttribute;
     }
+    frameMesh.geometry.setIndex(new Uint16BufferAttribute(FRAME_INDICES, 1));
 
+    // Elevate the frame higher up on the wall ("mas arriba")
+    originalPosY = frameMesh.position.y;
+    basePosY = originalPosY + 0.65;
+    frameMesh.position.y = basePosY;
+
+    // Build the certificate display assembly inside the frame's recessed canvas
+    certContainer = new Group();
+    // Canvas center in frame local space: X = -2.650, Y = 3.2655, Z = -0.6607
+    certContainer.position.set(-2.650, 3.2655, -0.6607);
+    certContainer.rotation.y = Math.PI / 2;
+
+    // 1. Backing mat board (passe-partout) in deep warm obsidian
+    const matBoardGeo = new PlaneGeometry(1.14, 0.98);
+    const matBoardMat = new MeshBasicMaterial({ color: 0x1f1b17 });
+    const matBoardMesh = new Mesh(matBoardGeo, matBoardMat);
+    matBoardMesh.position.z = 0.001;
+    certContainer.add(matBoardMesh);
+
+    // 2. Inner gold trim accent
+    const trimGeo = new PlaneGeometry(1.10, 0.76);
+    goldMat = new MeshBasicMaterial({ color: 0xdfa55c });
+    const trimMesh = new Mesh(trimGeo, goldMat);
+    trimMesh.position.z = 0.003;
+    certContainer.add(trimMesh);
+
+    // 3. Official Cisco Certification Texture
     const certTex = resources.items["cisco-cert"];
     if (certTex) {
       certTex.colorSpace = SRGBColorSpace;
@@ -37,81 +72,49 @@ export const wallFrames = {
       certTex.generateMipmaps = true;
     }
 
-    // Materials
-    const photoFrameMat = new MeshBasicMaterial({ color: 0x221d18 }); // Warm obsidian chassis
-    const photoMat = new MeshBasicMaterial({ map: photoTex });
-
-    const certFrameMat = new MeshBasicMaterial({ color: 0x2a241d }); // Warm bronze chassis
-    const certBorderMat = new MeshBasicMaterial({ color: 0xdfa55c }); // Gold inner bezel
+    const certGeo = new PlaneGeometry(1.06, 0.72); // Proportion 1.472 matching 1536x1040 diploma
     const certMat = new MeshBasicMaterial({ map: certTex });
-
-    // ----------------------------------------------------
-    // FRAME 1: LIONEL AGUIRRE PERSONAL PHOTO (PORTRAIT)
-    // ----------------------------------------------------
-    const photoGroup = new Group();
-    // Centered around original frame's Z location, slightly to the left
-    photoGroup.position.set(-2.61, 3.265, -0.78);
-    photoGroup.rotation.y = Math.PI / 2;
-
-    // Outer Bezel / Chassis
-    const photoBackGeo = new BoxGeometry(0.86, 1.10, 0.05);
-    const photoBackMesh = new Mesh(photoBackGeo, photoFrameMat);
-    photoGroup.add(photoBackMesh);
-
-    // Inner Photo Surface
-    const photoGeo = new PlaneGeometry(0.78, 1.02);
-    const photoMesh = new Mesh(photoGeo, photoMat);
-    photoMesh.position.z = 0.026; // Sits right on the front face of the chassis
-    photoGroup.add(photoMesh);
-
-    wallFramesGroup.add(photoGroup);
-
-    // ----------------------------------------------------
-    // FRAME 2: CISCO CYBERSECURITY CERTIFICATE (LANDSCAPE)
-    // ----------------------------------------------------
-    const certGroup = new Group();
-    // Placed to the right on the wall, between the photo and blackboard
-    certGroup.position.set(-2.61, 3.265, +0.32);
-    certGroup.rotation.y = Math.PI / 2;
-
-    // Outer Bezel / Chassis
-    const certBackGeo = new BoxGeometry(1.18, 0.84, 0.05);
-    const certBackMesh = new Mesh(certBackGeo, certFrameMat);
-    certGroup.add(certBackMesh);
-
-    // Gold Bezel Trim
-    const certTrimGeo = new BoxGeometry(1.12, 0.78, 0.052);
-    const certTrimMesh = new Mesh(certTrimGeo, certBorderMat);
-    certGroup.add(certTrimMesh);
-
-    // Inner Certificate Surface
-    const certGeo = new PlaneGeometry(1.06, 0.72);
     const certMesh = new Mesh(certGeo, certMat);
-    certMesh.position.z = 0.027; // Sits right on the front face of the gold trim
-    certGroup.add(certMesh);
+    certMesh.position.z = 0.005;
+    certContainer.add(certMesh);
 
-    wallFramesGroup.add(certGroup);
+    // Attach directly to the frame so it inherits all transforms and animations
+    frameMesh.add(certContainer);
+  },
 
-    // Add to the frameMesh object so coordinates inherit the scene transformations
-    frameMesh.add(wallFramesGroup);
-    // Keep frameMesh itself in the scene hierarchy so its children render
-    // but its own geometry won't render because onBeforeRender can make it invisible,
-    // or better: add wallFramesGroup to frameMesh.parent!
-    if (frameMesh.parent) {
-      // Offset by frameMesh.position
-      wallFramesGroup.position.copy(frameMesh.position);
-      wallFramesGroup.rotation.copy(frameMesh.rotation);
-      wallFramesGroup.scale.copy(frameMesh.scale);
-      frameMesh.parent.add(wallFramesGroup);
-    } else {
-      frameMesh.add(wallFramesGroup);
+  tick: () => {
+    if (!frameMeshRef || !frameMeshRef.visible) return;
+
+    const time = gsap.ticker.time;
+
+    // Subtle floating / breathing animation in the 3D room
+    frameMeshRef.position.y = basePosY + Math.sin(time * 1.5) * 0.025;
+
+    // Subtle breathing pulse on the inner gold trim
+    if (goldMat) {
+      const pulse = 0.5 + 0.5 * Math.sin(time * 2.2);
+      goldMat.color.setRGB(
+        0.80 + pulse * 0.15,
+        0.60 + pulse * 0.18,
+        0.30 + pulse * 0.18
+      );
     }
   },
 
   destroy: () => {
-    if (wallFramesGroup) {
-      wallFramesGroup.removeFromParent();
-      wallFramesGroup = null;
+    if (certContainer) {
+      certContainer.removeFromParent();
+      certContainer = null;
     }
+    if (frameMeshRef) {
+      if (originalIndex) {
+        frameMeshRef.geometry.setIndex(originalIndex);
+      }
+      frameMeshRef.position.y = originalPosY;
+      frameMeshRef = null;
+    }
+    goldMat?.dispose();
+    goldMat = null;
+    originalIndex = null;
   },
 };

@@ -96,6 +96,7 @@ const tick = () => {
 
   penguin.tick();
   music.tick();
+  wallFrames.tick();
 };
 
 const destroy = () => {
