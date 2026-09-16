@@ -32,115 +32,117 @@ export class ScreenCodeTexture {
     const w = this.canvas.width;
     const h = this.canvas.height;
 
-    // IDE Background
-    ctx.fillStyle = "#090d16";
+    // Deep modern IDE editor background
+    ctx.fillStyle = "#0d1117";
     ctx.fillRect(0, 0, w, h);
 
-    // Top Window Header Bar
-    ctx.fillStyle = "#0f172a";
-    ctx.fillRect(0, 0, w, 52);
+    // Header title bar
+    ctx.fillStyle = "#161b22";
+    ctx.fillRect(0, 0, w, 44);
 
-    // Window controls
-    ctx.fillStyle = "#ef4444";
+    // macOS window controls
+    ctx.fillStyle = "#ff5f56";
     ctx.beginPath();
-    ctx.arc(28, 26, 7, 0, Math.PI * 2);
+    ctx.arc(24, 22, 6, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = "#f59e0b";
+    ctx.fillStyle = "#ffbd2e";
     ctx.beginPath();
-    ctx.arc(48, 26, 7, 0, Math.PI * 2);
+    ctx.arc(42, 22, 6, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = "#10b981";
+    ctx.fillStyle = "#27c93f";
     ctx.beginPath();
-    ctx.arc(68, 26, 7, 0, Math.PI * 2);
+    ctx.arc(60, 22, 6, 0, Math.PI * 2);
     ctx.fill();
 
-    // Active File Tab
-    ctx.fillStyle = "#1e293b";
-    ctx.roundRect(100, 10, 280, 42, [8, 8, 0, 0]);
+    // Editor tab
+    ctx.fillStyle = "#0d1117";
+    ctx.roundRect(85, 8, 260, 36, [6, 6, 0, 0]);
     ctx.fill();
 
-    ctx.fillStyle = "#38bdf8";
-    ctx.font = "bold 18px 'Fira Code', monospace";
-    ctx.fillText("TransactionEngine.kt", 120, 36);
+    ctx.fillStyle = "#e6edf3";
+    ctx.font = "bold 15px 'Fira Code', monospace";
+    ctx.fillText("TransactionManager.kt", 105, 30);
 
-    ctx.fillStyle = "#64748b";
-    ctx.font = "16px 'Fira Code', monospace";
-    ctx.fillText("Lionel Aguirre | Kotlin 1.9", 420, 36);
+    ctx.fillStyle = "#7d8590";
+    ctx.font = "14px 'Fira Code', monospace";
+    ctx.fillText("Lionel Aguirre | Kotlin 1.9 | MVVM", 370, 30);
 
-    // Status Pill
-    ctx.fillStyle = "#064e3b";
-    ctx.roundRect(w - 180, 14, 150, 26, 6);
+    // Verified badge
+    ctx.fillStyle = "rgba(46, 160, 67, 0.2)";
+    ctx.strokeStyle = "rgba(46, 160, 67, 0.6)";
+    ctx.lineWidth = 1;
+    ctx.roundRect(w - 175, 10, 155, 24, 6);
     ctx.fill();
-    ctx.fillStyle = "#34d399";
-    ctx.font = "bold 13px 'Fira Code', monospace";
-    ctx.fillText("ACID VERIFIED", w - 165, 32);
+    ctx.stroke();
 
-    // Left Line Numbers Column
-    ctx.fillStyle = "#0c1322";
-    ctx.fillRect(0, 52, 60, h - 52);
+    ctx.fillStyle = "#3fb950";
+    ctx.font = "bold 12px 'Fira Code', monospace";
+    ctx.fillText("ACID PERSISTENCE", w - 162, 26);
 
-    // Code lines data
+    // Line numbers column
+    ctx.fillStyle = "#090d13";
+    ctx.fillRect(0, 44, 55, h - 44);
+
+    // Code lines with syntax highlighting
     const lines = [
-      { num: "01", text: "package com.lionel.metabit.engine.transaction", color: "#64748b" },
+      { num: "01", text: "package com.lionel.metabit.engine.transaction", color: "#7d8590" },
       { num: "02", text: "", color: "#ffffff" },
-      { num: "03", text: "import kotlinx.coroutines.flow.StateFlow", color: "#818cf8" },
-      { num: "04", text: "import androidx.room.withTransaction", color: "#818cf8" },
+      { num: "03", text: "import kotlinx.coroutines.flow.StateFlow", color: "#d2a8ff" },
+      { num: "04", text: "import androidx.room.withTransaction", color: "#d2a8ff" },
       { num: "05", text: "", color: "#ffffff" },
-      { num: "06", text: "/** Lionel Aguirre - Ingeniero de Sistemas */", color: "#475569" },
-      { num: "07", text: "class TransactionManager @Inject constructor(", color: "#38bdf8" },
-      { num: "08", text: "    private val database: AppDatabase,", color: "#f8fafc" },
-      { num: "09", text: "    private val ledgerDao: LedgerDao", color: "#f8fafc" },
-      { num: "10", text: ") : ITransactionPipeline {", color: "#38bdf8" },
-      { num: "11", text: "    override suspend fun commit(tx: Transaction): Result = database.withTransaction {", color: "#38bdf8" },
-      { num: "12", text: "        val current = ledgerDao.getBalance(tx.accountId) ?: 0.0", color: "#f8fafc" },
-      { num: "13", text: "        check(current >= tx.amount) { \"Saldo insuficiente: atomic rollback\" }", color: "#34d399" },
-      { num: "14", text: "        ledgerDao.debit(tx.accountId, tx.amount)", color: "#38bdf8" },
-      { num: "15", text: "        ledgerDao.insertAuditLog(tx.toLogEntry(status = ACID_COMMITTED))", color: "#818cf8" },
-      { num: "16", text: "        Result.Success(tx.id)", color: "#34d399" },
-      { num: "17", text: "    }", color: "#38bdf8" },
-      { num: "18", text: "}", color: "#38bdf8" },
+      { num: "06", text: "/** Motor transaccional con aislamiento estricto */", color: "#8b949e" },
+      { num: "07", text: "class TransactionManager @Inject constructor(", color: "#79c0ff" },
+      { num: "08", text: "    private val database: AppDatabase,", color: "#e6edf3" },
+      { num: "09", text: "    private val ledgerDao: LedgerDao", color: "#e6edf3" },
+      { num: "10", text: ") : ITransactionPipeline {", color: "#79c0ff" },
+      { num: "11", text: "    override suspend fun commit(tx: Transaction): Result = database.withTransaction {", color: "#79c0ff" },
+      { num: "12", text: "        val current = ledgerDao.getBalance(tx.accountId) ?: 0.0", color: "#e6edf3" },
+      { num: "13", text: "        check(current >= tx.amount) { \"Saldo insuficiente: atomic rollback\" }", color: "#7ee787" },
+      { num: "14", text: "        ledgerDao.debit(tx.accountId, tx.amount)", color: "#79c0ff" },
+      { num: "15", text: "        ledgerDao.insertAuditLog(tx.toLogEntry(status = ACID_COMMITTED))", color: "#d2a8ff" },
+      { num: "16", text: "        Result.Success(tx.id)", color: "#7ee787" },
+      { num: "17", text: "    }", color: "#79c0ff" },
+      { num: "18", text: "}", color: "#79c0ff" },
     ];
 
-    ctx.font = "18px 'Fira Code', monospace";
-    let startY = 85;
+    ctx.font = "16px 'Fira Code', monospace";
+    let startY = 74;
 
     lines.forEach((line) => {
-      // Line number
-      ctx.fillStyle = "#334155";
+      ctx.fillStyle = "#484f58";
       ctx.fillText(line.num, 16, startY);
 
-      // Line content
       ctx.fillStyle = line.color;
-      ctx.fillText(line.text, 80, startY);
+      ctx.fillText(line.text, 72, startY);
 
-      startY += 28;
+      startY += 26;
     });
 
-    // Blinking Cursor on active line
+    // Blinking cursor
     if (this.showCursor) {
-      ctx.fillStyle = "#38bdf8";
-      ctx.fillRect(80 + 360, 85 + 28 * 17 - 16, 10, 20);
+      ctx.fillStyle = "#58a6ff";
+      ctx.fillRect(72 + 330, 74 + 26 * 17 - 14, 8, 18);
     }
 
-    // Terminal footer drawer
-    ctx.fillStyle = "#0b1120";
-    ctx.fillRect(60, h - 70, w - 60, 70);
+    // Integrated Terminal drawer
+    ctx.fillStyle = "#161b22";
+    ctx.fillRect(55, h - 70, w - 55, 70);
 
-    ctx.fillStyle = "#1e293b";
-    ctx.fillRect(60, h - 70, w - 60, 1);
+    ctx.fillStyle = "#30363d";
+    ctx.fillRect(55, h - 70, w - 55, 1);
 
-    ctx.fillStyle = "#38bdf8";
-    ctx.font = "bold 14px 'Fira Code', monospace";
-    ctx.fillText("TERMINAL", 80, h - 45);
+    ctx.fillStyle = "#58a6ff";
+    ctx.font = "bold 13px 'Fira Code', monospace";
+    ctx.fillText("TERMINAL", 75, h - 45);
 
-    ctx.fillStyle = "#34d399";
-    ctx.font = "14px 'Fira Code', monospace";
-    ctx.fillText("lionel@workstation:~$ ./gradlew test --stacktrace", 180, h - 45);
-
-    ctx.fillStyle = "#94a3b8";
+    ctx.fillStyle = "#7ee787";
     ctx.font = "13px 'Fira Code', monospace";
-    ctx.fillText("PASSED: 12 tests verified, 0 failures. Offline-first DB synced.", 180, h - 22);
+    ctx.fillText("lionel@workstation:~$ ./gradlew test --offline", 175, h - 45);
+
+    ctx.fillStyle = "#8b949e";
+    ctx.font = "12px 'Fira Code', monospace";
+    ctx.fillText("BUILD SUCCESSFUL: 12 unit tests passed. Zero regressions.", 175, h - 22);
   }
 }

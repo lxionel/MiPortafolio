@@ -27,29 +27,29 @@ export const skillCategories: SkillCategory[] = [
       { name: "Android Nativo (Kotlin)", level: "Avanzado", detail: "Jetpack Room, ViewModel, LiveData, Clean Architecture" },
       { name: "React & TypeScript", level: "Avanzado", detail: "Hooks personalizados, gestión reactiva de estado y componentes modulares" },
       { name: "Arquitectura Offline-First", level: "Avanzado", detail: "Persistencia local única fuente de verdad y sincronización" },
-      { name: "Tailwind CSS", level: "Avanzado", detail: "Sistemas de diseño modernos, responsivos y componentes glassmorphic" },
-      { name: "Three.js", level: "Intermedio", detail: "Modelos 3D interactivos, shaders GLSL, texturas dinámicas y luces" }
+      { name: "Tailwind CSS", level: "Avanzado", detail: "Sistemas de diseño modernos, responsivos y componentes de alto contraste" },
+      { name: "Three.js", level: "Intermedio", detail: "Escenas 3D interactivas, renderizado WebGL, texturas procedurales e iluminación" }
     ]
   },
   {
-    title: "Redes, Infraestructura & DevOps",
-    description: "Dominio de conectividad, topologías de red, automatización de compilación y despliegue.",
+    title: "Ciberseguridad & Infraestructura",
+    description: "Buenas prácticas de seguridad de la información, protección de datos y automatización.",
     skills: [
-      { name: "Cisco Networking & IOS", level: "Certificado", detail: "VLANs, Troncales, Enrutamiento estático/OSPF, ACLs y NAT" },
-      { name: "Modelos OSI & TCP/IP", level: "Avanzado", detail: "Subnetting IPv4/IPv6, análisis de paquetes y diagnóstico de red" },
-      { name: "Git & GitHub CI/CD", level: "Avanzado", detail: "Workflows automatizados con GitHub Actions, branching y pull requests" },
-      { name: "Entornos Linux", level: "Intermedio-Avanzado", detail: "Administración vía shell, despliegue de servicios y scripts bash" },
-      { name: "Vite & Netlify", level: "Avanzado", detail: "Empaquetado optimizado, edge hosting y continuous delivery" }
+      { name: "Cisco Ciberseguridad", level: "Certificado", detail: "Fundamentos de ciberseguridad, confidencialidad y análisis de amenazas" },
+      { name: "Seguridad en Aplicaciones", level: "Avanzado", detail: "Validación estricta de entradas, sanitización y control de accesos" },
+      { name: "Git & GitHub CI/CD", level: "Avanzado", detail: "Pipelines automatizados con GitHub Actions, branching y despliegue continuo" },
+      { name: "Entornos Linux", level: "Intermedio", detail: "Administración básica mediante terminal, configuración y scripts" },
+      { name: "Vite & Netlify", level: "Avanzado", detail: "Empaquetado ultra rápido, edge hosting y continuous delivery" }
     ]
   },
   {
     title: "Arquitectura & Buenas Prácticas",
     description: "Estándares de ingeniería aplicados a lo largo de todo el ciclo de vida del software.",
     skills: [
-      { name: "Clean Architecture", level: "Avanzado", detail: "Desacoplamiento estricto entre dominio, lógica y presentación" },
-      { name: "Patrón MVVM", level: "Avanzado", detail: "Separación clara de responsabilidades y flujo unidireccional de datos" },
-      { name: "Seguridad por Diseño", level: "Avanzado", detail: "Validación estricta de entradas, sanitización y principios de privilegio mínimo" },
-      { name: "Control de Calidad", level: "Avanzado", detail: "Refactorización continua, código auto-documentado y mantenibilidad" }
+      { name: "Clean Architecture", level: "Avanzado", detail: "Desacoplamiento estricto entre dominio, lógica de negocio y presentación" },
+      { name: "Patrón MVVM", level: "Avanzado", detail: "Separación de responsabilidades y flujo unidireccional de datos reactivos" },
+      { name: "Transacciones ACID", level: "Avanzado", detail: "Atomicidad, consistencia, aislamiento y durabilidad en operaciones críticas" },
+      { name: "Mantenibilidad de Código", level: "Avanzado", detail: "Refactorización continua, código auto-documentado y modularidad" }
     ]
   }
 ];
