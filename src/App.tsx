@@ -8,7 +8,7 @@ import { Footer } from "./components/Footer";
 
 export const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col selection:bg-slate-200 selection:text-slate-900">
+    <div className="min-h-screen bg-[#F5EFE6] text-[#2D2A24] flex flex-col selection:bg-[#2D2A24] selection:text-[#F5EFE6]">
       <Navbar />
       <main className="flex-grow">
         <Hero />

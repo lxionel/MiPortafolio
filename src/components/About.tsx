@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { ShieldCheck, ZoomIn, X } from "lucide-react";
 import { profile } from "../data/profile";
 import { skillGroups } from "../data/skills";
@@ -8,16 +8,16 @@ export const About: React.FC = () => {
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null);
 
   return (
-    <section id="perfil" className="py-20 md:py-28 bg-[#fafafa] border-b border-slate-200/60">
+    <section id="perfil" className="py-24 md:py-32 bg-[#F5EFE6] border-b border-[#E2D7C7]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left: Summary & Cisco Credential */}
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-2">
-              <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-black text-[#2D2A24] tracking-tight uppercase">
                 Perfil Técnico
               </h2>
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              <p className="text-sm sm:text-base text-[#5F5646] font-medium leading-relaxed">
                 {profile.shortBio}
               </p>
             </div>
@@ -26,38 +26,38 @@ export const About: React.FC = () => {
             {certifications.map((cert) => (
               <div
                 key={cert.id}
-                className="card-light rounded-2xl p-5 space-y-3"
+                className="bg-[#EAE0D2]/60 border border-[#E2D7C7] rounded-2xl p-5 space-y-3 shadow-2xs hover:border-[#D3C5B2] transition-colors"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-slate-100 text-slate-800">
-                      <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                    <div className="p-2 rounded-xl bg-[#E2D7C7] text-[#2D2A24]">
+                      <ShieldCheck className="w-5 h-5 text-emerald-700" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-900">
+                      <h4 className="text-sm font-bold text-[#2D2A24]">
                         {cert.title}
                       </h4>
-                      <span className="text-xs text-slate-500 font-medium block">
+                      <span className="text-xs text-[#5F5646] font-medium block">
                         {cert.issuer}
                       </span>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                  <span className="text-[11px] font-mono font-bold text-[#5F5646] bg-[#E2D7C7] px-2 py-0.5 rounded">
                     {cert.date}
                   </span>
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-[#5F5646] leading-relaxed">
                   {cert.description}
                 </p>
 
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-emerald-700 font-mono">
+                <div className="pt-2 border-t border-[#E2D7C7] flex items-center justify-between">
+                  <span className="text-xs font-bold text-emerald-800 font-mono">
                     {cert.score}
                   </span>
                   <button
                     onClick={() => setSelectedCert(cert)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors"
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#2D2A24] hover:bg-[#FF8400] text-white text-xs font-bold transition-colors shadow-xs"
                   >
                     <ZoomIn className="w-3.5 h-3.5" />
                     <span>Ver Certificado</span>
@@ -69,7 +69,7 @@ export const About: React.FC = () => {
 
           {/* Right: Categorized Skills Matrix */}
           <div className="lg:col-span-7 space-y-4">
-            <h3 className="text-xl font-bold text-slate-900">
+            <h3 className="text-2xl font-black text-[#2D2A24] uppercase">
               Habilidades & Tecnologías
             </h3>
 
@@ -77,16 +77,16 @@ export const About: React.FC = () => {
               {skillGroups.map((group) => (
                 <div
                   key={group.category}
-                  className="card-light rounded-2xl p-5 space-y-3"
+                  className="bg-[#EAE0D2]/60 border border-[#E2D7C7] rounded-2xl p-5 space-y-3 shadow-2xs hover:border-[#D3C5B2] transition-colors"
                 >
-                  <h4 className="text-sm font-bold text-slate-900">
+                  <h4 className="text-sm font-black text-[#2D2A24] uppercase tracking-wide">
                     {group.category}
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
                     {group.items.map((item) => (
                       <span
                         key={item}
-                        className="px-2.5 py-1 rounded-md bg-slate-100 text-xs font-medium text-slate-700"
+                        className="px-2.5 py-1 rounded-md bg-[#E2D7C7] text-xs font-mono font-bold text-[#2D2A24]"
                       >
                         {item}
                       </span>
@@ -99,40 +99,40 @@ export const About: React.FC = () => {
         </div>
       </div>
 
-      {/* Light Certificate Modal */}
+      {/* Warm Certificate Modal */}
       {selectedCert && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-slate-900/60 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-[#2D2A24]/70 backdrop-blur-xs">
           <div
             onClick={() => setSelectedCert(null)}
             className="fixed inset-0"
           />
 
-          <div className="relative z-10 max-w-3xl w-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+          <div className="relative z-10 max-w-3xl w-full bg-[#F5EFE6] border border-[#E2D7C7] rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#E2D7C7] bg-[#EAE0D2]">
               <div>
-                <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                <h3 className="font-bold text-[#2D2A24] text-sm sm:text-base">
                   {selectedCert.title} - {selectedCert.issuer}
                 </h3>
-                <span className="text-xs text-slate-500 font-mono">
+                <span className="text-xs text-[#5F5646] font-mono">
                   ID: {selectedCert.verificationId}
                 </span>
               </div>
               <button
                 onClick={() => setSelectedCert(null)}
-                className="p-2 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="p-2 rounded-xl text-[#5F5646] hover:text-[#2D2A24] hover:bg-[#E2D7C7] transition-colors"
                 aria-label="Cerrar"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="overflow-auto p-4 flex flex-col items-center justify-center bg-slate-50">
+            <div className="overflow-auto p-5 flex flex-col items-center justify-center bg-[#F5EFE6]">
               <img
                 src={`${import.meta.env.BASE_URL}${selectedCert.image}`}
                 alt={selectedCert.title}
-                className="max-w-full max-h-[60vh] object-contain rounded-xl shadow-md border border-slate-200"
+                className="max-w-full max-h-[60vh] object-contain rounded-xl shadow-md border border-[#E2D7C7]"
               />
-              <span className="text-xs text-slate-500 font-medium mt-3">
+              <span className="text-xs text-[#5F5646] font-mono font-medium mt-3">
                 {selectedCert.verificationNote} • {selectedCert.score}
               </span>
             </div>
