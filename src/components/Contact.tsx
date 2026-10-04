@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import { Mail, Phone, Send, CheckCircle2, ArrowRight } from "lucide-react";
 import { profile } from "../data/profile";
 import { GithubIcon, LinkedinIcon } from "./icons";
+import { PageId } from "../types";
 
-export const Contact: React.FC = () => {
+interface ContactProps {
+  onNavigate?: (page: PageId) => void;
+}
+
+export const Contact: React.FC<ContactProps> = ({ onNavigate: _onNavigate }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",

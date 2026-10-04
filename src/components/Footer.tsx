@@ -2,10 +2,22 @@ import React from "react";
 import { ArrowUp, Mail, Phone, Code2 } from "lucide-react";
 import { profile } from "../data/profile";
 import { GithubIcon, LinkedinIcon } from "./icons";
+import { PageId } from "../types";
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onNavigate?: (page: PageId) => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleNav = (page: PageId, e: React.MouseEvent) => {
+    if (onNavigate) {
+      e.preventDefault();
+      onNavigate(page);
+    }
   };
 
   return (
@@ -29,16 +41,32 @@ export const Footer: React.FC = () => {
 
           {/* Nav links */}
           <div className="flex flex-wrap items-center gap-6 text-xs font-bold uppercase tracking-wider text-[#5F5646]">
-            <a href="#hero" className="hover:text-[#2D2A24] transition-colors">
+            <a
+              href="#inicio"
+              onClick={(e) => handleNav("inicio", e)}
+              className="hover:text-[#2D2A24] transition-colors"
+            >
               Inicio
             </a>
-            <a href="#proyectos" className="hover:text-[#2D2A24] transition-colors">
+            <a
+              href="#proyectos"
+              onClick={(e) => handleNav("proyectos", e)}
+              className="hover:text-[#2D2A24] transition-colors"
+            >
               Proyectos
             </a>
-            <a href="#perfil" className="hover:text-[#2D2A24] transition-colors">
-              Perfil & Habilidades
+            <a
+              href="#sobre-mi"
+              onClick={(e) => handleNav("sobre-mi", e)}
+              className="hover:text-[#2D2A24] transition-colors"
+            >
+              Sobre Mí
             </a>
-            <a href="#contacto" className="hover:text-[#2D2A24] transition-colors">
+            <a
+              href="#contacto"
+              onClick={(e) => handleNav("contacto", e)}
+              className="hover:text-[#2D2A24] transition-colors"
+            >
               Contacto
             </a>
           </div>

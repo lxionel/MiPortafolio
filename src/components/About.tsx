@@ -3,8 +3,13 @@ import { ShieldCheck, ZoomIn, X } from "lucide-react";
 import { profile } from "../data/profile";
 import { skillGroups } from "../data/skills";
 import { certifications, Certification } from "../data/certifications";
+import { PageId } from "../types";
 
-export const About: React.FC = () => {
+interface AboutProps {
+  onNavigate?: (page: PageId) => void;
+}
+
+export const About: React.FC<AboutProps> = ({ onNavigate: _onNavigate }) => {
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null);
 
   return (

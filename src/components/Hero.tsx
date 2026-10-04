@@ -2,8 +2,13 @@ import React from "react";
 import { ArrowRight, Mail, MapPin } from "lucide-react";
 import { profile } from "../data/profile";
 import { GithubIcon, LinkedinIcon } from "./icons";
+import { PageId } from "../types";
 
-export const Hero: React.FC = () => {
+interface HeroProps {
+  onNavigate?: (page: PageId) => void;
+}
+
+export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   return (
     <section
       id="hero"
@@ -40,6 +45,12 @@ export const Hero: React.FC = () => {
             <div className="flex flex-wrap items-center gap-3 pt-3">
               <a
                 href="#proyectos"
+                onClick={(e) => {
+                  if (onNavigate) {
+                    e.preventDefault();
+                    onNavigate("proyectos");
+                  }
+                }}
                 className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#FF8400] hover:bg-[#2D2A24] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-xs hover:-translate-y-0.5"
               >
                 <span>Ver Proyectos</span>
@@ -48,6 +59,12 @@ export const Hero: React.FC = () => {
 
               <a
                 href="#contacto"
+                onClick={(e) => {
+                  if (onNavigate) {
+                    e.preventDefault();
+                    onNavigate("contacto");
+                  }
+                }}
                 className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#EAE0D2] hover:bg-[#E2D7C7] text-[#2D2A24] border border-[#E2D7C7] font-bold text-xs uppercase tracking-wider transition-all"
               >
                 <Mail className="w-4 h-4 text-[#5F5646]" />

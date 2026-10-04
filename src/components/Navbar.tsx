@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { profile } from "../data/profile";
 import { GithubIcon, LinkedinIcon } from "./icons";
+import { PageId, NAV_ITEMS } from "../types";
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  currentPage: PageId;
+  onNavigate: (page: PageId) => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
@@ -15,12 +21,11 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navItems = [
-    { label: "Inicio", href: "#hero" },
-    { label: "Proyectos", href: "#proyectos" },
-    { label: "Perfil & Habilidades", href: "#perfil" },
-    { label: "Contacto", href: "#contacto" },
-  ];
+  const handleNavClick = (pageId: PageId, e: React.MouseEvent) => {
+    e.preventDefault();
+    onNavigate(pageId);
+    setMobileOpen(false);
+  };
 
   return (
     <header
@@ -32,7 +37,11 @@ export const Navbar: React.FC = () => {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand */}
-        <a href="#hero" className="flex items-center gap-2.5 group">
+        <a
+          href="#inicio"
+          onClick={(e) => handleNavClick("inicio", e)}
+          className="flex items-center gap-2.5 group cursor-pointer"
+        >
           <div className="w-9 h-9 rounded-xl bg-[#2D2A24] text-white flex items-center justify-center font-bold text-sm shadow-xs group-hover:bg-[#FF8400] transition-colors">
             LA
           </div>
@@ -46,17 +55,25 @@ export const Navbar: React.FC = () => {
           </div>
         </a>
 
-        {/* Desktop Links (Centered Pill) */}
-        <nav className="hidden md:flex items-center gap-1 bg-[#EAE0D2]/80 p-1 rounded-full border border-[#E2D7C7]">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="px-4 py-1.5 rounded-full text-xs font-bold text-[#5F5646] hover:text-[#2D2A24] hover:bg-[#F5EFE6] transition-all uppercase tracking-wide"
-            >
-              {item.label}
-            </a>
-          ))}
+        {/* Desktop Links (Centered Pill Selector) */}
+        <nav className="hidden md:flex items-center gap-1 bg-[#EAE0D2]/90 p-1.5 rounded-full border border-[#E2D7C7] shadow-2xs">
+          {NAV_ITEMS.map((item) => {
+            const isActive = currentPage === item.id;
+            return (
+              <a
+                key={item.id}
+                href={item.hash}
+                onClick={(e) => handleNavClick(item.id, e)}
+                className={`px-5 py-2 rounded-full text-xs font-bold transition-all uppercase tracking-wider ${
+                  isActive
+                    ? "bg-[#2D2A24] text-white shadow-xs"
+                    : "text-[#5F5646] hover:text-[#2D2A24] hover:bg-[#F5EFE6]/70"
+                }`}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Action Buttons */}
@@ -81,7 +98,12 @@ export const Navbar: React.FC = () => {
           </a>
           <a
             href="#contacto"
-            className="flex items-center gap-1.5 px-5 py-2 rounded-full bg-[#FF8400] hover:bg-[#2D2A24] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-xs"
+            onClick={(e) => handleNavClick("contacto", e)}
+            className={`flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-xs ${
+              currentPage === "contacto"
+                ? "bg-[#2D2A24] text-white"
+                : "bg-[#FF8400] hover:bg-[#2D2A24] text-white"
+            }`}
           >
             <span>Contactar</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -103,16 +125,23 @@ export const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div className="md:hidden bg-[#F5EFE6] border-b border-[#E2D7C7] px-4 pt-3 pb-6 space-y-2 shadow-lg">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 rounded-xl text-sm font-bold text-[#5F5646] hover:text-[#2D2A24] hover:bg-[#EAE0D2]"
-            >
-              {item.label}
-            </a>
-          ))}
+          {NAV_ITEMS.map((item) => {
+            const isActive = currentPage === item.id;
+            return (
+              <a
+                key={item.id}
+                href={item.hash}
+                onClick={(e) => handleNavClick(item.id, e)}
+                className={`block px-4 py-2.5 rounded-xl text-sm font-bold transition-colors ${
+                  isActive
+                    ? "bg-[#2D2A24] text-white"
+                    : "text-[#5F5646] hover:text-[#2D2A24] hover:bg-[#EAE0D2]"
+                }`}
+              >
+                {item.label}
+              </a>
+            );
+          })}
           <div className="pt-3 border-t border-[#E2D7C7] flex items-center justify-between">
             <div className="flex items-center gap-2">
               <a
@@ -134,7 +163,7 @@ export const Navbar: React.FC = () => {
             </div>
             <a
               href="#contacto"
-              onClick={() => setMobileOpen(false)}
+              onClick={(e) => handleNavClick("contacto", e)}
               className="px-5 py-2 rounded-full bg-[#FF8400] text-white text-xs font-bold uppercase tracking-wider"
             >
               Contactar

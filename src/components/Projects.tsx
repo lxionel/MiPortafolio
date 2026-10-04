@@ -2,8 +2,13 @@ import React from "react";
 import { ExternalLink, Check, ArrowUpRight, Plus, ArrowRight } from "lucide-react";
 import { projects } from "../data/projects";
 import { GithubIcon } from "./icons";
+import { PageId } from "../types";
 
-export const Projects: React.FC = () => {
+interface ProjectsProps {
+  onNavigate?: (page: PageId) => void;
+}
+
+export const Projects: React.FC<ProjectsProps> = ({ onNavigate }) => {
   return (
     <section id="proyectos" className="py-24 md:py-32 bg-[#F5EFE6] border-b border-[#E2D7C7]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -122,6 +127,12 @@ export const Projects: React.FC = () => {
           <div className="group relative flex flex-col justify-between">
             <a
               href="#contacto"
+              onClick={(e) => {
+                if (onNavigate) {
+                  e.preventDefault();
+                  onNavigate("contacto");
+                }
+              }}
               className="block"
             >
               <div className="relative w-full aspect-[16/10] rounded-2xl border-2 border-dashed border-[#C8BEAE] bg-[#EAE0D2]/40 group-hover:bg-[#EAE0D2]/70 group-hover:border-[#2D2A24] transition-all flex flex-col items-center justify-center p-6 text-center cursor-pointer shadow-2xs">
@@ -159,6 +170,12 @@ export const Projects: React.FC = () => {
             <div className="pt-6">
               <a
                 href="#contacto"
+                onClick={(e) => {
+                  if (onNavigate) {
+                    e.preventDefault();
+                    onNavigate("contacto");
+                  }
+                }}
                 className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#EAE0D2] hover:bg-[#FF8400] hover:text-white text-[#2D2A24] text-xs font-bold transition-colors border border-[#E2D7C7]"
               >
                 <span>Contactar ahora</span>
