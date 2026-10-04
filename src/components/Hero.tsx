@@ -1,14 +1,15 @@
 import React from "react";
-import { ArrowRight, Mail, MapPin } from "lucide-react";
+import { ArrowRight, Mail, MapPin, FileText } from "lucide-react";
 import { profile } from "../data/profile";
 import { GithubIcon, LinkedinIcon } from "./icons";
 import { PageId } from "../types";
 
 interface HeroProps {
   onNavigate?: (page: PageId) => void;
+  onOpenCv?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
+export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenCv }) => {
   return (
     <section
       id="hero"
@@ -56,6 +57,17 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                 <span>Ver Proyectos</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
+
+              {onOpenCv && (
+                <button
+                  type="button"
+                  onClick={onOpenCv}
+                  className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#2D2A24] hover:bg-[#FF8400] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-xs hover:-translate-y-0.5 cursor-pointer"
+                >
+                  <FileText className="w-4 h-4 text-[#FF8400] group-hover:text-white" />
+                  <span>Ver CV</span>
+                </button>
+              )}
 
               <a
                 href="#contacto"
