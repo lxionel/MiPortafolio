@@ -1,42 +1,92 @@
-import React from "react";
-import { ExternalLink, Check, ArrowUpRight, Plus, ArrowRight } from "lucide-react";
-import { projects } from "../data/projects";
+import React, { useState } from "react";
+import { ExternalLink, Check, ArrowUpRight, Plus, ArrowRight, Layers, Filter } from "lucide-react";
+import { projects, Project } from "../data/projects";
 import { GithubIcon } from "./icons";
 import { PageId } from "../types";
+import { ProjectDetailModal } from "./ProjectDetailModal";
+import { ProjectStackComparator } from "./ProjectStackComparator";
 
 interface ProjectsProps {
   onNavigate?: (page: PageId) => void;
 }
 
 export const Projects: React.FC<ProjectsProps> = ({ onNavigate }) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
+
+  const categories = [
+    { id: "all", label: "Todos", count: projects.length },
+    { id: "Móvil Nativo", label: "Móvil & Offline", count: projects.filter((p) => p.category === "Móvil Nativo").length },
+    { id: "Software Transaccional", label: "Backend & ACID", count: projects.filter((p) => p.category === "Software Transaccional").length },
+    { id: "Web Frontend", label: "Web Frontend", count: projects.filter((p) => p.category === "Web Frontend").length },
+  ];
+
+  const filteredProjects = selectedCategory === "all"
+    ? projects
+    : projects.filter((p) => p.category === selectedCategory);
+
   return (
-    <section id="proyectos" className="py-24 md:py-32 bg-[#F5EFE6] border-b border-[#E2D7C7]">
+    <section id="proyectos" className="py-20 md:py-28 bg-[#F5EFE6] border-b border-[#E2D7C7]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header with Tilted Sticker Banner */}
-        <div className="relative mb-14 space-y-2">
-          <div className="inline-block mb-2">
-            <span className="sticker-banner -rotate-3 text-xs tracking-wider uppercase">
-              SELECCIÓN DE PROYECTOS
+        <div className="relative mb-10 space-y-3">
+          <div className="inline-block">
+            <span className="sticker-banner -rotate-2 text-xs tracking-wider uppercase">
+              SELECCIÓN DE PROYECTOS DE INGENIERÍA
             </span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#2D2A24] tracking-tight uppercase">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#2D2A24] tracking-tight uppercase font-sans">
             PROYECTOS
           </h2>
           <p className="text-[#5F5646] text-base sm:text-lg max-w-2xl font-medium leading-relaxed">
-            Sistemas transaccionales, aplicaciones móviles offline-first y plataformas web en producción.
+            Sistemas transaccionales, aplicaciones móviles offline-first y plataformas web en producción. Selecciona cualquier proyecto para inspeccionar su arquitectura detallada.
           </p>
         </div>
 
-        {/* 2x2 Grid of PreviewCards (3 projects + 1 collaboration card) */}
+        {/* Category Filters Bar */}
+        <div className="flex flex-wrap items-center gap-2 mb-10 pb-4 border-b border-[#E2D7C7]">
+          <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#5F5646] mr-2">
+            <Filter className="w-3.5 h-3.5 text-[#FF8400]" />
+            <span className="uppercase">FILTRO:</span>
+          </div>
+          {categories.map((cat) => {
+            const isSelected = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  isSelected
+                    ? "bg-[#2D2A24] text-white shadow-xs -translate-y-0.5"
+                    : "bg-[#EAE0D2] hover:bg-[#E2D7C7] text-[#5F5646] hover:text-[#2D2A24] border border-[#E2D7C7]"
+                }`}
+              >
+                <span>{cat.label}</span>
+                <span
+                  className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                    isSelected ? "bg-[#FF8400] text-white" : "bg-[#D8CDBE] text-[#2D2A24]"
+                  }`}
+                >
+                  {cat.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 2x2 Grid of PreviewCards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-          {projects.map((project) => (
+          {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="group relative flex flex-col justify-between"
+              className="group relative flex flex-col justify-between bg-[#FAF7F2] border border-[#E2D7C7] hover:border-[#D3C5B2] rounded-3xl p-6 transition-all duration-300 shadow-2xs hover:shadow-md"
             >
               <div>
                 {/* PreviewCard Top: Image Container with Aspect Ratio and Round Arrow Button */}
-                <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#EAE0D2] border border-[#E2D7C7] transition-all duration-300 group-hover:border-[#D3C5B2] shadow-xs group-hover:shadow-md">
+                <div
+                  onClick={() => setActiveModalProject(project)}
+                  className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#EAE0D2] border border-[#E2D7C7] transition-all duration-300 group-hover:border-[#D3C5B2] shadow-xs cursor-pointer"
+                >
                   <img
                     src={`${import.meta.env.BASE_URL}${project.thumbnail}`}
                     alt={project.title}
@@ -45,7 +95,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onNavigate }) => {
                   
                   {/* Badge Top Left */}
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-md bg-[#2D2A24]/85 backdrop-blur-xs text-white text-[11px] font-mono font-bold tracking-wider uppercase border border-white/15">
+                    <span className="px-3 py-1 rounded-md bg-[#2D2A24]/90 backdrop-blur-xs text-white text-[11px] font-mono font-bold tracking-wider uppercase border border-white/15">
                       {project.badge}
                     </span>
                   </div>
@@ -62,7 +112,10 @@ export const Projects: React.FC<ProjectsProps> = ({ onNavigate }) => {
                     <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#FF8400]">
                       {project.category}
                     </span>
-                    <h3 className="text-2xl font-black text-[#2D2A24] group-hover:text-[#FF8400] transition-colors">
+                    <h3
+                      onClick={() => setActiveModalProject(project)}
+                      className="text-2xl font-black text-[#2D2A24] group-hover:text-[#FF8400] transition-colors cursor-pointer"
+                    >
                       {project.title}
                     </h3>
                   </div>
@@ -96,35 +149,46 @@ export const Projects: React.FC<ProjectsProps> = ({ onNavigate }) => {
               </div>
 
               {/* Actions */}
-              <div className="pt-6 flex items-center gap-3">
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#2D2A24] hover:bg-[#FF8400] text-white text-xs font-bold transition-colors shadow-xs"
-                  >
-                    <GithubIcon className="w-4 h-4" />
-                    <span>Código</span>
-                  </a>
-                )}
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#FF8400] hover:bg-[#2D2A24] text-white text-xs font-bold transition-colors shadow-xs"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    <span>Demo en Vivo</span>
-                  </a>
-                )}
+              <div className="pt-6 space-y-2 border-t border-[#E2D7C7]/80 mt-5">
+                <button
+                  type="button"
+                  onClick={() => setActiveModalProject(project)}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#2D2A24] hover:bg-[#FF8400] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-xs cursor-pointer"
+                >
+                  <Layers className="w-4 h-4 text-[#FF8400] group-hover:text-white" />
+                  <span>Inspeccionar Arquitectura</span>
+                </button>
+
+                <div className="flex items-center gap-2">
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-[#EAE0D2] hover:bg-[#E2D7C7] text-[#2D2A24] text-xs font-bold transition-colors border border-[#E2D7C7]"
+                    >
+                      <GithubIcon className="w-3.5 h-3.5" />
+                      <span>Código</span>
+                    </a>
+                  )}
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-[#EAE0D2] hover:bg-[#E2D7C7] text-[#2D2A24] text-xs font-bold transition-colors border border-[#E2D7C7]"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Demo</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))}
 
-          {/* 4th Card: Empty / Start a Project Collaboration */}
-          <div className="group relative flex flex-col justify-between">
+          {/* Start a Project Collaboration Card */}
+          <div className="group relative flex flex-col justify-between bg-[#FAF7F2] border border-[#E2D7C7] hover:border-[#D3C5B2] rounded-3xl p-6 transition-all duration-300 shadow-2xs hover:shadow-md">
             <a
               href="#contacto"
               onClick={(e) => {
@@ -167,7 +231,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onNavigate }) => {
               </div>
             </a>
 
-            <div className="pt-6">
+            <div className="pt-6 border-t border-[#E2D7C7]/80 mt-5">
               <a
                 href="#contacto"
                 onClick={(e) => {
@@ -184,7 +248,20 @@ export const Projects: React.FC<ProjectsProps> = ({ onNavigate }) => {
             </div>
           </div>
         </div>
+
+        {/* Interactive Stack Comparator Component */}
+        <ProjectStackComparator
+          onSelectProject={(project) => setActiveModalProject(project)}
+          onNavigate={onNavigate}
+        />
       </div>
+
+      {/* Project Detail Modal */}
+      <ProjectDetailModal
+        project={activeModalProject}
+        onClose={() => setActiveModalProject(null)}
+        onNavigate={onNavigate}
+      />
     </section>
   );
 };
