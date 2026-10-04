@@ -5,6 +5,7 @@ import { GithubIcon, LinkedinIcon } from "./icons";
 import { PageId } from "../types";
 import { LimaClockWidget } from "./LimaClockWidget";
 import { ProjectProposalBuilder } from "./ProjectProposalBuilder";
+import { EngineeringFaq } from "./EngineeringFaq";
 
 interface ContactProps {
   onNavigate?: (page: PageId) => void;
@@ -236,8 +237,11 @@ export const Contact: React.FC<ContactProps> = ({ onNavigate: _onNavigate }) => 
           </div>
         </div>
 
-        {/* Bottom Section: Interactive Project Scope / Proposal Builder */}
+        {/* Middle Section: Interactive Project Scope / Proposal Builder */}
         <ProjectProposalBuilder />
+
+        {/* Bottom Section: Interactive Engineering FAQ */}
+        <EngineeringFaq />
       </div>
     </section>
   );
