@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirigiendo... | Lionel Aguirre</title>
+    <script>
+      // Redireccion inteligente para GitHub Pages SPA
+      var path = window.location.pathname;
+      var repo = "/MiPortafolio";
+      if (path.startsWith(repo)) {
+        path = path.slice(repo.length);
+      }
+      var clean = path.replace(/^\//, "").replace(/\/$/, "");
+      var targetHash = clean ? "#" + clean : "#inicio";
+      window.location.replace(repo + "/" + targetHash);
+    </script>
+  </head>
+  <body style="background-color: #F5EFE6; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #2D2A24;">
+    <p>Redirigiendo al portafolio...</p>
+  </body>
+</html>

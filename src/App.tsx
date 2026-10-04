@@ -30,6 +30,17 @@ export const App: React.FC = () => {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
+  // Dynamic document title update per page
+  useEffect(() => {
+    const titles: Record<PageId, string> = {
+      inicio: "Lionel Aguirre | Ingeniero de Sistemas e Informática",
+      proyectos: "Proyectos de Ingeniería | Lionel Aguirre",
+      "sobre-mi": "Sobre Mí & Trayectoria | Lionel Aguirre",
+      contacto: "Contacto & Propuestas | Lionel Aguirre",
+    };
+    document.title = titles[currentPage] || "Lionel Aguirre | Ingeniero de Sistemas e Informática";
+  }, [currentPage]);
+
   const navigate = (page: PageId) => {
     setCurrentPage(page);
     window.location.hash = page === "inicio" ? "inicio" : page;
