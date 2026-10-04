@@ -1,72 +1,45 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Urbanist', 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-heading: 'Urbanist', sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'Space Mono', 'Fira Code', monospace;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'Fira Code', monospace;
 }
 
-/* Warm organic scrollbar */
+/* Modern Oceanic Slate Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #EFE8DE;
+  background: #E2E8F0;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D8CDBE;
+  background: #94A3B8;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #B8AC9C;
+  background: #64748B;
 }
 
-/* Warm organic card surface */
-.card-warm {
-  background: #EFE8DE;
-  border: 1px solid #E2D7C7;
-  box-shadow: 0 2px 8px -2px rgba(45, 42, 36, 0.05);
+/* Modern Card Surface */
+.card-modern {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.card-warm:hover {
-  border-color: #D3C5B2;
-  box-shadow: 0 12px 24px -6px rgba(45, 42, 36, 0.1);
-}
-
-/* Sticker Banner */
-.sticker-banner {
-  background: #263C70;
-  color: #FFFFFF;
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.85rem;
-  border-radius: 0.5rem;
-  border: 3px solid #F5EFE6;
-  box-shadow: 0 4px 14px rgba(38, 60, 112, 0.2);
-}
-
-/* Orange Accent Button */
-.btn-accent {
-  background-color: #FF8400;
-  color: #FFFFFF;
-  font-weight: 700;
-  transition: all 0.2s ease;
-}
-
-.btn-accent:hover {
-  background-color: #2D2A24;
-  color: #FFFFFF;
+.card-modern:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08);
+  transform: translateY(-2px);
 }
 
 /* Page Transition Animation */
 @keyframes pageFadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -75,5 +48,5 @@
 }
 
 .page-enter {
-  animation: pageFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: pageFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

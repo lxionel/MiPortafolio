@@ -45,8 +45,8 @@ export const LimaClockWidget: React.FC = () => {
           </span>
         </div>
         <div className="flex items-center gap-1.5 text-xs font-mono text-[#5F5646]">
-          <MapPin className="w-3.5 h-3.5 text-[#FF8400]" />
-          <span>Lima, Perú (UTC-5)</span>
+          <MapPin className="w-3.5 h-3.5 text-[#0284C7]" />
+          <span>Chimbote, Perú (UTC-5)</span>
         </div>
       </div>
 

@@ -33,12 +33,12 @@ export const App: React.FC = () => {
   // Dynamic document title update per page
   useEffect(() => {
     const titles: Record<PageId, string> = {
-      inicio: "Lionel Aguirre | Ingeniero de Sistemas e Informática",
-      proyectos: "Proyectos de Ingeniería | Lionel Aguirre",
-      "sobre-mi": "Sobre Mí & Trayectoria | Lionel Aguirre",
-      contacto: "Contacto & Propuestas | Lionel Aguirre",
+      inicio: "Lionel Aguirre | Sistemas e Informática (UTP)",
+      proyectos: "Proyectos | Lionel Aguirre",
+      "sobre-mi": "Sobre Mí | Lionel Aguirre",
+      contacto: "Contacto | Lionel Aguirre",
     };
-    document.title = titles[currentPage] || "Lionel Aguirre | Ingeniero de Sistemas e Informática";
+    document.title = titles[currentPage] || "Lionel Aguirre | Sistemas e Informática (UTP)";
   }, [currentPage]);
 
   const navigate = (page: PageId) => {
@@ -48,7 +48,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5EFE6] text-[#2D2A24] flex flex-col selection:bg-[#2D2A24] selection:text-[#F5EFE6]">
+    <div className="min-h-screen bg-[#F0F4F8] text-[#0F172A] flex flex-col selection:bg-[#0284C7] selection:text-white font-sans">
       <Navbar currentPage={currentPage} onNavigate={navigate} />
 
       <main key={currentPage} className="flex-grow min-h-[calc(100vh-240px)] page-enter">
