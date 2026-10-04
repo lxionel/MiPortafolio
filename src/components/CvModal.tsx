@@ -42,7 +42,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
         <div className="px-6 py-4 bg-[#EAE0D2] border-b border-[#E2D7C7] flex items-center justify-between no-print">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-bold text-[#5F5646] uppercase tracking-wider">
-              CURRICULUM VITAE EJECUTIVO
+              CURRICULUM VITAE PROFESIONAL
             </span>
           </div>
 
@@ -73,7 +73,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
                 {profile.fullName}
               </h1>
               <p className="text-base sm:text-lg font-bold text-[#FF8400]">
-                {profile.title}
+                {profile.title} • UTP
               </p>
               <div className="flex flex-wrap items-center gap-4 text-xs text-[#5F5646] pt-1 font-medium">
                 <span className="flex items-center gap-1">
@@ -120,63 +120,57 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
             <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-[#FF8400]">
               PERFIL PROFESIONAL
             </h2>
-            <p className="text-sm text-slate-700 leading-relaxed font-medium">
-              Ingeniero de Sistemas e Informática con sólida formación técnica en la Universidad Tecnológica del Perú (UTP). Especializado en arquitectura de software backend transaccional con Java y SQL Server bajo estrictos estándares ACID, desarrollo de aplicaciones móviles nativas en Kotlin con persistencia local offline-first (Room Database y arquitectura limpia MVVM), y principios de ciberseguridad defensiva acreditados oficialmente por Cisco Networking Academy. Enfoque riguroso en consistencia de datos, estabilidad y rendimiento.
+            <p className="text-sm text-slate-700 leading-relaxed font-normal">
+              Estudiante de Ingeniería de Sistemas e Informática en la Universidad Tecnológica del Perú (UTP). Apasionado por el desarrollo de aplicaciones prácticas y bien estructuradas, con experiencia construyendo aplicaciones móviles nativas para Android en Kotlin, sistemas con bases de datos en Java y SQL Server, y aplicaciones web con React y TypeScript. Me caracterizo por mi responsabilidad, iniciativa de aprendizaje continuo, buena comunicación y capacidad para colaborar efectivamente en equipo.
             </p>
           </div>
 
-          {/* Habilidades Técnicas */}
+          {/* Competencias y Habilidades */}
           <div className="space-y-3">
             <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-[#FF8400]">
-              COMPETENCIAS & STACK TÉCNICO
+              COMPETENCIAS & HABILIDADES
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <span className="font-bold text-[#2D2A24] block mb-1">Backend & Datos</span>
-                <span className="text-slate-600 leading-relaxed">
-                  Java 17 LTS, Microsoft SQL Server, Transacciones ACID, Stored Procedures, JDBC, Pools HikariCP, APIs RESTful.
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <span className="font-bold text-[#2D2A24] block">Desarrollo & Bases de Datos</span>
+                <span className="text-slate-600 leading-relaxed block">
+                  Java, Microsoft SQL Server, Consultas SQL, Procedimientos Almacenados, Git, GitHub.
                 </span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <span className="font-bold text-[#2D2A24] block mb-1">Móvil & Frontend</span>
-                <span className="text-slate-600 leading-relaxed">
-                  Android Nativo (Kotlin), Room DB (SQLite), MVVM, Coroutines & Flow, React, TypeScript, Tailwind CSS.
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <span className="font-bold text-[#2D2A24] block">Móvil & Web</span>
+                <span className="text-slate-600 leading-relaxed block">
+                  Kotlin (Android Studio), SQLite local, React, TypeScript, HTML5, CSS3, Tailwind CSS.
                 </span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <span className="font-bold text-[#2D2A24] block mb-1">Ciberseguridad & DevOps</span>
-                <span className="text-slate-600 leading-relaxed">
-                  Cisco Ciberseguridad (CIA Triad), Sanitización de Inputs, Git & GitHub Actions, Linux, CI/CD.
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <span className="font-bold text-[#2D2A24] block">Habilidades Humanas</span>
+                <span className="text-slate-600 leading-relaxed block">
+                  Trabajo en equipo, resolución de problemas, ganas de aprender, responsabilidad y adaptabilidad.
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Proyectos de Ingeniería */}
+          {/* Proyectos Relevantes */}
           <div className="space-y-4">
             <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-[#FF8400]">
-              PROYECTOS RELEVANTES
+              PROYECTOS DESARROLLADOS
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {projects.map((proj) => (
-                <div key={proj.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                <div key={proj.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-1.5">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold text-[#2D2A24]">{proj.title}</span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 font-bold text-slate-700">
-                        {proj.badge}
+                        {proj.category}
                       </span>
                     </div>
-                    <span className="text-xs font-mono text-[#5F5646] font-medium">{proj.category}</span>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     {proj.description}
                   </p>
-                  <ul className="list-disc list-inside text-xs text-slate-700 space-y-0.5">
-                    {proj.highlights.map((h, i) => (
-                      <li key={i}>{h}</li>
-                    ))}
-                  </ul>
                   <div className="flex flex-wrap gap-1 pt-1">
                     {proj.tags.map((t) => (
                       <span key={t} className="text-[10px] font-mono bg-white border border-slate-200 px-2 py-0.5 rounded text-slate-700 font-medium">
@@ -203,14 +197,14 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
                   Universidad Tecnológica del Perú (UTP)
                 </span>
                 <span className="text-xs font-mono text-slate-500">
-                  En curso • Formación Profesional de Grado
+                  En curso • Formación Universitaria
                 </span>
               </div>
             </div>
 
             <div className="space-y-2">
               <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-[#FF8400]">
-                CERTIFICACIONES OFICIALES
+                CERTIFICACIONES
               </h2>
               {certifications.map((c) => (
                 <div key={c.id}>
@@ -221,8 +215,8 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose }) => {
                   <span className="text-xs text-[#5F5646] block">
                     {c.issuer} • {c.date}
                   </span>
-                  <span className="text-[11px] font-mono text-emerald-700 font-bold block">
-                    {c.score} • ID: {c.verificationId}
+                  <span className="text-[11px] font-mono text-emerald-700 font-medium block">
+                    ID de Acreditación: {c.verificationId}
                   </span>
                 </div>
               ))}

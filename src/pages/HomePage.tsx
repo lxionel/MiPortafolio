@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Hero } from "../components/Hero";
-import { EngineeringKpis } from "../components/EngineeringKpis";
-import { ArchitectureTerminal } from "../components/ArchitectureTerminal";
+import { WhatIDo } from "../components/WhatIDo";
+import { HumanSkills } from "../components/HumanSkills";
+import { HomeProjectsPreview } from "../components/HomeProjectsPreview";
+import { HomeCallToAction } from "../components/HomeCallToAction";
 import { CvModal } from "../components/CvModal";
 import { PageId } from "../types";
 
@@ -15,8 +17,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   return (
     <div className="w-full">
       <Hero onNavigate={onNavigate} onOpenCv={() => setCvOpen(true)} />
-      <EngineeringKpis />
-      <ArchitectureTerminal onNavigate={onNavigate} />
+      <WhatIDo onNavigate={onNavigate} />
+      <HumanSkills />
+      <HomeProjectsPreview onNavigate={onNavigate} />
+      <HomeCallToAction onNavigate={onNavigate} />
       <CvModal isOpen={cvOpen} onClose={() => setCvOpen(false)} />
     </div>
   );

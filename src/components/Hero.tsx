@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, Mail, MapPin, FileText } from "lucide-react";
+import { ArrowRight, Mail, MapPin, FileText, GraduationCap, ShieldCheck } from "lucide-react";
 import { profile } from "../data/profile";
 import { GithubIcon, LinkedinIcon } from "./icons";
 import { PageId } from "../types";
@@ -13,34 +13,51 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenCv }) => {
   return (
     <section
       id="hero"
-      className="pt-32 pb-20 md:pt-44 md:pb-28 bg-[#F5EFE6] border-b border-[#E2D7C7]"
+      className="pt-32 pb-16 md:pt-40 md:pb-24 bg-[#F5EFE6] border-b border-[#E2D7C7]"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Column: Presentation & Value */}
+          {/* Left Column: Friendly, authentic presentation */}
           <div className="lg:col-span-7 flex flex-col items-start space-y-6">
-            {/* Status pill */}
-            <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#5F5646] bg-[#EAE0D2] px-4 py-1.5 rounded-full border border-[#E2D7C7]">
+            {/* Status Pill */}
+            <div className="inline-flex items-center gap-2 text-xs font-mono font-medium text-[#5F5646] bg-[#EAE0D2] px-3.5 py-1.5 rounded-full border border-[#E2D7C7]">
               <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-              <span className="uppercase tracking-wider">DISPONIBLE PARA PROYECTOS</span>
+              <span>Disponible para proyectos y oportunidades</span>
             </div>
 
-            {/* Name & Tilted Banner */}
-            <div className="space-y-3">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-[#2D2A24] leading-tight uppercase font-sans">
-                {profile.name}
+            {/* Greeting & Title */}
+            <div className="space-y-2">
+              <span className="text-sm font-bold uppercase tracking-wider text-[#FF8400] font-mono">
+                Hola, bienvenido a mi portafolio
+              </span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#2D2A24] leading-tight">
+                Soy {profile.name}
               </h1>
-              <div>
-                <span className="sticker-banner -rotate-2 text-xs sm:text-sm tracking-wider uppercase">
-                  ING. DE SISTEMAS E INFORMÁTICA
-                </span>
-              </div>
+              <p className="text-lg sm:text-xl font-bold text-[#5F5646]">
+                Estudiante de Ingeniería de Sistemas e Informática (UTP)
+              </p>
             </div>
 
-            {/* Concise Value Statement */}
-            <p className="text-base sm:text-lg text-[#5F5646] max-w-xl font-medium leading-relaxed">
-              {profile.subtitle}
+            {/* Natural, honest statement */}
+            <p className="text-base sm:text-lg text-[#5F5646] max-w-xl font-normal leading-relaxed">
+              Me gusta crear aplicaciones para celular, páginas web interactivas y sistemas con bases de datos. Me considero una persona dedicada, responsable y siempre motivada a seguir aprendiendo y aportando en equipo.
             </p>
+
+            {/* Credential & Location Badges */}
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAE0D2] text-xs font-mono text-[#2D2A24] border border-[#E2D7C7]">
+                <MapPin className="w-3.5 h-3.5 text-[#FF8400]" />
+                <span>{profile.location}</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAE0D2] text-xs font-mono text-[#2D2A24] border border-[#E2D7C7]">
+                <GraduationCap className="w-3.5 h-3.5 text-[#FF8400]" />
+                <span>Universidad Tecnológica del Perú</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAE0D2] text-xs font-mono text-[#2D2A24] border border-[#E2D7C7]">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
+                <span>Certificado en Ciberseguridad por Cisco</span>
+              </span>
+            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-3">
@@ -52,7 +69,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenCv }) => {
                     onNavigate("proyectos");
                   }
                 }}
-                className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#FF8400] hover:bg-[#2D2A24] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-xs hover:-translate-y-0.5"
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF8400] hover:bg-[#2D2A24] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-xs hover:-translate-y-0.5 cursor-pointer"
               >
                 <span>Ver Proyectos</span>
                 <ArrowRight className="w-4 h-4" />
@@ -62,10 +79,10 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenCv }) => {
                 <button
                   type="button"
                   onClick={onOpenCv}
-                  className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#2D2A24] hover:bg-[#FF8400] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-xs hover:-translate-y-0.5 cursor-pointer"
+                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-[#2D2A24] hover:bg-[#FF8400] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-xs hover:-translate-y-0.5 cursor-pointer"
                 >
                   <FileText className="w-4 h-4 text-[#FF8400] group-hover:text-white" />
-                  <span>Ver CV</span>
+                  <span>Ver mi CV</span>
                 </button>
               )}
 
@@ -77,12 +94,13 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenCv }) => {
                     onNavigate("contacto");
                   }
                 }}
-                className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#EAE0D2] hover:bg-[#E2D7C7] text-[#2D2A24] border border-[#E2D7C7] font-bold text-xs uppercase tracking-wider transition-all"
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-[#EAE0D2] hover:bg-[#E2D7C7] text-[#2D2A24] border border-[#E2D7C7] font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
               >
                 <Mail className="w-4 h-4 text-[#5F5646]" />
-                <span>Contactar</span>
+                <span>Escríbeme</span>
               </a>
 
+              {/* Social icons */}
               <div className="flex items-center gap-2 ml-1">
                 <a
                   href={profile.githubUrl}
@@ -104,18 +122,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenCv }) => {
                 </a>
               </div>
             </div>
-
-            {/* Location & Focus */}
-            <div className="pt-4 flex items-center gap-4 text-xs text-[#5F5646] font-mono font-medium">
-              <div className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#FF8400]" />
-                <span>{profile.location}</span>
-              </div>
-              <span>•</span>
-              <span>Java 17 & SQL Server (ACID)</span>
-              <span>•</span>
-              <span>Kotlin Android (Offline-First)</span>
-            </div>
           </div>
 
           {/* Right Column: Studio Portrait */}
@@ -126,13 +132,13 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenCv }) => {
                 alt={profile.name}
                 className="w-full h-full object-cover object-top filter contrast-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#2D2A24]/60 via-transparent to-transparent opacity-70" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2D2A24]/70 via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <span className="text-sm font-bold block">
+                <span className="text-base font-bold block">
                   {profile.fullName}
                 </span>
-                <span className="text-xs font-mono text-[#EAE0D2]">
-                  Ingeniero de Sistemas e Informática
+                <span className="text-xs text-[#EAE0D2] font-mono block">
+                  Ingeniería de Sistemas e Informática • UTP
                 </span>
               </div>
             </div>
